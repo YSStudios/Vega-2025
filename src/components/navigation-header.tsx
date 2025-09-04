@@ -2,6 +2,7 @@
 
 import React from 'react';
 import { GooeyNavMenu } from './gooey-nav-menu';
+import styles from './navigation-header.module.css';
 
 const navigationItems = [
   { label: 'HOME', href: '/' },
@@ -25,8 +26,10 @@ export default function NavigationHeader({ onNavigate }: NavigationHeaderProps) 
   };
 
   return (
-    <header style={{ background: 'black', minHeight: '120px', padding: '20px 0' }}>
-      <GooeyNavMenu items={navigationItems} onItemClick={handleItemClick} />
-    </header>
+    <nav className={styles.navContainer}>
+      <div className={styles.navMenu}>
+        <GooeyNavMenu items={navigationItems} onItemClick={handleItemClick} />
+      </div>
+    </nav>
   );
 }
