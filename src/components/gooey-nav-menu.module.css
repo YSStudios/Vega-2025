@@ -1,0 +1,71 @@
+.menuContainer {
+  position: relative;
+  left: 100px;
+  top: 30px;
+}
+
+.dots {
+  list-style-type: none;
+  background: black;
+  filter: blur(5px) contrast(10);
+  padding: 0;
+  margin: 0;
+  padding-top: 20px;
+  padding-bottom: 20px;
+  padding-left: 20px;
+  margin-left: -10px;
+  padding-right: 10px;
+  position: relative;
+}
+
+.menuText {
+  position: absolute;
+  top: 20px;
+  left: 10px;
+  z-index: 10;
+  pointer-events: none;
+}
+
+.textItem {
+  display: inline-block;
+  width: 80px;
+  height: 30px;
+  margin-left: 5px;
+  margin-right: 5px;
+  color: black;
+  text-align: center;
+  line-height: 30px;
+  font-family: Arial, sans-serif;
+  font-size: 12px;
+  font-weight: bold;
+  vertical-align: middle;
+  pointer-events: auto;
+  cursor: pointer;
+}
+
+.dot {
+  display: inline-block;
+  vertical-align: middle;
+  border-radius: 25px;
+  width: 80px;
+  height: 30px;
+  background: white;
+  margin-left: 5px;
+  margin-right: 5px;
+  cursor: pointer;
+  position: relative;
+  z-index: 2;
+}
+
+.select {
+  display: block;
+  border-radius: 25px;
+  width: 80px;
+  height: 40px;
+  background: white;
+  position: absolute;
+  z-index: 3;
+  top: 15px;
+  left: 25px;
+  pointer-events: none;
+}
