@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
+import localFont from "next/font/local";
 import "./globals.css";
 import NavigationHeader from "../components/navigation-header";
 
@@ -11,6 +12,55 @@ const geistSans = Geist({
 const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
   subsets: ["latin"],
+});
+
+const argon = localFont({
+  src: [
+    {
+      path: "../../public/fonts/Argon-Regular.otf",
+      weight: "400",
+      style: "normal",
+    },
+    {
+      path: "../../public/fonts/Argon-Oblique.otf",
+      weight: "400",
+      style: "italic",
+    },
+  ],
+  variable: "--font-argon",
+});
+
+const mondwest = localFont({
+  src: [
+    {
+      path: "../../public/fonts/Mondwest-Regular.otf",
+      weight: "400",
+      style: "normal",
+    },
+    {
+      path: "../../public/fonts/Mondwest-Bold.otf",
+      weight: "700",
+      style: "normal",
+    },
+  ],
+  variable: "--font-mondwest",
+  display: "swap",
+});
+
+const objectSans = localFont({
+  src: [
+    {
+      path: "../../public/fonts/ObjectSans-Regular.otf",
+      weight: "400",
+      style: "normal",
+    },
+    {
+      path: "../../public/fonts/ObjectSans-Bold.otf",
+      weight: "700",
+      style: "normal",
+    },
+  ],
+  variable: "--font-object-sans",
 });
 
 export const metadata: Metadata = {
@@ -25,7 +75,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${geistSans.variable} ${geistMono.variable}`}>
+      <body
+        className={`${geistSans.variable} ${geistMono.variable} ${argon.variable} ${mondwest.variable} ${objectSans.variable}`}
+      >
         <NavigationHeader />
         {children}
       </body>

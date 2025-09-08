@@ -7,7 +7,7 @@
   z-index: 1000;
   background: rgba(0, 0, 0, 0.9);
   backdrop-filter: blur(10px);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  border-bottom: 1px solid rgb(255, 255, 255);
   padding: 8px 0;
 }
 
@@ -34,13 +34,14 @@
   display: flex;
   justify-content: center;
   text-align: center;
+  font-family: var(--font-object-sans);
 }
 
 .studioTitle h1 {
   margin: 0;
-  font-size: 0.75rem;
+  font-size: 0.8rem;
   font-weight: 500;
-  color: #fff;
+  color: #ffffff;
   letter-spacing: 0.05em;
 }
 

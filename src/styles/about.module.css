@@ -1,0 +1,181 @@
+.aboutSection {
+  min-height: 100vh;
+  width: 100%;
+  background-color: rgb(0, 0, 0);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4rem 1rem;
+  box-sizing: border-box;
+}
+
+.container {
+  width: 100%;
+  max-width: 1400px;
+  padding: 2rem;
+  position: relative;
+  box-sizing: border-box;
+}
+
+.studioLabel {
+  font-size: 1rem;
+  color: rgb(255, 255, 255);
+  font-weight: 400;
+  font-family: var(--font-argon);
+  position: absolute;
+  top: 10px;
+  left: -115px;
+  margin-bottom: 0;
+  white-space: nowrap;
+}
+
+.mainContent {
+  position: relative;
+  width: 100%;
+}
+
+.mainText {
+  font-size: clamp(2.5rem, 5.5vw, 4.5rem);
+  font-weight: 400;
+  line-height: 1.1;
+  color: rgb(255, 255, 255);
+  margin: 0;
+  max-width: 100%;
+  font-family: var(--font-object-sans);
+  display: inline;
+}
+
+.buttonContainer {
+  display: inline;
+  margin-left: 1rem;
+  vertical-align: baseline;
+}
+
+.learnMoreButton {
+  color: rgb(0, 0, 0);
+  background-color: rgb(255, 24, 24);
+  border-radius: 20px;
+  padding: 0.5rem 2rem;
+  font-size: 2.5rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-family: var(--font-argon);
+  white-space: nowrap;
+}
+
+.learnMoreButton:hover {
+  background-color: rgb(255, 255, 255);
+  transform: translateY(-2px);
+}
+
+.arrow {
+  color: rgb(255, 255, 255);
+  width: 0.6em;
+  height: 0.6em;
+  margin-left: 1rem;
+  display: inline-block;
+  vertical-align: middle;
+}
+
+.desktopButton {
+  display: inline;
+}
+
+.mobileButton {
+  display: none;
+  margin-top: 2rem;
+}
+
+/* Large Tablet and Mobile Responsive */
+@media (max-width: 1660px) {
+  .aboutSection {
+    padding: 4rem 2rem;
+    min-height: 100vh;
+  }
+
+  .container {
+    padding: 3rem 2rem;
+  }
+
+  .studioLabel {
+    position: static;
+    display: block;
+    margin-bottom: 1rem;
+    margin-top: 2rem;
+    left: auto;
+    top: auto;
+    font-size: 0.9rem;
+  }
+
+  .mainText {
+    font-size: clamp(1.8rem, 6vw, 3.5rem);
+    max-width: 100%;
+    margin-bottom: 2rem;
+    display: block;
+  }
+
+  .buttonContainer {
+    display: block;
+    margin-left: 0;
+    margin-top: 1rem;
+  }
+
+  .learnMoreButton {
+    display: inline-block;
+  }
+
+  .desktopButton {
+    display: none;
+  }
+
+  .mobileButton {
+    display: block;
+    margin-top: 1rem;
+  }
+
+  .arrow {
+    color: rgb(255, 255, 255);
+    width: 2.7em;
+    height: 2.7em;
+  }
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+  .aboutSection {
+    padding: 2rem 1rem;
+  }
+
+  .container {
+    padding: 1rem;
+  }
+
+  .mainText {
+    font-size: clamp(2.2rem, 10vw, 2rem);
+    line-height: 1.2;
+    display: block;
+  }
+
+  .desktopButton {
+    display: none;
+  }
+
+  .mobileButton {
+    display: block;
+    margin-top: 1rem;
+  }
+
+  .learnMoreButton {
+    padding: 0.7rem 1.5rem;
+    font-size: 1.5rem;
+    display: inline-block;
+  }
+
+  .arrow {
+    width: 1.7em;
+    height: 1.7em;
+    display: inline-block;
+    vertical-align: middle;
+  }
+}

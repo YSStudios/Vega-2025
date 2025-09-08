@@ -30,12 +30,12 @@
   height: 30px;
   margin-left: 5px;
   margin-right: 5px;
-  color: black;
+  color: rgb(0, 0, 0);
   text-align: center;
   line-height: 30px;
-  font-family: Arial, sans-serif;
-  font-size: 12px;
-  font-weight: bold;
+  font-family: var(--font-object-sans);
+  font-size: 0.5em;
+  font-weight: 700;
   vertical-align: middle;
   pointer-events: auto;
   cursor: pointer;
@@ -59,11 +59,11 @@
   display: block;
   border-radius: 25px;
   width: 80px;
-  height: 40px;
+  height: 30px;
   background: white;
   position: absolute;
   z-index: 3;
-  top: 15px;
+  top: 20px;
   left: 25px;
   pointer-events: none;
 }
