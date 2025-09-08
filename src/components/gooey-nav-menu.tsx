@@ -1,8 +1,8 @@
-'use client';
+"use client";
 
-import { useEffect, useRef, useCallback } from 'react';
-import { gsap } from 'gsap';
-import styles from './gooey-nav-menu.module.css';
+import { useEffect, useRef, useCallback } from "react";
+import { gsap } from "gsap";
+import styles from "../styles/gooey-nav-menu.module.css";
 
 interface MenuItem {
   label: string;
@@ -31,35 +31,43 @@ export function GooeyNavMenu({ items, onItemClick }: GooeyNavMenuProps) {
     // Calculate position based on dot spacing
     const dotMargin = 5; // margin-left + margin-right = 10px total between dots
     const dotWidth = 80; // width from CSS
-    const spaceBetweenDots = dotWidth + (dotMargin * 2); // 90px total space per dot
-    
+    const spaceBetweenDots = dotWidth + dotMargin * 2; // 90px total space per dot
+
     // Calculate destination relative to initial position (which is at first dot)
     const dest = index * spaceBetweenDots;
     const t = 0.6;
 
     // Create timeline for smooth scale + position animation
     const tl = gsap.timeline();
-    
+
     // First: Scale down slightly while moving
     tl.to(selectRef.current, {
       duration: t * 0.3,
       scaleY: 0.8,
       scaleX: 1.3,
-      ease: "power2.out"
+      ease: "power2.out",
     })
-    // Then: Move to position while maintaining scale
-    .to(selectRef.current, {
-      duration: t * 0.7,
-      x: dest,
-      ease: "back.out(1.7)"
-    }, "-=0.1")
-    // Finally: Scale back to normal
-    .to(selectRef.current, {
-      duration: t * 0.4,
-      scaleY: 1,
-      scaleX: 1,
-      ease: "power2.out"
-    }, "-=0.2");
+      // Then: Move to position while maintaining scale
+      .to(
+        selectRef.current,
+        {
+          duration: t * 0.7,
+          x: dest,
+          ease: "back.out(1.7)",
+        },
+        "-=0.1"
+      )
+      // Finally: Scale back to normal
+      .to(
+        selectRef.current,
+        {
+          duration: t * 0.4,
+          scaleY: 1,
+          scaleX: 1,
+          ease: "power2.out",
+        },
+        "-=0.2"
+      );
   }, []);
 
   const handleItemClick = (item: MenuItem, index: number) => {
