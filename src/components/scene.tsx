@@ -29,6 +29,19 @@ interface SceneProps {
   className?: string
 }
 
+function OrbitingScene({ children }: { children: React.ReactNode }) {
+  const ref = useRef<THREE.Group>(null)
+  
+  useFrame((state, delta) => {
+    if (ref.current) {
+      // Very slow rotation around Y-axis (one full rotation every ~30 seconds)
+      ref.current.rotation.y += delta * 0.05
+    }
+  })
+  
+  return <group ref={ref}>{children}</group>
+}
+
 export function Scene(props: SceneProps) {
   const [accent, click] = useReducer((state: number) => ++state % accents.length, 0)
   const connectors = useMemo(() => shuffle(accent), [accent])
@@ -46,24 +59,26 @@ export function Scene(props: SceneProps) {
 	  <OrbitControls enableZoom={false}/>
       <ambientLight intensity={0.4} />
       <spotLight position={[10, 10, 10]} angle={0.15} penumbra={1} intensity={1} castShadow />
-      <Physics gravity={[0, 0, 0]}>
-        <Pointer />
-        {connectors.map((connectorProps, i) => (
-          <Connector key={i} {...connectorProps} />
-        ))}
-        <Connector position={[10, 10, 5]}>
-          <Model>
-            <MeshTransmissionMaterial 
-              clearcoat={1} 
-              thickness={0.1} 
-              anisotropicBlur={0.1} 
-              chromaticAberration={0.1} 
-              samples={8} 
-              resolution={512} 
-            />
-          </Model>
-        </Connector>
-      </Physics>
+      <OrbitingScene>
+        <Physics gravity={[0, 0, 0]}>
+          <Pointer />
+          {connectors.map((connectorProps, i) => (
+            <Connector key={i} {...connectorProps} />
+          ))}
+          <Connector position={[10, 10, 5]}>
+            <Model>
+              <MeshTransmissionMaterial 
+                clearcoat={1} 
+                thickness={0.1} 
+                anisotropicBlur={0.1} 
+                chromaticAberration={0.1} 
+                samples={8} 
+                resolution={512} 
+              />
+            </Model>
+          </Connector>
+        </Physics>
+      </OrbitingScene>
       <EffectComposer enableNormalPass={false} multisampling={8}>
         <N8AO distanceFalloff={1} aoRadius={1} intensity={4} />
       </EffectComposer>
