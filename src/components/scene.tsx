@@ -1,12 +1,13 @@
 'use client'
 
 import * as THREE from 'three'
-import { useRef, useReducer, useMemo, useState } from 'react'
+import { useRef, useReducer, useMemo, useState, useEffect } from 'react'
 import { Canvas, useFrame } from '@react-three/fiber'
 import { useGLTF, MeshTransmissionMaterial, Environment, Lightformer, OrbitControls } from '@react-three/drei'
 import { CuboidCollider, BallCollider, Physics, RigidBody, RapierRigidBody } from '@react-three/rapier'
 import { EffectComposer, N8AO } from '@react-three/postprocessing'
 import { easing } from 'maath'
+import { motion } from 'framer-motion'
 
 const accents = ['#0093d0', '#00a78f', '#ff5057', '#ffde00']
 
@@ -45,76 +46,109 @@ function OrbitingScene({ children }: { children: React.ReactNode }) {
 export function Scene(props: SceneProps) {
   const [accent, click] = useReducer((state: number) => ++state % accents.length, 0)
   const connectors = useMemo(() => shuffle(accent), [accent])
+  const [isVisible, setIsVisible] = useState(true)
+  const [scrollY, setScrollY] = useState(0)
+  
+  useEffect(() => {
+    const handleScroll = () => {
+      const currentScrollY = window.scrollY
+      setScrollY(currentScrollY)
+      
+      if (currentScrollY > 10) {
+        setIsVisible(false)
+      } else {
+        setIsVisible(true)
+      }
+    }
+    
+    window.addEventListener('scroll', handleScroll)
+    return () => window.removeEventListener('scroll', handleScroll)
+  }, [])
   
   return (
-    <Canvas 
-      onClick={click} 
-      shadows 
-      dpr={[1, 1.5]} 
-      gl={{ antialias: false }} 
-      camera={{ position: [0, 0, 15], fov: 17.5, near: 1, far: 20 }} 
-      {...props}
-    >
-      <color attach="background" args={['#000']} />
-	  <OrbitControls enableZoom={false}/>
-      <ambientLight intensity={0.4} />
-      <spotLight position={[10, 10, 10]} angle={0.15} penumbra={1} intensity={1} castShadow />
-      <OrbitingScene>
-        <Physics gravity={[0, 0, 0]}>
-          <Pointer />
-          {connectors.map((connectorProps, i) => (
-            <Connector key={i} {...connectorProps} />
-          ))}
-          <Connector position={[10, 10, 5]}>
-            <Model>
-              <MeshTransmissionMaterial 
-                clearcoat={1} 
-                thickness={0.1} 
-                anisotropicBlur={0.1} 
-                chromaticAberration={0.1} 
-                samples={8} 
-                resolution={512} 
-              />
-            </Model>
-          </Connector>
-        </Physics>
-      </OrbitingScene>
-      <EffectComposer enableNormalPass={false} multisampling={8}>
-        <N8AO distanceFalloff={1} aoRadius={1} intensity={4} />
-      </EffectComposer>
-      <Environment resolution={256}>
-        <group rotation={[-Math.PI / 3, 0, 1]}>
-          <Lightformer 
-            form="circle" 
-            intensity={4} 
-            rotation-x={Math.PI / 2} 
-            position={[0, 5, -9]} 
-            scale={2} 
-          />
-          <Lightformer 
-            form="circle" 
-            intensity={2} 
-            rotation-y={Math.PI / 2} 
-            position={[-5, 1, -1]} 
-            scale={2} 
-          />
-          <Lightformer 
-            form="circle" 
-            intensity={2} 
-            rotation-y={Math.PI / 2} 
-            position={[-5, -1, -1]} 
-            scale={2} 
-          />
-          <Lightformer 
-            form="circle" 
-            intensity={2} 
-            rotation-y={-Math.PI / 2} 
-            position={[10, 1, 0]} 
-            scale={8} 
-          />
-        </group>
-      </Environment>
-    </Canvas>
+    <>
+      <Canvas 
+        onClick={click} 
+        shadows 
+        dpr={[1, 1.5]} 
+        gl={{ antialias: false }} 
+        camera={{ position: [0, 0, 15], fov: 17.5, near: 1, far: 20 }} 
+        {...props}
+      >
+        <color attach="background" args={['#000']} />
+        <OrbitControls enableZoom={false}/>
+        <ambientLight intensity={0.4} />
+        <spotLight position={[10, 10, 10]} angle={0.15} penumbra={1} intensity={1} castShadow />
+        <OrbitingScene>
+          <Physics gravity={[0, 0, 0]}>
+            <Pointer />
+            {connectors.map((connectorProps, i) => (
+              <Connector key={i} {...connectorProps} />
+            ))}
+            <Connector position={[10, 10, 5]}>
+              <Model>
+                <MeshTransmissionMaterial 
+                  clearcoat={1} 
+                  thickness={0.1} 
+                  anisotropicBlur={0.1} 
+                  chromaticAberration={0.1} 
+                  samples={8} 
+                  resolution={512} 
+                />
+              </Model>
+            </Connector>
+          </Physics>
+        </OrbitingScene>
+        <EffectComposer enableNormalPass={false} multisampling={8}>
+          <N8AO distanceFalloff={1} aoRadius={1} intensity={4} />
+        </EffectComposer>
+        <Environment resolution={256}>
+          <group rotation={[-Math.PI / 3, 0, 1]}>
+            <Lightformer 
+              form="circle" 
+              intensity={4} 
+              rotation-x={Math.PI / 2} 
+              position={[0, 5, -9]} 
+              scale={2} 
+            />
+            <Lightformer 
+              form="circle" 
+              intensity={2} 
+              rotation-y={Math.PI / 2} 
+              position={[-5, 1, -1]} 
+              scale={2} 
+            />
+            <Lightformer 
+              form="circle" 
+              intensity={2} 
+              rotation-y={Math.PI / 2} 
+              position={[-5, -1, -1]} 
+              scale={2} 
+            />
+            <Lightformer 
+              form="circle" 
+              intensity={2} 
+              rotation-y={-Math.PI / 2} 
+              position={[10, 1, 0]} 
+              scale={8} 
+            />
+          </group>
+        </Environment>
+      </Canvas>
+      
+      <motion.div 
+        animate={{ 
+          opacity: isVisible ? 1 : 0,
+          scale: 1 + (scrollY * 0.01),
+          x: '-50%'
+        }}
+        transition={{ duration: 0.3 }}
+        className="scroll-indicator-fixed"
+      >
+        <span className="scroll-text">scroll down</span>
+        <div className="scroll-arrow">↓</div>
+      </motion.div>
+    </>
   )
 }
 

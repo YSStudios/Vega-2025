@@ -7,12 +7,7 @@ export default function Home() {
 		<div className="scene-container">
         <Scene />
       </div>
-      <div className="scroll-indicator">
-        <span className="scroll-text">scroll down</span>
-        <div className="scroll-arrow">↓</div>
-      </div>
       <About />
-      
     </div>
   );
 }

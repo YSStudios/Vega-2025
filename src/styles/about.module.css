@@ -86,13 +86,37 @@
 }
 
 /* Large Tablet and Mobile Responsive */
-@media (max-width: 1660px) {
+@media (max-width: 2000px) {
   .aboutSection {
     padding: 4rem 2rem;
   }
 
   .container {
     padding: 3rem 2rem;
+  }
+}
+
+/* Medium Tablet - Fix studio label cutoff */
+@media (max-width: 1600px) {
+  .studioLabel {
+    position: static;
+    display: block;
+    margin-bottom: 1rem;
+    margin-top: 2rem;
+    left: auto;
+    top: auto;
+    font-size: 0.9rem;
+  }
+}
+
+/* Medium Tablet */
+@media (max-width: 1200px) {
+  .aboutSection {
+    padding: 4rem 4rem;
+  }
+
+  .container {
+    padding: 3rem 0;
   }
 
   .studioLabel {
@@ -106,7 +130,7 @@
   }
 
   .mainText {
-    font-size: clamp(1.8rem, 6vw, 3.5rem);
+    font-size: clamp(2.5rem, 8vw, 4rem);
     max-width: 100%;
     margin-bottom: 2rem;
     display: block;
@@ -141,11 +165,11 @@
 /* Mobile */
 @media (max-width: 768px) {
   .aboutSection {
-    padding: 2rem 1rem;
+    padding: 2rem 0;
   }
 
   .container {
-    padding: 1rem;
+    padding: 0;
   }
 
   .mainText {
