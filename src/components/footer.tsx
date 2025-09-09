@@ -76,7 +76,7 @@ export default function Footer() {
         viewport={{ once: true, margin: "-100px" }}
         variants={containerVariants}
       >
-        <div className={styles.container}>
+        <div className={styles.footerContainer}>
           <div className={styles.footerGrid}>
             {/* Menu Column */}
             <motion.div

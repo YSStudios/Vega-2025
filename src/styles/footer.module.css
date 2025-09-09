@@ -7,7 +7,7 @@
   margin-top: auto;
 }
 
-.container {
+.footerContainer {
   width: 100%;
   max-width: 1400px;
   margin: 0 auto;
@@ -20,34 +20,6 @@
   grid-template-columns: repeat(3, 1fr);
   gap: 4rem;
   align-items: start;
-}
-
-/* Tablet styles */
-@media (max-width: 768px) {
-  .footerGrid {
-    grid-template-columns: repeat(2, 1fr);
-    gap: 3rem;
-  }
-
-  .footerColumn:nth-child(3) {
-    grid-column: 1 / -1;
-  }
-}
-
-/* Mobile styles */
-@media (max-width: 480px) {
-  .footerGrid {
-    grid-template-columns: 1fr;
-    gap: 2rem;
-  }
-
-  .container {
-    padding: 0 1rem;
-  }
-
-  .footer {
-    padding: 2rem 0 0 0;
-  }
 }
 
 .footerColumn {
@@ -144,50 +116,104 @@
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
-  background-color: rgba(255, 255, 255, 0.05);
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .logoText:nth-child(1) {
   z-index: 1;
   top: 0;
-  background-color: rgba(255, 255, 255, 0.03);
   filter: blur(4px);
 }
 
 .logoText:nth-child(2) {
   z-index: 2;
   top: 10rem;
-  background-color: rgba(255, 255, 255, 0.04);
   filter: blur(2px);
 }
 
 .logoText:nth-child(3) {
   z-index: 3;
   top: 20rem;
-  background-color: rgba(255, 255, 255, 0.05);
   filter: blur(0px);
 }
 
-/* Responsive logo text */
-@media (max-width: 768px) {
-  .logoText {
-    font-size: 22vw;
+/* TABLET ONLY */
+@media screen and (max-width: 768px) and (min-width: 481px) {
+  .footerGrid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 3rem;
+  }
+
+  .footerColumn:nth-child(3) {
+    grid-column: 1 / -1;
   }
   
   .logoSection {
-    height: 22vw;
+    height: calc(12vw + 16rem);
+  }
+  
+  .logoText {
+    font-size: 12vw;
+    letter-spacing: -0.04em;
+  }
+  
+  .logoText:nth-child(2) {
+    top: 6rem;
+  }
+
+  .logoText:nth-child(3) {
+    top: 12rem;
   }
 }
 
-@media (max-width: 480px) {
-  .logoText {
-    font-size: 24vw;
-    letter-spacing: -0.06em;
+/* MOBILE ONLY */
+@media only screen and (max-width: 480px) {
+  .footer {
+    padding: 2rem 0 6rem 0;
+  }
+  
+  .footerGrid {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+
+  .footerContainer {
+    padding: 0 1rem;
   }
   
   .logoSection {
-    height: 24vw;
+    height: calc(18vw + 12rem);
+    padding: 0;
+  }
+  
+  .logoText {
+    font-size: 18vw;
+    letter-spacing: -0.12em;
+    padding: 1rem 0 0 0;
+    position: absolute;
+    margin-bottom: 0;
+    width: 100%;
+    box-sizing: border-box;
+    display: block;
+  }
+  
+  .logoText:nth-child(1) {
+    position: absolute;
+    top: 0;
+    z-index: 1;
+    filter: blur(4px);
+  }
+  
+  .logoText:nth-child(2) {
+    position: absolute;
+    top: 5rem;
+    z-index: 2;
+    filter: blur(2px);
+  }
+
+  .logoText:nth-child(3) {
+    position: absolute;
+    top: 10rem;
+    z-index: 3;
+    filter: blur(0px);
   }
 }
