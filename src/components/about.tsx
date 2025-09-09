@@ -64,6 +64,7 @@ export default function About() {
                 initial={{ opacity: 0, y: 15 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5, delay: 0.9 }}
+                style={{ transition: 'none' }}
               >
                 Learn more
               </motion.span> 
@@ -88,6 +89,7 @@ export default function About() {
               initial={{ opacity: 0, y: 15 }}
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: 0.9 }}
+              style={{ transition: 'none' }}
             >
               Learn more
             </motion.span>

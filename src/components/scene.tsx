@@ -137,10 +137,10 @@ export function Scene(props: SceneProps) {
       </Canvas>
       
       <motion.div 
+        initial={{ x: '-50%' }}
         animate={{ 
           opacity: isVisible ? 1 : 0,
-          scale: 1 + (scrollY * 0.01),
-          x: '-50%'
+          scale: 1 + (scrollY * 0.01)
         }}
         transition={{ duration: 0.3 }}
         className="scroll-indicator-fixed"
