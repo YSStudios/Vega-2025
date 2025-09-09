@@ -139,7 +139,8 @@ export function Scene(props: SceneProps) {
       <motion.div 
         animate={{ 
           opacity: isVisible ? 1 : 0,
-          scale: 1 + (scrollY * 0.01)
+          scale: 1 + (scrollY * 0.01),
+          x: '-50%'
         }}
         transition={{ duration: 0.3 }}
         className="scroll-indicator-fixed"
