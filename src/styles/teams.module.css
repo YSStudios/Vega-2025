@@ -1,0 +1,278 @@
+.teamsSection {
+  padding: 4rem 0;
+  background: #f5f5f0;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+}
+
+.container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 2rem;
+  width: 100%;
+}
+
+.contentWrapper {
+  display: grid;
+  grid-template-columns: 1fr 2.5fr;
+  gap: 6rem;
+  align-items: center;
+  background: #f5f5f0;
+  border-radius: 1rem;
+  padding: 3rem;
+  position: relative;
+}
+
+/* Image Section */
+.imageSection {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.imageContainer {
+  position: relative;
+  width: 100%;
+  max-width: 400px;
+  aspect-ratio: 2/3;
+}
+
+.memberImage {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 0.75rem;
+}
+
+.navigationControls {
+  position: absolute;
+  top: 50%;
+  left: -4rem;
+  right: -4rem;
+  display: flex;
+  justify-content: space-between;
+  transform: translateY(-50%);
+  pointer-events: none;
+}
+
+.navButton {
+  background: rgba(0, 0, 0, 0.1);
+  border: none;
+  border-radius: 50%;
+  width: 2.5rem;
+  height: 2.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  pointer-events: all;
+  font-size: 0.875rem;
+  color: rgba(0, 0, 0, 0.6);
+  opacity: 0.7;
+}
+
+.navButton:hover {
+  background: rgba(0, 0, 0, 0.2);
+  color: rgba(0, 0, 0, 0.8);
+  opacity: 1;
+  transform: scale(1.05);
+}
+
+.dotsIndicator {
+  position: absolute;
+  bottom: -2rem;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 0.5rem;
+}
+
+.dot {
+  width: 0.75rem;
+  height: 0.75rem;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.2);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border: none;
+  outline: none;
+  transform: none;
+  flex-shrink: 0;
+}
+
+.activeDot {
+  background: #333;
+}
+
+.dot:hover {
+  background: #666;
+}
+
+/* Content Section */
+.contentSection {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  height: 100%;
+  padding-top: 2rem;
+}
+
+.content {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.icons {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.icon {
+  width: 1.5rem;
+  height: 1.5rem;
+  background: #333;
+  border-radius: 0.25rem;
+}
+
+.icon:nth-child(1) {
+  border-radius: 50%;
+}
+
+.icon:nth-child(2) {
+  border-radius: 0.25rem;
+}
+
+.icon:nth-child(3) {
+  border-radius: 0.25rem;
+  background: linear-gradient(45deg, #333 50%, transparent 50%);
+}
+
+.header {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.memberName {
+  font-family: "ObjectSans", monospace;
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: #333;
+  margin: 0;
+  line-height: 1.1;
+}
+
+.services {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.serviceTag {
+  background: #333;
+  color: white;
+  padding: 0.5rem 1rem;
+  border-radius: 1.5rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  font-family: "Inter", sans-serif;
+}
+
+.description {
+  font-family: "Inter", sans-serif;
+  font-size: 1.125rem;
+  line-height: 1.6;
+  color: #555;
+  margin: 0;
+  max-width: 100%;
+}
+
+/* Responsive Design */
+@media (max-width: 1200px) {
+  .contentWrapper {
+    gap: 3rem;
+    padding: 2.5rem;
+  }
+  
+  .memberName {
+    font-size: 2rem;
+  }
+}
+
+@media (max-width: 968px) {
+  .contentWrapper {
+    grid-template-columns: 1fr;
+    gap: 3rem;
+    text-align: center;
+  }
+  
+  .imageContainer {
+    max-width: 300px;
+    margin: 0 auto;
+  }
+  
+  .memberName {
+    font-size: 1.75rem;
+  }
+  
+  .description {
+    font-size: 1rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .teamsSection {
+    padding: 2rem 0;
+  }
+  
+  .container {
+    padding: 0 1rem;
+  }
+  
+  .contentWrapper {
+    padding: 2rem;
+    gap: 2rem;
+  }
+  
+  .memberName {
+    font-size: 1.5rem;
+  }
+  
+  .services {
+    justify-content: center;
+  }
+  
+  .serviceTag {
+    font-size: 0.75rem;
+    padding: 0.375rem 0.75rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .contentWrapper {
+    padding: 1.5rem;
+  }
+  
+  .imageContainer {
+    max-width: 250px;
+  }
+  
+  .navButton {
+    width: 2.5rem;
+    height: 2.5rem;
+    font-size: 0.875rem;
+  }
+  
+  .memberName {
+    font-size: 1.25rem;
+  }
+  
+  .description {
+    font-size: 0.875rem;
+  }
+}

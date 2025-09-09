@@ -1,4 +1,5 @@
 import About from '../components/about';
+import Teams from '../components/teams';
 import { Scene } from '@/components/scene'
 
 export default function Home() {
@@ -8,6 +9,7 @@ export default function Home() {
         <Scene />
       </div>
       <About />
+      <Teams />
     </div>
   );
 }
