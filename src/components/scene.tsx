@@ -251,12 +251,10 @@ function Model({ children, color = 'white', roughness = 0.15, metalness = 0.2, .
   
   // Using the vega-v-logo.glb file from public directory
   let nodes: { [key: string]: THREE.Object3D } = {}
-  let materials: { [key: string]: THREE.Material } = {}
   
   try {
     const gltf = useGLTF('/vega-v-logo.glb')
     nodes = gltf.nodes
-    materials = gltf.materials
   } catch {
     // Fallback geometry if GLB file doesn't exist
     console.warn('GLB file not found, using fallback geometry')

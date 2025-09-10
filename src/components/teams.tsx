@@ -52,7 +52,7 @@ export default function Teams() {
     setCurrentMember((prev) => (prev - 1 + teamMembers.length) % teamMembers.length);
   };
 
-  const handleSwipe = (event: any, info: PanInfo) => {
+  const handleSwipe = (_event: unknown, info: PanInfo) => {
     const threshold = 50;
     if (info.offset.x > threshold) {
       prevMember();
