@@ -256,7 +256,7 @@ function Model({ children, color = 'white', roughness = 0.15, metalness = 0.2, .
   try {
     const gltf = useGLTF('/vega-v-logo.glb')
     nodes = gltf.nodes
-    materials = gltf.materials
+    // materials = gltf.materials // Unused variable
   } catch {
     // Fallback geometry if GLB file doesn't exist
     console.warn('GLB file not found, using fallback geometry')
