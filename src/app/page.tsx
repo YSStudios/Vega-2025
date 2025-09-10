@@ -2,6 +2,7 @@ import About from '../components/about';
 import Services from '../components/services';
 import Teams from '../components/teams';
 import WorkMarquee from '../components/work-marquee';
+import BrandsSlider from '../components/brands-slider';
 import { Scene } from '@/components/scene'
 import Marquee from '../components/marquee';
 
@@ -15,6 +16,7 @@ export default function Home() {
       <About />
       <Services />
       <Teams />
+      <BrandsSlider />
       <WorkMarquee />
     </div>
   );
