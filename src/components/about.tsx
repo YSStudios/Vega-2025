@@ -4,6 +4,7 @@ import React from "react";
 import { FaArrowLeftLong } from "react-icons/fa6";
 import { motion } from "framer-motion";
 import styles from "../styles/about.module.css";
+import { useAccentColor } from "../contexts/accent-color-context";
 
 const textLines = [
   "Vega Studio is a full-service, black-owned and operated agency,",
@@ -13,6 +14,7 @@ const textLines = [
 ];
 
 export default function About() {
+  const { currentAccent } = useAccentColor();
   return (
     <motion.section 
       className={styles.aboutSection}

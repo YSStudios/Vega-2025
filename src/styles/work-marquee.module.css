@@ -3,12 +3,13 @@
   background: #fff;
   overflow: hidden;
   position: relative;
+  width: 100%;
 }
 
 .container {
-  max-width: 1400px;
-  margin: 0 auto;
-  padding: 0 2rem;
+  width: 100%;
+  margin: 0;
+  padding: 0;
 }
 
 .title {
@@ -21,6 +22,10 @@
   line-height: 0.85;
   text-transform: uppercase;
   text-align: left;
+  padding: 0 2rem;
+  max-width: 1400px;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .marqueeContainer {
@@ -30,20 +35,6 @@
   height: 100px;
   display: flex;
   align-items: center;
-  mask: linear-gradient(
-    90deg,
-    transparent 0%,
-    #000 5%,
-    #000 95%,
-    transparent 100%
-  );
-  -webkit-mask: linear-gradient(
-    90deg,
-    transparent 0%,
-    #000 5%,
-    #000 95%,
-    transparent 100%
-  );
 }
 
 .marqueeTrack {
@@ -89,12 +80,9 @@
     padding: 1.5rem 0;
   }
   
-  .container {
-    padding: 0 1rem;
-  }
-  
   .title {
     margin-bottom: 1.5rem;
+    padding: 0 1rem;
   }
   
   .marqueeContainer {
@@ -117,6 +105,7 @@
   
   .title {
     margin-bottom: 1rem;
+    padding: 0 1rem;
   }
   
   .marqueeContainer {
