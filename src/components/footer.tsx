@@ -168,18 +168,10 @@ export default function Footer() {
         </div>
       </motion.footer>
 
-      {/* Large Logo Text - Separate Section */}
-      <motion.div
-        className={styles.logoSection}
-        variants={columnVariants}
-        initial="hidden"
-        whileInView="visible"
-        viewport={{ once: true }}
-      >
+      {/* Large Logo Text - Simplified */}
+      <div className={styles.logoSection}>
         <h2 className={styles.logoText}>Vega Studios</h2>
-        <h2 className={styles.logoText}>Vega Studios</h2>
-        <h2 className={styles.logoText}>Vega Studios</h2>
-      </motion.div>
+      </div>
     </>
   );
 }

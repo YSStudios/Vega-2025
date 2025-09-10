@@ -1,8 +1,6 @@
 .footer {
   width: 100%;
-  background-color: rgba(255, 255, 255, 0.05);
-  backdrop-filter: blur(10px);
-  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  background-color: #000;
   padding: 4rem 0 6rem 0;
   margin-top: auto;
 }
@@ -86,54 +84,20 @@
 }
 
 .logoSection {
-  width: 100vw;
+  width: 100%;
   background-color: transparent;
-  overflow: hidden;
-  padding: 0;
-  margin: 0;
-  position: relative;
-  left: 50%;
-  right: 50%;
-  margin-left: -50vw;
-  margin-right: -50vw;
-  height: calc(17vw + 24rem);
+  padding: 4rem 0;
+  text-align: center;
 }
 
 .logoText {
   font-family: var(--font-argon), sans-serif;
-  font-size: 17vw;
+  font-size: 8rem;
   font-weight: 600;
   line-height: 1.2;
   margin: 0;
-  padding: 1rem 0 0 0;
-  letter-spacing: -0.06em;
+  color: #fff;
   text-align: center;
-  white-space: nowrap;
-  width: 100%;
-  position: absolute;
-  left: 0;
-  background: linear-gradient(90deg, #666666 0%, #999999 30%, #cccccc 70%, #ffffff 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-}
-
-.logoText:nth-child(1) {
-  z-index: 1;
-  top: 0;
-  filter: blur(4px);
-}
-
-.logoText:nth-child(2) {
-  z-index: 2;
-  top: 10rem;
-  filter: blur(2px);
-}
-
-.logoText:nth-child(3) {
-  z-index: 3;
-  top: 20rem;
-  filter: blur(0px);
 }
 
 /* TABLET ONLY */
@@ -147,21 +111,8 @@
     grid-column: 1 / -1;
   }
   
-  .logoSection {
-    height: calc(12vw + 16rem);
-  }
-  
   .logoText {
-    font-size: 12vw;
-    letter-spacing: -0.04em;
-  }
-  
-  .logoText:nth-child(2) {
-    top: 6rem;
-  }
-
-  .logoText:nth-child(3) {
-    top: 12rem;
+    font-size: 6rem;
   }
 }
 
@@ -180,40 +131,7 @@
     padding: 0 1rem;
   }
   
-  .logoSection {
-    height: calc(18vw + 12rem);
-    padding: 0;
-  }
-  
   .logoText {
-    font-size: 18vw;
-    letter-spacing: -0.12em;
-    padding: 1rem 0 0 0;
-    position: absolute;
-    margin-bottom: 0;
-    width: 100%;
-    box-sizing: border-box;
-    display: block;
-  }
-  
-  .logoText:nth-child(1) {
-    position: absolute;
-    top: 0;
-    z-index: 1;
-    filter: blur(4px);
-  }
-  
-  .logoText:nth-child(2) {
-    position: absolute;
-    top: 5rem;
-    z-index: 2;
-    filter: blur(2px);
-  }
-
-  .logoText:nth-child(3) {
-    position: absolute;
-    top: 10rem;
-    z-index: 3;
-    filter: blur(0px);
+    font-size: 4rem;
   }
 }
