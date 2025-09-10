@@ -1,4 +1,5 @@
 import About from '../components/about';
+import Services from '../components/services';
 import Teams from '../components/teams';
 import WorkMarquee from '../components/work-marquee';
 import { Scene } from '@/components/scene'
@@ -12,6 +13,7 @@ export default function Home() {
       </div>
       <Marquee />
       <About />
+      <Services />
       <Teams />
       <WorkMarquee />
     </div>
