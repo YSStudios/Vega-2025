@@ -1,0 +1,174 @@
+.brandsSection {
+  padding: 4rem 0;
+  background: #fff;
+  overflow: hidden;
+  position: relative;
+  width: 100%;
+}
+
+.title {
+  font-family: "Mondwest", monospace, sans-serif;
+  font-size: 5rem;
+  font-weight: 700;
+  color: #000;
+  margin: 0 0 3rem 0;
+  letter-spacing: 0.02em;
+  line-height: 0.85;
+  text-transform: uppercase;
+  text-align: left;
+  padding: 0 2rem;
+  max-width: 1400px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.brandsContainer {
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.brandRow {
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+  height: 180px;
+  display: flex;
+  align-items: center;
+}
+
+.brandTrack {
+  display: flex;
+  align-items: center;
+  gap: 3rem;
+  white-space: nowrap;
+  will-change: transform;
+}
+
+.brandItem {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 160px;
+  min-width: 260px;
+  background: rgba(255, 255, 255, 0.8);
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  border-radius: 16px;
+  padding: 2rem;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(10px);
+}
+
+.brandItem:hover {
+  background: rgba(255, 255, 255, 0.95);
+  border-color: rgba(0, 0, 0, 0.2);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+}
+
+.brandImageContainer {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.brandImage {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+  filter: grayscale(1) brightness(0.8) contrast(1.2);
+  transition: filter 0.3s ease;
+}
+
+.brandItem:hover .brandImage {
+  filter: grayscale(0) brightness(1) contrast(1);
+}
+
+/* Grid pattern background */
+.brandsSection::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image: 
+    linear-gradient(rgba(0, 0, 0, 0.02) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 0, 0, 0.02) 1px, transparent 1px);
+  background-size: 50px 50px;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.brandsContainer {
+  position: relative;
+  z-index: 2;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .brandsSection {
+    padding: 3rem 0;
+  }
+  
+  .title {
+    font-size: 3.5rem;
+    margin-bottom: 2rem;
+    padding: 0 1rem;
+  }
+  
+  .brandsContainer {
+    gap: 1.5rem;
+  }
+  
+  .brandRow {
+    height: 80px;
+  }
+  
+  .brandTrack {
+    gap: 2rem;
+  }
+  
+  .brandItem {
+    min-width: 120px;
+    height: 60px;
+    padding: 0.75rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .brandsSection {
+    padding: 2rem 0;
+  }
+  
+  .title {
+    font-size: 2.5rem;
+    margin-bottom: 1.5rem;
+    padding: 0 1rem;
+  }
+  
+  .brandsContainer {
+    gap: 1rem;
+  }
+  
+  .brandRow {
+    height: 70px;
+  }
+  
+  .brandTrack {
+    gap: 1.5rem;
+  }
+  
+  .brandItem {
+    min-width: 100px;
+    height: 50px;
+    padding: 0.5rem;
+    border-radius: 8px;
+  }
+}
