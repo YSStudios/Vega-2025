@@ -10,7 +10,7 @@ interface NavigationHeaderProps {
 
 export default function NavigationHeader({}: NavigationHeaderProps) {
   const [menuOpen, setMenuOpen] = useState(false);
-  const { currentAccent } = useAccentColor();
+  // const { currentAccent } = useAccentColor();
 
   const handleButtonClick = () => {
     console.log("Button clicked");
