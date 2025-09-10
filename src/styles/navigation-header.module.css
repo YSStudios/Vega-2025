@@ -164,3 +164,235 @@
 .buttonIcon {
   display: none;
 }
+
+/* Tablet Responsive Styles */
+@media (max-width: 1200px) and (min-width: 769px) {
+  .headerContent {
+    padding: 0 20px;
+  }
+
+  .menuToggle {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .logo {
+    padding: 12px 20px;
+    font-size: 1rem;
+  }
+
+  .menuText {
+    padding: 12px 0px;
+    width: 142px;
+    font-size: 1rem;
+    text-align: center;
+  }
+
+  .menuBar {
+    position: fixed;
+    top: 107px;
+    left: 20px;
+    width: 142px;
+    height: 0;
+    background: rgb(255, 255, 255);
+    padding: 0;
+    font-size: 1.2rem;
+    font-weight: 400;
+    z-index: 1500;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0;
+    overflow: hidden;
+    transition: height 0.4s ease, opacity 0.4s ease, padding 0.4s ease;
+    opacity: 0;
+    white-space: nowrap;
+    box-sizing: border-box;
+  }
+
+  .menuBar.menuBarOpen {
+    height: 300px;
+    width: 142px;
+    padding: 15px;
+    opacity: 1;
+  }
+
+  .menuBar a {
+    color: #010101;
+    text-decoration: none;
+    font-size: 1.1rem;
+    font-weight: 400;
+    cursor: pointer;
+    transition: color 0.3s ease;
+    white-space: nowrap;
+    flex-shrink: 0;
+    padding: 10px 0;
+  }
+
+  .menuBar a:hover {
+    color: #ff0000;
+  }
+
+  .closeButton {
+    color: #fff;
+    background: rgb(0, 0, 0);
+    border: none;
+    width: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+    cursor: pointer;
+    transition: background 0.3s ease;
+    margin-left: 0;
+    flex-shrink: 0;
+    padding: 12px 0px;
+    margin-top: 12px;
+  }
+
+  .closeButton:hover {
+    background: rgb(63, 63, 63);
+  }
+
+  .buttonContainer {
+    width: 200px;
+    height: 60px;
+  }
+
+  .flipButton {
+    width: 180px;
+    height: 60px;
+    top: -30px;
+  }
+
+  .flipButton::before,
+  .flipButton::after {
+    width: 180px;
+    height: 60px;
+    font-size: 1.1rem;
+  }
+
+  .flipButton::before {
+    transform: rotateX(0deg) translateZ(30px);
+  }
+
+  .flipButton::after {
+    transform: rotateX(-90deg) translateZ(30px);
+  }
+}
+
+@media (max-width: 768px) {
+  .headerContent {
+    padding: 0 20px;
+  }
+
+  .menuToggle {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .logo {
+    padding: 12px 20px;
+    font-size: 1rem;
+  }
+
+  .menuText {
+    padding: 12px 0px;
+    width: 142px;
+    font-size: 1rem;
+    text-align: center;
+  }
+
+  .menuBar {
+    position: fixed;
+    top: 107px;
+    left: 20px;
+    width: 142px;
+    height: 0;
+    background: rgb(255, 255, 255);
+    padding: 0;
+    font-size: 1.2rem;
+    font-weight: 400;
+    z-index: 1500;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0;
+    overflow: hidden;
+    transition: height 0.4s ease, opacity 0.4s ease, padding 0.4s ease;
+    opacity: 0;
+    white-space: nowrap;
+  }
+
+  .menuBar.menuBarOpen {
+    height: 300px;
+    width: 142px;
+    padding: 15px;
+    opacity: 1;
+  }
+
+  .menuBar a {
+    color: #010101;
+    text-decoration: none;
+    font-size: 1.1rem;
+    font-weight: 400;
+    cursor: pointer;
+    transition: color 0.3s ease;
+    white-space: nowrap;
+    flex-shrink: 0;
+    padding: 10px 0;
+  }
+
+  .menuBar a:hover {
+    color: #ff0000;
+  }
+
+  .closeButton {
+    color: #fff;
+    background: rgb(0, 0, 0);
+    border: none;
+    width: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+    cursor: pointer;
+    transition: background 0.3s ease;
+    margin-left: 0;
+    flex-shrink: 0;
+    padding: 12px 0px;
+    margin-top: 12px;
+  }
+
+  .closeButton:hover {
+    background: rgb(63, 63, 63);
+  }
+
+  .buttonContainer {
+    width: 120px;
+    height: 40px;
+    padding: 0 10px;
+  }
+
+  .flipButton {
+    width: 100px;
+    height: 40px;
+    top: -43px;
+  }
+
+  .flipButton::before,
+  .flipButton::after {
+    content: "Let's talk ↗";
+    width: 100px;
+    height: 40px;
+    font-size: 0.8rem;
+  }
+
+  .flipButton::before {
+    transform: rotateX(0deg) translateZ(20px);
+  }
+
+  .flipButton::after {
+    transform: rotateX(-90deg) translateZ(20px);
+  }
+}
