@@ -2,6 +2,7 @@
 
 import React, { useState } from "react";
 import styles from "../styles/navigation-header.module.css";
+import { useAccentColor } from "../contexts/accent-color-context";
 
 interface NavigationHeaderProps {
   onNavigate?: (href: string) => void;
@@ -9,6 +10,7 @@ interface NavigationHeaderProps {
 
 export default function NavigationHeader({}: NavigationHeaderProps) {
   const [menuOpen, setMenuOpen] = useState(false);
+  const { currentAccent } = useAccentColor();
 
   const handleButtonClick = () => {
     console.log("Button clicked");
