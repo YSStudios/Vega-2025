@@ -8,6 +8,7 @@ import { CuboidCollider, BallCollider, Physics, RigidBody, RapierRigidBody } fro
 import { EffectComposer, N8AO } from '@react-three/postprocessing'
 import { easing } from 'maath'
 import { motion } from 'framer-motion'
+import { useAccentColor } from '../contexts/accent-color-context'
 
 const accents = ['#0093d0', '#00a78f', '#ff5057', '#ffde00']
 
@@ -48,6 +49,12 @@ export function Scene(props: SceneProps) {
   const connectors = useMemo(() => shuffle(accent), [accent])
   const [isVisible, setIsVisible] = useState(true)
   const [scrollY, setScrollY] = useState(0)
+  const { setCurrentAccent } = useAccentColor()
+  
+  // Update context when accent changes
+  useEffect(() => {
+    setCurrentAccent(accents[accent])
+  }, [accent, setCurrentAccent])
   
   useEffect(() => {
     const handleScroll = () => {
@@ -102,7 +109,7 @@ export function Scene(props: SceneProps) {
         <EffectComposer enableNormalPass={false} multisampling={8}>
           <N8AO distanceFalloff={1} aoRadius={1} intensity={4} />
         </EffectComposer>
-        <Environment resolution={256}>
+        <Environment preset="city" frames={1} resolution={256}>
           <group rotation={[-Math.PI / 3, 0, 1]}>
             <Lightformer 
               form="circle" 

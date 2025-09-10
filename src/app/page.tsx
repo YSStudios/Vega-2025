@@ -22,6 +22,7 @@ export default function Home() {
         muted={true}
         loop={true}
       />
+      <BrandsSlider />
       <WorkMarquee />
     </div>
   );

@@ -4,6 +4,7 @@ import localFont from "next/font/local";
 import "./globals.css";
 import NavigationHeader from "../components/navigation-header";
 import Footer from "../components/footer";
+import { AccentColorProvider } from "../contexts/accent-color-context";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -79,9 +80,11 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} ${argon.variable} ${mondwest.variable} ${objectSans.variable}`}
       >
-        <NavigationHeader />
-        {children}
-        <Footer />
+        <AccentColorProvider>
+          <NavigationHeader />
+          {children}
+          <Footer />
+        </AccentColorProvider>
       </body>
     </html>
   );
