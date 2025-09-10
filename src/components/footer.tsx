@@ -17,10 +17,10 @@ const footerData = {
   ],
   business: {
     title: "Business enquiries",
-    email: "hi@formandfun.co",
+    email: "info@vega.earth",
     career: {
       title: "Join our team",
-      email: "apply@formandfun.co",
+      email: "apply@vega.earth",
     },
   },
 };

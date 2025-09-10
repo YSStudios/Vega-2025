@@ -7,9 +7,7 @@ interface NavigationHeaderProps {
   onNavigate?: (href: string) => void;
 }
 
-export default function NavigationHeader({
-  onNavigate,
-}: NavigationHeaderProps) {
+export default function NavigationHeader({}: NavigationHeaderProps) {
   const [menuOpen, setMenuOpen] = useState(false);
 
   const handleButtonClick = () => {
@@ -33,7 +31,7 @@ export default function NavigationHeader({
 
           <div className={styles.buttonContainer}>
             <button className={styles.flipButton} onClick={handleButtonClick}>
-              <span className={styles.buttonText}>Let's talk</span>
+              <span className={styles.buttonText}>Let&apos;s talk</span>
               <span className={styles.buttonIcon}>↗</span>
             </button>
           </div>
