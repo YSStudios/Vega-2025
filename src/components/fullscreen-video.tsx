@@ -3,9 +3,10 @@
 import { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useRouter } from 'next/navigation';
+import MuxPlayer from '@mux/mux-player-react';
 
 interface VideoSlide {
-  src: string;
+  playbackId: string;
   poster?: string;
   title?: string;
   caseStudySlug?: string;
@@ -40,7 +41,7 @@ export default function FullscreenVideo({
   const [isPlaying, setIsPlaying] = useState(false);
   const [showControls, setShowControls] = useState(false);
   const [hasError, setHasError] = useState(false);
-  const videoRef = useRef<HTMLVideoElement>(null);
+  const muxPlayerRef = useRef<HTMLVideoElement>(null);
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
   const touchStartX = useRef<number | null>(null);
   const touchStartY = useRef<number | null>(null);
@@ -85,54 +86,35 @@ export default function FullscreenVideo({
     return () => document.removeEventListener('keydown', handleKeyDown);
   }, [videos.length]);
 
-  useEffect(() => {
-    const video = videoRef.current;
-    if (!video) return;
+  const handleLoadedData = () => {
+    setIsLoaded(true);
+    if (autoPlay && muxPlayerRef.current) {
+      muxPlayerRef.current.play().catch(() => {
+        console.log('Autoplay prevented by browser');
+      });
+    }
+  };
 
-    const handleLoadedData = () => {
-      setIsLoaded(true);
-      if (autoPlay) {
-        video.play().catch(() => {
-          console.log('Autoplay prevented by browser');
-        });
-      }
-    };
+  const handleError = () => {
+    console.error('Video failed to load');
+    setHasError(true);
+    setIsLoaded(false);
+  };
 
-    const handleError = (e: Event) => {
-      console.error('Video failed to load:', e);
-      setHasError(true);
-      setIsLoaded(false);
-    };
+  const handlePlay = () => {
+    setIsPlaying(true);
+    onPlay?.();
+  };
 
-    const handlePlay = () => {
-      setIsPlaying(true);
-      onPlay?.();
-    };
+  const handlePause = () => {
+    setIsPlaying(false);
+    onPause?.();
+  };
 
-    const handlePause = () => {
-      setIsPlaying(false);
-      onPause?.();
-    };
-
-    const handleEnded = () => {
-      setIsPlaying(false);
-      onEnded?.();
-    };
-
-    video.addEventListener('loadeddata', handleLoadedData);
-    video.addEventListener('error', handleError);
-    video.addEventListener('play', handlePlay);
-    video.addEventListener('pause', handlePause);
-    video.addEventListener('ended', handleEnded);
-
-    return () => {
-      video.removeEventListener('loadeddata', handleLoadedData);
-      video.removeEventListener('error', handleError);
-      video.removeEventListener('play', handlePlay);
-      video.removeEventListener('pause', handlePause);
-      video.removeEventListener('ended', handleEnded);
-    };
-  }, [autoPlay, onPlay, onPause, onEnded]);
+  const handleEnded = () => {
+    setIsPlaying(false);
+    onEnded?.();
+  };
 
   const handleMouseMove = () => {
     setShowControls(true);
@@ -152,7 +134,7 @@ export default function FullscreenVideo({
   };
 
   const togglePlayPause = () => {
-    const video = videoRef.current;
+    const video = muxPlayerRef.current;
     if (!video) return;
 
     if (isPlaying) {
@@ -215,22 +197,31 @@ export default function FullscreenVideo({
       onTouchEnd={handleTouchEnd}
       onClick={handleVideoClick}
     >
-      <motion.video
-        ref={videoRef}
-        src={currentVideo?.src}
-        poster={currentVideo?.poster}
-        muted={muted}
-        loop={loop}
-        playsInline
-        preload="auto"
-        crossOrigin="anonymous"
-        onClick={handleVideoClick}
+      <motion.div
         key={currentIndex}
-        className="fullscreen-video"
+        className="fullscreen-video-wrapper"
         initial={{ opacity: 0 }}
         animate={{ opacity: isLoaded ? 1 : 0 }}
         transition={{ duration: 0.5 }}
-      />
+        onClick={handleVideoClick}
+      >
+        <MuxPlayer
+          ref={muxPlayerRef}
+          playbackId={currentVideo?.playbackId}
+          poster={currentVideo?.poster}
+          muted={muted}
+          loop={loop}
+          playsInline
+          preload="auto"
+          onLoadedData={handleLoadedData}
+          onError={handleError}
+          onPlay={handlePlay}
+          onPause={handlePause}
+          onEnded={handleEnded}
+          className="fullscreen-video"
+          style={{ width: '100%', height: '100%' }}
+        />
+      </motion.div>
 
       {!isLoaded && !hasError && (
         <motion.div
@@ -252,8 +243,8 @@ export default function FullscreenVideo({
             onClick={() => {
               setHasError(false);
               setIsLoaded(false);
-              if (videoRef.current) {
-                videoRef.current.load();
+              if (muxPlayerRef.current) {
+                muxPlayerRef.current.load();
               }
             }}
             className="retry-button"

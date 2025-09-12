@@ -21,19 +21,24 @@ export default function Home() {
       <FullscreenVideo
         videos={[
           {
-            src: "https://res.cloudinary.com/dhj9rq4mu/video/upload/v1755711349/We_built_a_giant_receipt_in_SoHo_for_maccosmetics_lipstickday_reels_cosmetics_mac_rkndgq.mp4",
+            playbackId: "Kn017g6ax7ZC14b01VCbyozkWsWJCrHcej8qsMkNiYBIU",
             title: "Giant Receipt Project - MAC Cosmetics",
             caseStudySlug: "mac-cosmetics"
           },
           {
-            src: "https://res.cloudinary.com/dhj9rq4mu/video/upload/v1755711349/We_built_a_giant_receipt_in_SoHo_for_maccosmetics_lipstickday_reels_cosmetics_mac_rkndgq.mp4",
+            playbackId: "saKMQupIrVioY7mdPtRAIdCdrUWZX7ZzhRrYB00H007UI",
             title: "SoHo Installation - Behind the Scenes",
             caseStudySlug: "soho-installation"
           },
           {
-            src: "https://res.cloudinary.com/dhj9rq4mu/video/upload/v1755711349/We_built_a_giant_receipt_in_SoHo_for_maccosmetics_lipstickday_reels_cosmetics_mac_rkndgq.mp4",
+            playbackId: "qLH6CPgJy00HIJxh8B67oLjT87Ly2VF00zEzvYaQk1qvA",
             title: "Lipstick Day Campaign - Final Cut",
             caseStudySlug: "lipstick-campaign"
+          },
+          {
+            playbackId: "GO9pmH6uyGB00x024YZ2Jv1c7XJvatGx02qDGJCTZMLtDY",
+            title: "Creative Campaign Project",
+            caseStudySlug: "creative-campaign"
           }
         ]}
         autoPlay={true}
