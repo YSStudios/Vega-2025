@@ -42,6 +42,23 @@ body {
   font-family: "Inter", sans-serif;
 }
 
+/* Hide all Mux video controls completely */
+mux-player::part(controls),
+mux-player .mux-controls,
+mux-player [slot="controls"],
+.fullscreen-video::part(controls),
+.fullscreen-video .mux-controls,
+.fullscreen-video [slot="controls"] {
+  display: none !important;
+  opacity: 0 !important;
+  visibility: hidden !important;
+}
+
+mux-player {
+  --controls: none !important;
+  --media-controls: none !important;
+}
+
 body {
   color: var(--foreground);
   background: var(--background);

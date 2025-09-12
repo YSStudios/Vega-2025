@@ -5,7 +5,7 @@ import WorkMarquee from "../components/work-marquee";
 import BrandsSlider from "../components/brands-slider";
 import { Scene } from "@/components/scene";
 import Marquee from "../components/marquee";
-import FullscreenVideo from "../components/fullscreen-video";
+import ScrollVideoSection from "../components/scroll-video-section";
 
 export default function Home() {
   return (
@@ -18,33 +18,7 @@ export default function Home() {
       <Teams />
       <BrandsSlider />
       <Services />
-      <FullscreenVideo
-        videos={[
-          {
-            playbackId: "Kn017g6ax7ZC14b01VCbyozkWsWJCrHcej8qsMkNiYBIU",
-            title: "Giant Receipt Project - MAC Cosmetics",
-            caseStudySlug: "mac-cosmetics"
-          },
-          {
-            playbackId: "saKMQupIrVioY7mdPtRAIdCdrUWZX7ZzhRrYB00H007UI",
-            title: "SoHo Installation - Behind the Scenes",
-            caseStudySlug: "soho-installation"
-          },
-          {
-            playbackId: "qLH6CPgJy00HIJxh8B67oLjT87Ly2VF00zEzvYaQk1qvA",
-            title: "Lipstick Day Campaign - Final Cut",
-            caseStudySlug: "lipstick-campaign"
-          },
-          {
-            playbackId: "GO9pmH6uyGB00x024YZ2Jv1c7XJvatGx02qDGJCTZMLtDY",
-            title: "Creative Campaign Project",
-            caseStudySlug: "creative-campaign"
-          }
-        ]}
-        autoPlay={true}
-        muted={true}
-        loop={true}
-      />
+      <ScrollVideoSection />
       <WorkMarquee />
     </div>
   );

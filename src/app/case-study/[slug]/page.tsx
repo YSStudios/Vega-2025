@@ -72,6 +72,24 @@ const caseStudiesData: Record<string, CaseStudyData> = {
       'The campaign achieved record-breaking engagement rates and drove significant sales during the promotional period, establishing new benchmarks for beauty marketing.'
     ],
     description: 'Final cut of our award-winning Lipstick Day campaign.'
+  },
+  'creative-campaign': {
+    id: 'creative-campaign',
+    title: 'Creative Campaign Project',
+    subtitle: 'Brand strategy & creative direction',
+    clientName: 'Global Brand',
+    heroImage: 'https://images.unsplash.com/photo-1542744094-3a31f272c490?w=400&h=600&fit=crop',
+    backgroundColor: '#9C27B0',
+    services: [
+      'Brand strategy',
+      'Creative direction',
+      'Campaign development'
+    ],
+    overview: [
+      'An innovative campaign that pushed creative boundaries and established new industry standards for brand storytelling and audience engagement.',
+      'The project delivered exceptional results across all metrics, driving brand awareness and customer engagement to unprecedented levels.'
+    ],
+    description: 'A comprehensive creative campaign that redefined brand storytelling.'
   }
 };
 
