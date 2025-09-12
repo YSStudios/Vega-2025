@@ -1,0 +1,188 @@
+/* Full Screen Sticky Component Styles */
+
+.article {
+  position: relative;
+  scroll-snap-align: start;
+  scroll-snap-stop: normal;
+  height: 100vh; /* Ensure each section takes full viewport height */
+}
+
+.noScrollSnap {
+  scroll-snap-align: none;
+  scroll-snap-stop: normal;
+}
+
+.fullScreenSticky {
+  position: relative; /* fallback for older browsers */
+  position: sticky;
+  top: 0;
+  z-index: -1; /* push the sticky element to the back */
+  width: 100vw;
+  height: 100vh; /* fill the viewport height */
+  overflow: hidden; /* if using video */
+  margin-left: calc(-50vw + 50%); /* make truly fullscreen */
+}
+
+.media {
+  position: absolute;
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.contentWrapper {
+  position: sticky;
+  top: 0;
+  width: 100vw;
+  height: 100vh;
+  margin-left: calc(-50vw + 50%); /* make truly fullscreen */
+  padding: 0;
+  z-index: 1; /* ensure overlay is above video */
+  pointer-events: none; /* allow clicks to pass through to video */
+}
+
+.contentOverlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 4rem 6rem;
+  background: linear-gradient(135deg, rgba(0, 0, 0, 0.4) 0%, rgba(0, 0, 0, 0.1) 100%);
+  pointer-events: none; /* allow clicks to pass through */
+}
+
+.parallaxText {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 4rem 6rem;
+  z-index: 2; /* Ensure text is above everything */
+  pointer-events: none; /* Allow clicks to pass through */
+}
+
+.relativeText {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  margin-left: 0;
+  z-index: 2; /* Ensure it's above the video */
+  padding: 4rem 6rem;
+  background: linear-gradient(135deg, rgba(0, 0, 0, 0.4) 0%, rgba(0, 0, 0, 0.1) 100%);
+  pointer-events: none; /* Allow clicks to pass through */
+}
+
+.titleSection {
+  width: 100%;
+  max-width: 1200px;
+  margin: auto 0; /* Center vertically */
+  pointer-events: auto; /* allow text interaction */
+}
+
+.relativeText .titleSection {
+  pointer-events: auto; /* Ensure text is interactive in relative mode */
+}
+
+.mainTitle {
+  font-family: var(--font-argon), sans-serif;
+  font-size: clamp(4rem, 8vw, 12rem);
+  font-weight: 600;
+  color: #fff;
+  line-height: 0.9;
+  margin: 0;
+  text-shadow: 2px 2px 20px rgba(0, 0, 0, 0.5);
+  letter-spacing: -0.02em;
+  text-transform: uppercase;
+}
+
+.descriptionSection {
+  position: absolute;
+  bottom: 4rem;
+  right: 6rem;
+  max-width: 400px;
+  pointer-events: auto; /* allow text interaction */
+}
+
+.relativeText .descriptionSection {
+  pointer-events: auto; /* Ensure description is interactive in relative mode */
+}
+
+.description {
+  font-family: var(--font-object-sans), sans-serif;
+  font-size: 1.1rem;
+  font-weight: 400;
+  color: #fff;
+  line-height: 1.6;
+  margin: 0;
+  text-shadow: 1px 1px 10px rgba(0, 0, 0, 0.7);
+  background: rgba(0, 0, 0, 0.3);
+  padding: 2rem;
+  border-radius: 12px;
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.videoNumber {
+  font-family: var(--font-mondwest), monospace;
+  font-size: 1rem;
+  color: rgba(255, 255, 255, 0.7);
+  margin-bottom: 1rem;
+  font-weight: 400;
+  letter-spacing: 0.1em;
+  pointer-events: auto; /* allow text interaction */
+}
+
+.relativeText .videoNumber {
+  pointer-events: auto; /* Ensure video number is interactive in relative mode */
+}
+
+/* Responsive Design */
+@media screen and (max-width: 1024px) {
+  .parallaxText {
+    padding: 3rem 4rem;
+  }
+  
+  .descriptionSection {
+    right: 4rem;
+    bottom: 3rem;
+    max-width: 350px;
+  }
+  
+  .mainTitle {
+    font-size: clamp(3rem, 10vw, 8rem);
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .parallaxText {
+    padding: 2rem;
+  }
+  
+  .descriptionSection {
+    right: 2rem;
+    bottom: 2rem;
+    max-width: 300px;
+  }
+  
+  .mainTitle {
+    font-size: clamp(2.5rem, 12vw, 6rem);
+  }
+  
+  .description {
+    font-size: 1rem;
+    padding: 1.5rem;
+  }
+}
