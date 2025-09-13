@@ -135,6 +135,7 @@ export default function CaseStudyPage({ params }: { params: Promise<{ slug: stri
               alt={caseStudy.title}
               fill
               className="hero-image"
+              style={{ objectFit: "cover" }}
             />
           </div>
         </motion.div>
@@ -155,6 +156,7 @@ export default function CaseStudyPage({ params }: { params: Promise<{ slug: stri
                   alt={caseStudy.clientName}
                   width={120}
                   height={40}
+                  sizes="120px"
                 />
               </div>
             )}

@@ -1,8 +1,8 @@
 .scrollVideoSection {
   position: relative;
   width: 100%;
-  height: 400vh; /* Allow scrolling through 4 case studies */
-  margin: 2rem 0;
+  height: 475vh; /* Allow scrolling through 4 case studies + moderate exit scroll */
+  margin: 2rem 0 0 0;
   overflow: hidden;
 }
 
@@ -19,7 +19,7 @@
 .textContent {
   position: relative;
   width: 100%;
-  height: 400vh;
+  height: 475vh;
   z-index: 10;
 }
 
@@ -36,7 +36,7 @@
   padding: 8rem 4rem;
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: flex-end;
   transition: all 0.5s ease;
   position: relative;
   margin: 0;
@@ -84,6 +84,11 @@
   margin-top: 2rem;
   font-weight: 500;
   letter-spacing: 0.05em;
+}
+
+.emptySectionForScroll {
+  height: 100vh;
+  width: 100%;
 }
 
 /* Mobile Styles */

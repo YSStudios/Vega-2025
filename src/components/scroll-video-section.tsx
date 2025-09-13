@@ -30,11 +30,16 @@ const videos = [
 
 export default function ScrollVideoSection() {
   const [currentVideoIndex, setCurrentVideoIndex] = useState(0);
+  const [shouldPlay, setShouldPlay] = useState(false);
   const sectionRef = useRef<HTMLElement>(null);
   const videoRef = useRef<HTMLDivElement>(null);
 
   const handleVideoChange = (index: number) => {
     setCurrentVideoIndex(index);
+  };
+
+  const handleShouldPlay = (play: boolean) => {
+    setShouldPlay(play);
   };
 
   useEffect(() => {
@@ -80,7 +85,8 @@ export default function ScrollVideoSection() {
         <FullscreenVideo
           videos={videos}
           currentIndex={currentVideoIndex}
-          autoPlay={true}
+          autoPlay={shouldPlay}
+          opacity={shouldPlay ? 1 : 0}
           muted={true}
           loop={true}
         />
@@ -91,6 +97,7 @@ export default function ScrollVideoSection() {
         <CaseStudiesText 
           onVideoChange={handleVideoChange}
           currentVideoIndex={currentVideoIndex}
+          onShouldPlay={handleShouldPlay}
         />
       </div>
     </section>

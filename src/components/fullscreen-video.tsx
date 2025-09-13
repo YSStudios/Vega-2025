@@ -20,6 +20,7 @@ interface FullscreenVideoProps {
   controls?: boolean;
   className?: string;
   currentIndex?: number;
+  opacity?: number;
   onPlay?: () => void;
   onPause?: () => void;
   onEnded?: () => void;
@@ -33,6 +34,7 @@ export default function FullscreenVideo({
   controls = false,
   className = '',
   currentIndex: externalIndex,
+  opacity = 1,
   onPlay,
   onPause,
   onEnded
@@ -217,6 +219,10 @@ export default function FullscreenVideo({
       onTouchStart={handleTouchStart}
       onTouchEnd={handleTouchEnd}
       onClick={handleVideoClick}
+      style={{ 
+        opacity,
+        transition: 'opacity 0.8s ease-in-out'
+      }}
     >
       {videos.map((video, index) => (
         <motion.div
@@ -246,6 +252,7 @@ export default function FullscreenVideo({
             playsInline
             preload="auto"
             controls={false}
+            disableTracking
             onLoadedData={() => handleLoadedData(index)}
             onError={() => handleError(index)}
             onPlay={index === currentIndex ? handlePlay : undefined}

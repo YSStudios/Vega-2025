@@ -42,9 +42,10 @@ const caseStudies: CaseStudy[] = [
 interface CaseStudiesTextProps {
   onVideoChange: (index: number) => void;
   currentVideoIndex: number;
+  onShouldPlay?: (shouldPlay: boolean) => void;
 }
 
-export default function CaseStudiesText({ onVideoChange, currentVideoIndex }: CaseStudiesTextProps) {
+export default function CaseStudiesText({ onVideoChange, currentVideoIndex, onShouldPlay }: CaseStudiesTextProps) {
   const sectionsRef = useRef<(HTMLDivElement | null)[]>([]);
   const [activeIndex, setActiveIndex] = useState(0);
   const router = useRouter();
@@ -65,6 +66,11 @@ export default function CaseStudiesText({ onVideoChange, currentVideoIndex }: Ca
       const parentTop = scrollPosition + parentRect.top;
       const parentHeight = parentRect.height;
       
+      // Check if the first text section is entering from bottom of viewport
+      const firstSectionRect = firstSection.getBoundingClientRect();
+      const shouldPlayVideo = firstSectionRect.bottom <= viewportHeight;
+      onShouldPlay?.(shouldPlayVideo);
+      
       // Only update video when scrolling within this section
       if (parentRect.top > viewportHeight || parentRect.bottom < 0) {
         return; // Section is not in view
@@ -74,8 +80,9 @@ export default function CaseStudiesText({ onVideoChange, currentVideoIndex }: Ca
       const sectionProgress = Math.max(0, Math.min(1, -parentRect.top / (parentHeight - viewportHeight)));
       
       // Calculate which video should be active based on progress
-      const videoIndex = Math.floor(sectionProgress * (sectionsRef.current.length - 0.1));
-      const clampedIndex = Math.max(0, Math.min(sectionsRef.current.length - 1, videoIndex));
+      // Cap at the number of actual case studies (excluding empty section)
+      const videoIndex = Math.floor(sectionProgress * (caseStudies.length - 0.1));
+      const clampedIndex = Math.max(0, Math.min(caseStudies.length - 1, videoIndex));
 
       if (clampedIndex !== activeIndex) {
         setActiveIndex(clampedIndex);
@@ -89,7 +96,7 @@ export default function CaseStudiesText({ onVideoChange, currentVideoIndex }: Ca
     return () => {
       window.removeEventListener('scroll', handleScroll);
     };
-  }, [activeIndex, onVideoChange]);
+  }, [activeIndex, onVideoChange, onShouldPlay]);
 
   const handleCaseStudyClick = (caseStudyId: string) => {
     router.push(`/case-study/${caseStudyId}`);
@@ -142,6 +149,12 @@ export default function CaseStudiesText({ onVideoChange, currentVideoIndex }: Ca
             </div>
           </motion.div>
         ))}
+        
+        {/* Empty section to allow scrolling away the last slide */}
+        <div 
+          ref={el => sectionsRef.current[caseStudies.length] = el}
+          className={styles.emptySectionForScroll}
+        />
       </div>
     </div>
   );

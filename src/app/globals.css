@@ -185,11 +185,12 @@ a {
   right: 0;
   bottom: 0;
   display: flex;
-  align-items: center;
+  align-items: flex-end;
   justify-content: center;
   background-color: #000;
   color: #fff;
   font-size: 1.2rem;
+  padding-bottom: 2rem;
 }
 
 .video-overlay.error {

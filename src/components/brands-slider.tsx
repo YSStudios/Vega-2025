@@ -108,7 +108,8 @@ export default function BrandsSlider() {
                       width={200}
                       height={100}
                       className={styles.brandImage}
-                      style={{ objectFit: "contain" }}
+                      style={{ objectFit: "contain", height: "auto" }}
+                      sizes="200px"
                     />
                   </div>
                 </div>
