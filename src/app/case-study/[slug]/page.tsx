@@ -108,6 +108,9 @@ export default function CaseStudyPage({ params }: { params: Promise<{ slug: stri
   const heroY = useTransform(scrollYProgress, [0, 1], [0, -200]);
   const textY = useTransform(scrollYProgress, [0, 1], [0, -100]);
   const titleY = useTransform(scrollYProgress, [0, 1], [0, -150]);
+  const headerY = useTransform(scrollYProgress, [0, 1], [0, -50]);
+  const descriptionY = useTransform(scrollYProgress, [0, 1], [0, -75]);
+  const gridY = useTransform(scrollYProgress, [0, 1], [0, -25]);
 
   if (!caseStudy) {
     return <div>Case study not found</div>;
@@ -165,7 +168,7 @@ export default function CaseStudyPage({ params }: { params: Promise<{ slug: stri
           {/* Client Logo & Subtitle */}
           <motion.div
             className="case-study-header"
-            style={{ y: useTransform(scrollYProgress, [0, 1], [0, -50]) }}
+            style={{ y: headerY }}
           >
             {caseStudy.clientLogo && (
               <div className="client-logo">
@@ -191,7 +194,7 @@ export default function CaseStudyPage({ params }: { params: Promise<{ slug: stri
           {/* Description */}
           <motion.p
             className="case-study-description"
-            style={{ y: useTransform(scrollYProgress, [0, 1], [0, -75]) }}
+            style={{ y: descriptionY }}
           >
             {caseStudy.description}
           </motion.p>
@@ -199,7 +202,7 @@ export default function CaseStudyPage({ params }: { params: Promise<{ slug: stri
           {/* Services & Overview Grid */}
           <motion.div
             className="case-study-grid"
-            style={{ y: useTransform(scrollYProgress, [0, 1], [0, -25]) }}
+            style={{ y: gridY }}
           >
             {/* Services */}
             <div className="services-section">

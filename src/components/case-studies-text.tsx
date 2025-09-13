@@ -44,7 +44,7 @@ interface CaseStudiesTextProps {
   currentVideoIndex: number;
 }
 
-export default function CaseStudiesText({ onVideoChange, currentVideoIndex }: CaseStudiesTextProps) {
+export default function CaseStudiesText({ onVideoChange }: CaseStudiesTextProps) {
   const sectionsRef = useRef<(HTMLDivElement | null)[]>([]);
   const containerRef = useRef<HTMLDivElement>(null);
   const [activeIndex, setActiveIndex] = useState(0);
@@ -116,7 +116,7 @@ export default function CaseStudiesText({ onVideoChange, currentVideoIndex }: Ca
           return (
             <div
               key={caseStudy.id}
-              ref={el => sectionsRef.current[index] = el}
+              ref={el => { sectionsRef.current[index] = el; }}
               className={`${styles.caseStudySection} ${index === activeIndex ? styles.active : ''}`}
               onClick={() => handleCaseStudyClick(caseStudy.id)}
               style={{
