@@ -1,9 +1,9 @@
 'use client';
 
 import { useRouter } from 'next/navigation';
-import { motion } from 'framer-motion';
+import { motion, useScroll, useTransform } from 'framer-motion';
 import Image from 'next/image';
-import { use } from 'react';
+import { use, useRef } from 'react';
 
 interface CaseStudyData {
   id: string;
@@ -97,6 +97,17 @@ export default function CaseStudyPage({ params }: { params: Promise<{ slug: stri
   const router = useRouter();
   const { slug } = use(params);
   const caseStudy = caseStudiesData[slug];
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  // Parallax scroll effects
+  const { scrollYProgress } = useScroll({
+    target: containerRef,
+    offset: ["start start", "end start"]
+  });
+
+  const heroY = useTransform(scrollYProgress, [0, 1], [0, -200]);
+  const textY = useTransform(scrollYProgress, [0, 1], [0, -100]);
+  const titleY = useTransform(scrollYProgress, [0, 1], [0, -150]);
 
   if (!caseStudy) {
     return <div>Case study not found</div>;
@@ -108,6 +119,7 @@ export default function CaseStudyPage({ params }: { params: Promise<{ slug: stri
 
   return (
     <motion.div
+      ref={containerRef}
       className="case-study-container"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
@@ -122,9 +134,12 @@ export default function CaseStudyPage({ params }: { params: Promise<{ slug: stri
 
       <div className="case-study-content">
         {/* Left Side - Hero Image */}
-        <motion.div 
+        <motion.div
           className="case-study-hero"
-          style={{ backgroundColor: caseStudy.backgroundColor }}
+          style={{
+            backgroundColor: caseStudy.backgroundColor,
+            y: heroY
+          }}
           initial={{ x: -100, opacity: 0 }}
           animate={{ x: 0, opacity: 1 }}
           transition={{ duration: 0.6, delay: 0.2 }}
@@ -140,14 +155,18 @@ export default function CaseStudyPage({ params }: { params: Promise<{ slug: stri
         </motion.div>
 
         {/* Right Side - Content */}
-        <motion.div 
+        <motion.div
           className="case-study-details"
+          style={{ y: textY }}
           initial={{ x: 100, opacity: 0 }}
           animate={{ x: 0, opacity: 1 }}
           transition={{ duration: 0.6, delay: 0.4 }}
         >
           {/* Client Logo & Subtitle */}
-          <div className="case-study-header">
+          <motion.div
+            className="case-study-header"
+            style={{ y: useTransform(scrollYProgress, [0, 1], [0, -50]) }}
+          >
             {caseStudy.clientLogo && (
               <div className="client-logo">
                 <Image
@@ -159,16 +178,29 @@ export default function CaseStudyPage({ params }: { params: Promise<{ slug: stri
               </div>
             )}
             <p className="case-study-subtitle">{caseStudy.subtitle} —</p>
-          </div>
+          </motion.div>
 
           {/* Title */}
-          <h1 className="case-study-title">{caseStudy.title} —</h1>
-          
+          <motion.h1
+            className="case-study-title"
+            style={{ y: titleY }}
+          >
+            {caseStudy.title} —
+          </motion.h1>
+
           {/* Description */}
-          <p className="case-study-description">{caseStudy.description}</p>
+          <motion.p
+            className="case-study-description"
+            style={{ y: useTransform(scrollYProgress, [0, 1], [0, -75]) }}
+          >
+            {caseStudy.description}
+          </motion.p>
 
           {/* Services & Overview Grid */}
-          <div className="case-study-grid">
+          <motion.div
+            className="case-study-grid"
+            style={{ y: useTransform(scrollYProgress, [0, 1], [0, -25]) }}
+          >
             {/* Services */}
             <div className="services-section">
               <h3>Services —</h3>
@@ -191,7 +223,7 @@ export default function CaseStudyPage({ params }: { params: Promise<{ slug: stri
                 ))}
               </div>
             </div>
-          </div>
+          </motion.div>
         </motion.div>
       </div>
     </motion.div>

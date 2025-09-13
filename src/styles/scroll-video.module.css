@@ -43,6 +43,28 @@
   cursor: pointer;
 }
 
+/* First section starts from bottom */
+.caseStudySection:first-child {
+  justify-content: flex-end;
+  padding-bottom: 12rem;
+}
+
+/* Second section centers */
+.caseStudySection:nth-child(2) {
+  justify-content: center;
+}
+
+/* Third section in upper portion */
+.caseStudySection:nth-child(3) {
+  justify-content: flex-start;
+  padding-top: 12rem;
+}
+
+/* Fourth section centers */
+.caseStudySection:nth-child(4) {
+  justify-content: center;
+}
+
 .caseStudySection:hover {
   transform: scale(1.02);
 }

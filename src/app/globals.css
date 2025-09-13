@@ -35,7 +35,50 @@
   font-family: var(--font-object-sans), sans-serif;
 }
 
-html,
+html {
+  scroll-behavior: smooth;
+  scroll-snap-type: y proximity;
+}
+
+/* Enhanced smooth scrolling with slower, more cinematic feel */
+* {
+  scroll-behavior: smooth;
+  scroll-timeline: --scroll;
+}
+
+/* Slow down scroll momentum with CSS */
+@supports (animation-timeline: scroll()) {
+  html {
+    animation: smooth-scroll linear;
+    animation-timeline: scroll();
+    animation-duration: 1s;
+  }
+}
+
+@keyframes smooth-scroll {
+  from { scroll-behavior: smooth; }
+  to { scroll-behavior: smooth; }
+}
+
+/* Custom scrollbar for better control */
+::-webkit-scrollbar {
+  width: 0px;
+  background: transparent;
+}
+
+/* Enhance scroll momentum */
+body {
+  scroll-snap-type: y proximity;
+  overscroll-behavior-y: contain;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  html {
+    scroll-behavior: smooth;
+    scroll-padding-top: 2rem;
+  }
+}
+
 body {
   max-width: 100vw;
   overflow-x: hidden;
