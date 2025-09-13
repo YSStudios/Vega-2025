@@ -70,12 +70,22 @@ export default function Teams() {
       whileInView={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.8, delay: 0 }}
     >
-      <motion.div 
-        className={styles.container}
-        initial={{ opacity: 0, y: 20 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6, delay: 0.1 }}
-      >
+      <div className={styles.container}>
+        <motion.h2 
+          className={styles.sectionTitle}
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, delay: 0.2 }}
+        >
+          Our Team
+        </motion.h2>
+        
+        <motion.div 
+          className={styles.contentContainer}
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.4 }}
+        >
         <div className={styles.contentWrapper}>
           {/* Left side - Image with controls */}
           <div className={styles.imageSection}>
@@ -137,14 +147,8 @@ export default function Teams() {
               key={currentMember}
               initial={{ opacity: 0, x: 20 }}
               animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.5 }}
+              transition={{ duration: 0.5, delay: 0 }}
             >
-              {/* Icons */}
-              <div className={styles.icons}>
-                <div className={styles.icon}></div>
-                <div className={styles.icon}></div>
-                <div className={styles.icon}></div>
-              </div>
 
               {/* Name and Services */}
               <div className={styles.header}>
@@ -165,7 +169,8 @@ export default function Teams() {
             </motion.div>
           </div>
         </div>
-      </motion.div>
+        </motion.div>
+      </div>
     </motion.section>
   );
 }
