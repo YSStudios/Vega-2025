@@ -5,6 +5,7 @@ import "./globals.css";
 import NavigationHeader from "../components/navigation-header";
 import Footer from "../components/footer";
 import { AccentColorProvider } from "../contexts/accent-color-context";
+import SmoothScrollProvider from "../components/smooth-scroll-provider";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -80,11 +81,13 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} ${argon.variable} ${mondwest.variable} ${objectSans.variable}`}
       >
-        <AccentColorProvider>
-          <NavigationHeader />
-          {children}
-          <Footer />
-        </AccentColorProvider>
+        <SmoothScrollProvider>
+          <AccentColorProvider>
+            <NavigationHeader />
+            {children}
+            <Footer />
+          </AccentColorProvider>
+        </SmoothScrollProvider>
       </body>
     </html>
   );

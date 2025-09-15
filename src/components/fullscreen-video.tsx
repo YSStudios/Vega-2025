@@ -1,79 +1,137 @@
 'use client';
 
-import { useState, useRef, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { useState, useRef, useEffect, useCallback } from 'react';
+import { motion } from 'framer-motion';
+import { useRouter } from 'next/navigation';
+import MuxPlayer from '@mux/mux-player-react';
+
+interface VideoSlide {
+  playbackId: string;
+  poster?: string;
+  title?: string;
+  caseStudySlug?: string;
+}
 
 interface FullscreenVideoProps {
-  src: string;
-  poster?: string;
+  videos: VideoSlide[];
   autoPlay?: boolean;
   muted?: boolean;
   loop?: boolean;
   controls?: boolean;
   className?: string;
+  currentIndex?: number;
   onPlay?: () => void;
   onPause?: () => void;
   onEnded?: () => void;
 }
 
 export default function FullscreenVideo({
-  src,
-  poster,
+  videos,
   autoPlay = true,
   muted = true,
   loop = true,
   controls = false,
   className = '',
+  currentIndex: externalIndex,
   onPlay,
   onPause,
   onEnded
 }: FullscreenVideoProps) {
-  const [isLoaded, setIsLoaded] = useState(false);
+  const router = useRouter();
+  const [internalIndex, setInternalIndex] = useState(0);
+  const currentIndex = externalIndex !== undefined ? externalIndex : internalIndex;
+  const [loadedVideos, setLoadedVideos] = useState<Set<number>>(new Set());
   const [isPlaying, setIsPlaying] = useState(false);
   const [showControls, setShowControls] = useState(false);
-  const videoRef = useRef<HTMLVideoElement>(null);
+  const [hasError, setHasError] = useState(false);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const muxPlayerRefs = useRef<(any | null)[]>([]);
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const touchStartX = useRef<number | null>(null);
+  const touchStartY = useRef<number | null>(null);
+
+  const goToNext = useCallback(() => {
+    if (externalIndex === undefined) {
+      setInternalIndex((prev) => (prev + 1) % videos.length);
+    }
+    setHasError(false);
+  }, [externalIndex, videos.length]);
+
+  const goToPrevious = useCallback(() => {
+    if (externalIndex === undefined) {
+      setInternalIndex((prev) => (prev - 1 + videos.length) % videos.length);
+    }
+    setHasError(false);
+  }, [externalIndex, videos.length]);
 
   useEffect(() => {
-    const video = videoRef.current;
-    if (!video) return;
+    setHasError(false);
+    setIsPlaying(false);
+    
+    // Pause all other videos and play the current one
+    muxPlayerRefs.current.forEach((player, index) => {
+      if (player) {
+        if (index === currentIndex) {
+          if (autoPlay && loadedVideos.has(index)) {
+            player.play().catch(() => {
+              console.log('Autoplay prevented by browser');
+            });
+          }
+        } else {
+          player.pause();
+        }
+      }
+    });
+  }, [currentIndex, autoPlay, loadedVideos]);
 
-    const handleLoadedData = () => {
-      setIsLoaded(true);
-      if (autoPlay) {
-        video.play().catch(() => {
-          console.log('Autoplay prevented by browser');
-        });
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (videos.length <= 1) return;
+      
+      switch (e.key) {
+        case 'ArrowLeft':
+          e.preventDefault();
+          goToPrevious();
+          break;
+        case 'ArrowRight':
+          e.preventDefault();
+          goToNext();
+          break;
       }
     };
 
-    const handlePlay = () => {
-      setIsPlaying(true);
-      onPlay?.();
-    };
+    document.addEventListener('keydown', handleKeyDown);
+    return () => document.removeEventListener('keydown', handleKeyDown);
+  }, [videos.length, goToNext, goToPrevious]);
 
-    const handlePause = () => {
-      setIsPlaying(false);
-      onPause?.();
-    };
+  const handleLoadedData = (index: number) => {
+    setLoadedVideos(prev => new Set([...prev, index]));
+    if (autoPlay && index === currentIndex && muxPlayerRefs.current[index]) {
+      muxPlayerRefs.current[index]?.play().catch(() => {
+        console.log('Autoplay prevented by browser');
+      });
+    }
+  };
 
-    const handleEnded = () => {
-      setIsPlaying(false);
-      onEnded?.();
-    };
+  const handleError = (index: number) => {
+    console.error(`Video ${index} failed to load`);
+    setHasError(true);
+  };
 
-    video.addEventListener('loadeddata', handleLoadedData);
-    video.addEventListener('play', handlePlay);
-    video.addEventListener('pause', handlePause);
-    video.addEventListener('ended', handleEnded);
+  const handlePlay = () => {
+    setIsPlaying(true);
+    onPlay?.();
+  };
 
-    return () => {
-      video.removeEventListener('loadeddata', handleLoadedData);
-      video.removeEventListener('play', handlePlay);
-      video.removeEventListener('pause', handlePause);
-      video.removeEventListener('ended', handleEnded);
-    };
-  }, [autoPlay, onPlay, onPause, onEnded]);
+  const handlePause = () => {
+    setIsPlaying(false);
+    onPause?.();
+  };
+
+  const handleEnded = () => {
+    setIsPlaying(false);
+    onEnded?.();
+  };
 
   const handleMouseMove = () => {
     setShowControls(true);
@@ -93,7 +151,7 @@ export default function FullscreenVideo({
   };
 
   const togglePlayPause = () => {
-    const video = videoRef.current;
+    const video = muxPlayerRefs.current[currentIndex];
     if (!video) return;
 
     if (isPlaying) {
@@ -105,142 +163,138 @@ export default function FullscreenVideo({
     }
   };
 
-  const handleVideoClick = () => {
-    if (!controls) {
+  const handleVideoClick = (e: React.MouseEvent) => {
+    e.preventDefault();
+    const currentVideo = videos[currentIndex];
+    console.log('Video clicked!', currentVideo?.caseStudySlug); // Debug log
+    if (currentVideo?.caseStudySlug) {
+      console.log('Navigating to:', `/case-study/${currentVideo.caseStudySlug}`); // Debug log
+      router.push(`/case-study/${currentVideo.caseStudySlug}`);
+    } else if (!controls) {
       togglePlayPause();
     }
   };
 
+  const handleTouchStart = (e: React.TouchEvent) => {
+    if (videos.length <= 1) return;
+    const touch = e.touches[0];
+    touchStartX.current = touch.clientX;
+    touchStartY.current = touch.clientY;
+  };
+
+  const handleTouchEnd = (e: React.TouchEvent) => {
+    if (videos.length <= 1 || touchStartX.current === null || touchStartY.current === null) return;
+    
+    const touch = e.changedTouches[0];
+    const deltaX = touch.clientX - touchStartX.current;
+    const deltaY = touch.clientY - touchStartY.current;
+    const absDeltaX = Math.abs(deltaX);
+    const absDeltaY = Math.abs(deltaY);
+
+    // If it's a tap (small movement), treat as click
+    if (absDeltaX < 10 && absDeltaY < 10) {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      handleVideoClick(e as any);
+    } else if (absDeltaX > absDeltaY && absDeltaX > 50) {
+      if (deltaX > 0) {
+        goToPrevious();
+      } else {
+        goToNext();
+      }
+    }
+
+    touchStartX.current = null;
+    touchStartY.current = null;
+  };
+
   return (
     <div 
-      className={`fullscreen-video-container ${className}`}
+      className={`fullscreen-video-container ${showControls || !isPlaying ? 'cursor-pointer' : 'cursor-none'} ${className}`}
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
-      style={{
-        position: 'relative',
-        width: '100vw',
-        height: '100vh',
-        overflow: 'hidden',
-        cursor: showControls || !isPlaying ? 'pointer' : 'none',
-        marginLeft: 'calc(-50vw + 50%)'
-      }}
+      onTouchStart={handleTouchStart}
+      onTouchEnd={handleTouchEnd}
+      onClick={handleVideoClick}
     >
-      <motion.video
-        ref={videoRef}
-        src={src}
-        poster={poster}
-        muted={muted}
-        loop={loop}
-        playsInline
-        preload="metadata"
-        onClick={handleVideoClick}
-        initial={{ opacity: 0 }}
-        animate={{ opacity: isLoaded ? 1 : 0 }}
-        transition={{ duration: 0.5 }}
-        style={{
-          width: '100%',
-          height: '100%',
-          objectFit: 'cover',
-          objectPosition: 'center'
-        }}
-      />
-
-      {!isLoaded && (
+      {videos.map((video, index) => (
         <motion.div
-          className="loading-overlay"
-          initial={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
+          key={`video-${index}`}
+          className="fullscreen-video-wrapper"
+          initial={{ opacity: 0 }}
+          animate={{ 
+            opacity: index === currentIndex && loadedVideos.has(index) ? 1 : 0,
+            zIndex: index === currentIndex ? 2 : 1
+          }}
+          transition={{ duration: 1.2, ease: 'easeInOut' }}
+          onClick={handleVideoClick}
           style={{
             position: 'absolute',
             top: 0,
             left: 0,
-            right: 0,
-            bottom: 0,
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            backgroundColor: '#000',
-            color: '#fff',
-            fontSize: '1.2rem'
+            width: '100%',
+            height: '100%'
           }}
+        >
+          <MuxPlayer
+            ref={el => { muxPlayerRefs.current[index] = el; }}
+            playbackId={video.playbackId}
+            poster={video.poster}
+            muted={muted}
+            loop={loop}
+            playsInline
+            preload="auto"
+            onLoadedData={() => handleLoadedData(index)}
+            onError={() => handleError(index)}
+            onPlay={index === currentIndex ? handlePlay : undefined}
+            onPause={index === currentIndex ? handlePause : undefined}
+            onEnded={index === currentIndex ? handleEnded : undefined}
+            className="fullscreen-video"
+            style={{ 
+              width: '100%', 
+              height: '100%',
+              '--controls': 'none',
+              '--media-object-fit': 'cover'
+            } as React.CSSProperties}
+          />
+        </motion.div>
+      ))}
+
+      {!loadedVideos.has(currentIndex) && !hasError && (
+        <motion.div
+          className="video-overlay"
+          initial={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
         >
           Loading video...
         </motion.div>
       )}
 
-      <AnimatePresence>
-        {showControls && controls && (
-          <motion.div
-            className="video-controls"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.3 }}
-            style={{
-              position: 'absolute',
-              bottom: '2rem',
-              left: '50%',
-              transform: 'translateX(-50%)',
-              display: 'flex',
-              alignItems: 'center',
-              gap: '1rem',
-              padding: '1rem 2rem',
-              backgroundColor: 'rgba(0, 0, 0, 0.7)',
-              borderRadius: '50px',
-              backdropFilter: 'blur(10px)'
+      {hasError && (
+        <motion.div
+          className="video-overlay error"
+          initial={{ opacity: 1 }}
+        >
+          <div>Failed to load video</div>
+          <button
+            onClick={() => {
+              setHasError(false);
+              if (muxPlayerRefs.current[currentIndex]) {
+                muxPlayerRefs.current[currentIndex]?.load();
+              }
             }}
+            className="retry-button"
           >
-            <button
-              onClick={togglePlayPause}
-              style={{
-                background: 'none',
-                border: 'none',
-                color: '#fff',
-                fontSize: '1.5rem',
-                cursor: 'pointer',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                width: '40px',
-                height: '40px',
-                borderRadius: '50%',
-                transition: 'background-color 0.2s'
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.backgroundColor = 'rgba(255, 255, 255, 0.1)';
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.backgroundColor = 'transparent';
-              }}
-            >
-              {isPlaying ? '⏸️' : '▶️'}
-            </button>
-          </motion.div>
-        )}
-      </AnimatePresence>
+            Retry
+          </button>
+        </motion.div>
+      )}
 
-      <style jsx>{`
-        .fullscreen-video-container {
-          -webkit-user-select: none;
-          -moz-user-select: none;
-          -ms-user-select: none;
-          user-select: none;
-        }
+      {/* Video Title Overlay - Hidden for scroll-based text overlay */}
 
-        @media (max-width: 768px) {
-          .video-controls {
-            bottom: 1rem !important;
-            padding: 0.8rem 1.5rem !important;
-          }
-        }
+      {/* Navigation hidden for scroll-based control */}
 
-        @media (max-width: 480px) {
-          .video-controls {
-            bottom: 0.5rem !important;
-            padding: 0.6rem 1rem !important;
-          }
-        }
-      `}</style>
+      {/* Video controls hidden for clean overlay experience */}
+
     </div>
   );
 }

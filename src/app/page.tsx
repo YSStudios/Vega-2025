@@ -5,7 +5,7 @@ import WorkMarquee from "../components/work-marquee";
 import BrandsSlider from "../components/brands-slider";
 import { Scene } from "@/components/scene";
 import Marquee from "../components/marquee";
-import FullscreenVideo from "../components/fullscreen-video";
+import ScrollVideoSection from "../components/scroll-video-section";
 
 export default function Home() {
   return (

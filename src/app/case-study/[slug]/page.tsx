@@ -1,0 +1,234 @@
+'use client';
+
+import { useRouter } from 'next/navigation';
+import { motion, useScroll, useTransform } from 'framer-motion';
+import Image from 'next/image';
+import { use, useRef } from 'react';
+
+interface CaseStudyData {
+  id: string;
+  title: string;
+  subtitle: string;
+  clientName: string;
+  clientLogo?: string;
+  heroImage: string;
+  backgroundColor: string;
+  services: string[];
+  overview: string[];
+  description: string;
+}
+
+const caseStudiesData: Record<string, CaseStudyData> = {
+  'mac-cosmetics': {
+    id: 'mac-cosmetics',
+    title: 'MAC Cosmetics',
+    subtitle: 'Experiential design & brand activation',
+    clientName: 'MAC Cosmetics',
+    heroImage: 'https://images.unsplash.com/photo-1596462502278-27bfdc403348?w=400&h=600&fit=crop',
+    backgroundColor: '#FFD700',
+    services: [
+      'Experiential design',
+      'Brand activation', 
+      'Installation art'
+    ],
+    overview: [
+      'We created a groundbreaking installation experience in SoHo that transformed the way people interact with MAC Cosmetics, creating viral moments and lasting brand connections.',
+      'The giant receipt installation drove massive social engagement and foot traffic, establishing a new benchmark for experiential marketing in the beauty industry.'
+    ],
+    description: 'Giant Receipt Project - transforming cosmetics retail through immersive brand experiences.'
+  },
+  'soho-installation': {
+    id: 'soho-installation',
+    title: 'SoHo Creative Installation',
+    subtitle: 'Experiential design & brand activation',
+    clientName: 'Creative Studio',
+    heroImage: 'https://images.unsplash.com/photo-1541961017774-22349e4a1262?w=400&h=600&fit=crop',
+    backgroundColor: '#FF6B6B',
+    services: [
+      'Experiential design',
+      'Brand activation',
+      'Installation art'
+    ],
+    overview: [
+      'An immersive brand experience in the heart of SoHo, creating a memorable connection between brands and their audiences through interactive installations.',
+      'The installation drove significant foot traffic and social media engagement, amplifying brand awareness in a key market while setting new standards for experiential marketing.'
+    ],
+    description: 'Behind the scenes of our groundbreaking SoHo installation project.'
+  },
+  'lipstick-campaign': {
+    id: 'lipstick-campaign',
+    title: 'Lipstick Day Campaign',
+    subtitle: 'Digital campaign & social strategy',
+    clientName: 'Beauty Brand',
+    heroImage: 'https://images.unsplash.com/photo-1522338242992-e1a54906a8da?w=400&h=600&fit=crop',
+    backgroundColor: '#E91E63',
+    services: [
+      'Digital campaign',
+      'Social media strategy',
+      'Content creation'
+    ],
+    overview: [
+      'A comprehensive digital campaign celebrating National Lipstick Day, engaging millions across social platforms with innovative content and interactive experiences.',
+      'The campaign achieved record-breaking engagement rates and drove significant sales during the promotional period, establishing new benchmarks for beauty marketing.'
+    ],
+    description: 'Final cut of our award-winning Lipstick Day campaign.'
+  },
+  'creative-campaign': {
+    id: 'creative-campaign',
+    title: 'Creative Campaign Project',
+    subtitle: 'Brand strategy & creative direction',
+    clientName: 'Global Brand',
+    heroImage: 'https://images.unsplash.com/photo-1542744094-3a31f272c490?w=400&h=600&fit=crop',
+    backgroundColor: '#9C27B0',
+    services: [
+      'Brand strategy',
+      'Creative direction',
+      'Campaign development'
+    ],
+    overview: [
+      'An innovative campaign that pushed creative boundaries and established new industry standards for brand storytelling and audience engagement.',
+      'The project delivered exceptional results across all metrics, driving brand awareness and customer engagement to unprecedented levels.'
+    ],
+    description: 'A comprehensive creative campaign that redefined brand storytelling.'
+  }
+};
+
+export default function CaseStudyPage({ params }: { params: Promise<{ slug: string }> }) {
+  const router = useRouter();
+  const { slug } = use(params);
+  const caseStudy = caseStudiesData[slug];
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  // Parallax scroll effects
+  const { scrollYProgress } = useScroll({
+    target: containerRef,
+    offset: ["start start", "end start"]
+  });
+
+  const heroY = useTransform(scrollYProgress, [0, 1], [0, -200]);
+  const textY = useTransform(scrollYProgress, [0, 1], [0, -100]);
+  const titleY = useTransform(scrollYProgress, [0, 1], [0, -150]);
+  const headerY = useTransform(scrollYProgress, [0, 1], [0, -50]);
+  const descriptionY = useTransform(scrollYProgress, [0, 1], [0, -75]);
+  const gridY = useTransform(scrollYProgress, [0, 1], [0, -25]);
+
+  if (!caseStudy) {
+    return <div>Case study not found</div>;
+  }
+
+  const handleClose = () => {
+    router.back();
+  };
+
+  return (
+    <motion.div
+      ref={containerRef}
+      className="case-study-container"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      transition={{ duration: 0.5 }}
+    >
+      {/* Close Button */}
+      <button className="case-study-close" onClick={handleClose}>
+        <span>Close</span>
+        <span className="close-x">✕</span>
+      </button>
+
+      <div className="case-study-content">
+        {/* Left Side - Hero Image */}
+        <motion.div
+          className="case-study-hero"
+          style={{
+            backgroundColor: caseStudy.backgroundColor,
+            y: heroY
+          }}
+          initial={{ x: -100, opacity: 0 }}
+          animate={{ x: 0, opacity: 1 }}
+          transition={{ duration: 0.6, delay: 0.2 }}
+        >
+          <div className="hero-image-container">
+            <Image
+              src={caseStudy.heroImage}
+              alt={caseStudy.title}
+              fill
+              className="hero-image"
+            />
+          </div>
+        </motion.div>
+
+        {/* Right Side - Content */}
+        <motion.div
+          className="case-study-details"
+          style={{ y: textY }}
+          initial={{ x: 100, opacity: 0 }}
+          animate={{ x: 0, opacity: 1 }}
+          transition={{ duration: 0.6, delay: 0.4 }}
+        >
+          {/* Client Logo & Subtitle */}
+          <motion.div
+            className="case-study-header"
+            style={{ y: headerY }}
+          >
+            {caseStudy.clientLogo && (
+              <div className="client-logo">
+                <Image
+                  src={caseStudy.clientLogo}
+                  alt={caseStudy.clientName}
+                  width={120}
+                  height={40}
+                />
+              </div>
+            )}
+            <p className="case-study-subtitle">{caseStudy.subtitle} —</p>
+          </motion.div>
+
+          {/* Title */}
+          <motion.h1
+            className="case-study-title"
+            style={{ y: titleY }}
+          >
+            {caseStudy.title} —
+          </motion.h1>
+
+          {/* Description */}
+          <motion.p
+            className="case-study-description"
+            style={{ y: descriptionY }}
+          >
+            {caseStudy.description}
+          </motion.p>
+
+          {/* Services & Overview Grid */}
+          <motion.div
+            className="case-study-grid"
+            style={{ y: gridY }}
+          >
+            {/* Services */}
+            <div className="services-section">
+              <h3>Services —</h3>
+              <ul className="services-list">
+                {caseStudy.services.map((service, index) => (
+                  <li key={index}>
+                    <span className="service-arrow">→</span>
+                    {service}
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            {/* Overview */}
+            <div className="overview-section">
+              <h3>Overview —</h3>
+              <div className="overview-content">
+                {caseStudy.overview.map((paragraph, index) => (
+                  <p key={index}>{paragraph}</p>
+                ))}
+              </div>
+            </div>
+          </motion.div>
+        </motion.div>
+      </div>
+    </motion.div>
+  );
+}
