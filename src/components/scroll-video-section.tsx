@@ -78,27 +78,36 @@ export default function ScrollVideoSection() {
   }, [currentVideoIndex]);
 
   return (
-    <section ref={sectionRef} className={styles.scrollVideoSection} data-scroll-video-section>
-      {/* Sticky Video Background */}
-      <div ref={videoRef} className={styles.videoBackground}>
-        <FullscreenVideo
-          videos={videos}
-          currentIndex={currentVideoIndex}
-          autoPlay={shouldPlay}
-          opacity={shouldPlay ? 1 : 0}
-          muted={true}
-          loop={true}
-        />
+    <>
+      <div className={styles.sectionTitle}>
+        <div className={styles.sectionTitleContainer}>
+          <h2>Case Studies —</h2>
+          <p className={styles.sectionSubtitle}>Some of our most recent work</p>
+        </div>
       </div>
       
-      {/* Scrollable Text Content Overlay */}
-      <div className={styles.textContent}>
-        <CaseStudiesText 
-          onVideoChange={handleVideoChange}
-          currentVideoIndex={currentVideoIndex}
-          onShouldPlay={handleShouldPlay}
-        />
-      </div>
-    </section>
+      <section ref={sectionRef} className={styles.scrollVideoSection} data-scroll-video-section>
+        {/* Sticky Video Background */}
+        <div ref={videoRef} className={styles.videoBackground}>
+          <FullscreenVideo
+            videos={videos}
+            currentIndex={currentVideoIndex}
+            autoPlay={shouldPlay}
+            opacity={shouldPlay ? 1 : 0}
+            muted={true}
+            loop={true}
+          />
+        </div>
+        
+        {/* Scrollable Text Content Overlay */}
+        <div className={styles.textContent}>
+          <CaseStudiesText 
+            onVideoChange={handleVideoChange}
+            currentVideoIndex={currentVideoIndex}
+            onShouldPlay={handleShouldPlay}
+          />
+        </div>
+      </section>
+    </>
   );
 }

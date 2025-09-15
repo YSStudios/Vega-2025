@@ -73,7 +73,7 @@ export default function CaseStudiesText({ onVideoChange, currentVideoIndex, onSh
       
       // Check if the first text section is entering from bottom of viewport
       const firstSectionRect = firstSection.getBoundingClientRect();
-      const shouldPlayVideo = firstSectionRect.bottom <= viewportHeight;
+      const shouldPlayVideo = firstSectionRect.bottom <= viewportHeight * 2;
       onShouldPlay?.(shouldPlayVideo);
       
       // Only update video when scrolling within this section

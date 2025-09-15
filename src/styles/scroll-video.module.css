@@ -2,8 +2,9 @@
   position: relative;
   width: 100%;
   height: 475vh; /* Allow scrolling through 4 case studies + moderate exit scroll */
-  margin: 2rem 0 0 0;
+  margin: 0;
   overflow: hidden;
+  z-index: 5;
 }
 
 .videoBackground {
@@ -22,9 +23,49 @@
   height: 475vh;
   z-index: 10;
   /* Add space at top so first text starts off-screen */
-  padding-top: 100vh;
+  padding-top: 50vh;
   /* Add space at bottom so last text can scroll to top */
   padding-bottom: 100vh;
+}
+
+.sectionTitle {
+  padding: 8rem 4rem;
+  background: #000;
+  color: #fff;
+  min-height: 80vh;
+  display: flex;
+  align-items: center;
+}
+
+.sectionTitleContainer {
+  max-width: 1400px;
+  margin: 0 auto;
+  width: 100%;
+  position: relative;
+}
+
+.sectionTitle h2 {
+  font-family: var(--font-argon), sans-serif;
+  font-size: 8rem;
+  font-weight: 400;
+  color: #fff;
+  line-height: 0.9;
+  margin: 0;
+  text-align: left;
+}
+
+.sectionSubtitle {
+  position: absolute;
+  top: 12rem;
+  right: 0;
+  font-family: var(--font-argon), sans-serif;
+  font-size: 2rem;
+  font-weight: 400;
+  color: #fff;
+  margin: 0;
+  max-width: 500px;
+  text-align: right;
+  line-height: 1.2;
 }
 
 .caseStudiesTextContainer {
@@ -47,27 +88,9 @@
   cursor: pointer;
 }
 
-/* First section starts from bottom */
+/* All sections consistently positioned */
 .caseStudySection:first-child {
-  justify-content: flex-end;
-  padding-bottom: 8rem;
-  margin-top: -50vh; /* Pull the first section up so text starts at bottom */
-}
-
-/* Second section centers */
-.caseStudySection:nth-child(2) {
-  justify-content: center;
-}
-
-/* Third section in upper portion */
-.caseStudySection:nth-child(3) {
-  justify-content: flex-start;
-  padding-top: 12rem;
-}
-
-/* Fourth section centers */
-.caseStudySection:nth-child(4) {
-  justify-content: center;
+  margin-top: -25vh; /* Pull the first section up so text starts at bottom */
 }
 
 .caseStudySection:hover {
@@ -120,6 +143,26 @@
 
 /* Mobile Styles */
 @media (max-width: 768px) {
+  .scrollVideoSection {
+    margin: 0;
+  }
+
+  .sectionTitle {
+    padding: 4rem 2rem;
+    min-height: 70vh;
+  }
+
+  .sectionTitle h2 {
+    font-size: 4rem;
+    line-height: 0.8;
+  }
+
+  .sectionSubtitle {
+    font-size: 1.3rem;
+    max-width: 280px;
+    top: 8rem;
+  }
+
   .caseStudyTitle {
     font-size: 2rem;
   }
