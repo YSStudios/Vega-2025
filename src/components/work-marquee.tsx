@@ -7,12 +7,10 @@ import styles from "../styles/work-marquee.module.css";
 const workItems = [
   "GEN-AI",
   "AR", 
-  "VIRTUAL",
-  "PRODUCTION",
+  "VR",
   "BRANDING",
   "WEB DESIGN",
   "PRODUCT DESIGN",
-  "CREATIVE DEVELOPMENT", 
   "FRONTEND",
   "BACKEND",
   "MOBILE",

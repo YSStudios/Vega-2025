@@ -16,15 +16,10 @@ export default function Home() {
       <Marquee />
       <About />
       <Teams />
-      <BrandsSlider />
       <Services />
-      <FullscreenVideo
-        src="https://res.cloudinary.com/dhj9rq4mu/video/upload/v1755711349/We_built_a_giant_receipt_in_SoHo_for_maccosmetics_lipstickday_reels_cosmetics_mac_rkndgq.mp4"
-        autoPlay={true}
-        muted={true}
-        loop={true}
-      />
       <WorkMarquee />
+      <ScrollVideoSection />
+      <BrandsSlider />
     </div>
   );
 }
