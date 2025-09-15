@@ -69,7 +69,6 @@ export default function CaseStudiesText({ onVideoChange, currentVideoIndex, onSh
       if (!parentSection) return;
       
       const parentRect = parentSection.getBoundingClientRect();
-      const parentTop = scrollPosition + parentRect.top;
       const parentHeight = parentRect.height;
       
       // Check if the first text section is entering from bottom of viewport
@@ -114,7 +113,7 @@ export default function CaseStudiesText({ onVideoChange, currentVideoIndex, onSh
         {caseStudies.map((caseStudy, index) => (
           <motion.div
             key={caseStudy.id}
-            ref={el => sectionsRef.current[index] = el}
+            ref={el => { sectionsRef.current[index] = el; }}
             className={`${styles.caseStudySection} ${index === activeIndex ? styles.active : ''}`}
             initial={{ opacity: 0.3 }}
             animate={{ 
@@ -158,7 +157,7 @@ export default function CaseStudiesText({ onVideoChange, currentVideoIndex, onSh
         
         {/* Empty section to allow scrolling away the last slide */}
         <div 
-          ref={el => sectionsRef.current[caseStudies.length] = el}
+          ref={el => { sectionsRef.current[caseStudies.length] = el; }}
           className={styles.emptySectionForScroll}
         />
       </div>

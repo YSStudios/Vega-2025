@@ -249,7 +249,6 @@ export default function FullscreenVideo({
             loop={loop}
             playsInline
             preload="auto"
-            controls={false}
             disableTracking
             onLoadedData={() => handleLoadedData(index)}
             onError={() => handleError(index)}

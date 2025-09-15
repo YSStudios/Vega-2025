@@ -38,7 +38,7 @@ export default function WorkMarquee() {
         whileInView={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6, delay: 0.2 }}
       >
-        WORK
+        Work
       </motion.h2>
       
       <div className={styles.marqueeContainer}>
