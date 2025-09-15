@@ -139,7 +139,7 @@ a {
 }
 
 .scene-container {
-  height: 100vh;
+  height: 75vh;
   width: 100%;
   /* border-radius: 1rem; */
   overflow: hidden;
@@ -148,7 +148,7 @@ a {
 
 .scroll-indicator-fixed {
   position: fixed;
-  bottom: 4rem;
+  bottom: 28vh;
   left: 50%;
   z-index: 999;
   pointer-events: none;
