@@ -46,14 +46,13 @@ export default function ScrollVideoSection() {
     const handleScroll = () => {
       const section = sectionRef.current;
       const video = videoRef.current;
-      
+
       if (!section || !video) return;
 
       const sectionRect = section.getBoundingClientRect();
       const sectionTop = sectionRect.top;
       const sectionBottom = sectionRect.bottom;
       const windowHeight = window.innerHeight;
-
       // Calculate if section is in view and how much
       if (sectionTop <= 0 && sectionBottom > windowHeight) {
         // Section is taking full viewport, video should be sticky
@@ -64,7 +63,7 @@ export default function ScrollVideoSection() {
         video.style.position = 'absolute';
         video.style.top = '0';
       } else if (sectionBottom <= windowHeight) {
-        // Section is above viewport, video should be at bottom of section  
+        // Section is above viewport, video should be at bottom of section
         video.style.position = 'absolute';
         video.style.top = `${sectionRect.height - windowHeight}px`;
       }
@@ -76,7 +75,7 @@ export default function ScrollVideoSection() {
     return () => {
       window.removeEventListener('scroll', handleScroll);
     };
-  }, []);
+  }, [currentVideoIndex]);
 
   return (
     <section ref={sectionRef} className={styles.scrollVideoSection} data-scroll-video-section>

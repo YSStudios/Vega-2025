@@ -1,7 +1,7 @@
 'use client';
 
-import { useState, useRef, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { useState, useRef, useEffect, useCallback } from 'react';
+import { motion } from 'framer-motion';
 import { useRouter } from 'next/navigation';
 import MuxPlayer from '@mux/mux-player-react';
 
@@ -46,28 +46,25 @@ export default function FullscreenVideo({
   const [isPlaying, setIsPlaying] = useState(false);
   const [showControls, setShowControls] = useState(false);
   const [hasError, setHasError] = useState(false);
-  const muxPlayerRefs = useRef<(HTMLVideoElement | null)[]>([]);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const muxPlayerRefs = useRef<(any | null)[]>([]);
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
   const touchStartX = useRef<number | null>(null);
   const touchStartY = useRef<number | null>(null);
 
-  const currentVideo = videos[currentIndex];
-
-  const goToNext = () => {
+  const goToNext = useCallback(() => {
     if (externalIndex === undefined) {
       setInternalIndex((prev) => (prev + 1) % videos.length);
     }
-    setIsLoaded(false);
     setHasError(false);
-  };
+  }, [externalIndex, videos.length]);
 
-  const goToPrevious = () => {
+  const goToPrevious = useCallback(() => {
     if (externalIndex === undefined) {
       setInternalIndex((prev) => (prev - 1 + videos.length) % videos.length);
     }
-    setIsLoaded(false);
     setHasError(false);
-  };
+  }, [externalIndex, videos.length]);
 
   useEffect(() => {
     setHasError(false);
@@ -107,7 +104,7 @@ export default function FullscreenVideo({
 
     document.addEventListener('keydown', handleKeyDown);
     return () => document.removeEventListener('keydown', handleKeyDown);
-  }, [videos.length]);
+  }, [videos.length, goToNext, goToPrevious]);
 
   const handleLoadedData = (index: number) => {
     setLoadedVideos(prev => new Set([...prev, index]));
@@ -198,6 +195,7 @@ export default function FullscreenVideo({
 
     // If it's a tap (small movement), treat as click
     if (absDeltaX < 10 && absDeltaY < 10) {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       handleVideoClick(e as any);
     } else if (absDeltaX > absDeltaY && absDeltaX > 50) {
       if (deltaX > 0) {
@@ -244,7 +242,7 @@ export default function FullscreenVideo({
           }}
         >
           <MuxPlayer
-            ref={el => muxPlayerRefs.current[index] = el}
+            ref={el => { muxPlayerRefs.current[index] = el; }}
             playbackId={video.playbackId}
             poster={video.poster}
             muted={muted}

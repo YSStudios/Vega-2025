@@ -78,7 +78,7 @@ export default function BrandsSlider() {
         whileInView={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6, delay: 0.2 }}
       >
-        BRANDS
+        Brands
       </motion.h2>
       
       <div className={styles.brandsContainer}>

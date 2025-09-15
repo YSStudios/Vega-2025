@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useRef, useState } from 'react';
-import { motion } from 'framer-motion';
+import { motion, useScroll, useTransform } from 'framer-motion';
 import { useRouter } from 'next/navigation';
 import styles from '../styles/scroll-video.module.css';
 
@@ -47,12 +47,18 @@ interface CaseStudiesTextProps {
 
 export default function CaseStudiesText({ onVideoChange, currentVideoIndex, onShouldPlay }: CaseStudiesTextProps) {
   const sectionsRef = useRef<(HTMLDivElement | null)[]>([]);
+  const containerRef = useRef<HTMLDivElement>(null);
   const [activeIndex, setActiveIndex] = useState(0);
   const router = useRouter();
 
+  // Global scroll progress for different parallax speeds
+  const { scrollY } = useScroll();
+  const subtitleY = useTransform(scrollY, [0, 2000], [0, -100]);  // Slowest
+  const titleY = useTransform(scrollY, [0, 2000], [0, -300]);     // Fastest
+  const ctaY = useTransform(scrollY, [0, 2000], [0, -200]);       // Medium
+
   useEffect(() => {
     const handleScroll = () => {
-      const scrollPosition = window.scrollY;
       const viewportHeight = window.innerHeight;
       
       // Find the parent section to get scroll bounds
@@ -103,7 +109,7 @@ export default function CaseStudiesText({ onVideoChange, currentVideoIndex, onSh
   };
 
   return (
-    <div className={styles.caseStudiesTextContainer}>
+    <div ref={containerRef} className={styles.caseStudiesTextContainer}>
       <div className={styles.caseStudiesContent}>
         {caseStudies.map((caseStudy, index) => (
           <motion.div

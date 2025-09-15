@@ -17,9 +17,9 @@ export default function Home() {
       <About />
       <Teams />
       <Services />
+      <WorkMarquee />
       <ScrollVideoSection />
       <BrandsSlider />
-      <WorkMarquee />
     </div>
   );
 }
