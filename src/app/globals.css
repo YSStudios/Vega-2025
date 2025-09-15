@@ -146,9 +146,21 @@ a {
   position: relative;
 }
 
+@media (max-width: 1024px) and (min-width: 769px) {
+  .scene-container {
+    height: 85vh;
+  }
+}
+
+@media (max-width: 768px) {
+  .scene-container {
+    height: 92vh;
+  }
+}
+
 .scroll-indicator-fixed {
   position: fixed;
-  bottom: 28vh;
+  bottom: 28vh; /* 3vh from bottom of 75vh scene (75-28=47, 75-47=28) */
   left: 50%;
   z-index: 999;
   pointer-events: none;
@@ -158,6 +170,18 @@ a {
   justify-content: center;
   gap: 0.5rem;
   transform-origin: center;
+}
+
+@media (max-width: 1024px) and (min-width: 769px) {
+  .scroll-indicator-fixed {
+    bottom: 18vh; /* 3vh from bottom of 85vh scene (85-18=67, 85-67=18) */
+  }
+}
+
+@media (max-width: 768px) {
+  .scroll-indicator-fixed {
+    bottom: 11vh; /* 3vh from bottom of 92vh scene (92-11=81, 92-81=11) */
+  }
 }
 
 .scroll-text {

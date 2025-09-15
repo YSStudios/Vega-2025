@@ -79,11 +79,10 @@ export function Scene(props: SceneProps) {
         shadows 
         dpr={[1, 1.5]} 
         gl={{ antialias: false }} 
-        camera={{ position: [0, 0, 15], fov: 17.5, near: 1, far: 20 }} 
+        camera={{ position: [0, 0, 15], fov: 17.5, near: 1, far: 30 }} 
         {...props}
       >
         <color attach="background" args={['#000']} />
-        <OrbitControls enableZoom={false}/>
         <ambientLight intensity={0.4} />
         <spotLight position={[10, 10, 10]} angle={0.15} penumbra={1} intensity={1} castShadow />
         <OrbitingScene>
@@ -177,7 +176,7 @@ function Connector({
   const api = useRef<RapierRigidBody>(null)
   const vec = useMemo(() => new THREE.Vector3(), [])
   const r = THREE.MathUtils.randFloatSpread
-  const pos = useMemo(() => position || [r(10), r(10), r(10)] as [number, number, number], [position, r])
+  const pos = useMemo(() => position || [r(20), r(20), r(20)] as [number, number, number], [position, r])
   
   useFrame((state, delta) => {
     Math.min(0.1, delta)
@@ -289,6 +288,7 @@ function Model({ children, color = 'white', roughness = 0.15, metalness = 0.2, .
       geometry={geometry}
       metalness={metalness}
       roughness={roughness}
+      rotation={[Math.PI / 2, 0, 0]}
       {...props}
     >
       {children}
