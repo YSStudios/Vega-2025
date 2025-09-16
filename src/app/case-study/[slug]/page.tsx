@@ -3,7 +3,7 @@
 import { useRouter } from 'next/navigation';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import Image from 'next/image';
-import { use, useRef } from 'react';
+import { use, useRef, useState, useCallback, useEffect } from 'react';
 
 interface CaseStudyData {
   id: string;
@@ -97,11 +97,134 @@ const caseStudiesData: Record<string, CaseStudyData> = {
   }
 };
 
+// Function to extract vibrant color from image using multiple methods
+const extractDominantColor = (imageSrc: string): Promise<string> => {
+  return new Promise((resolve) => {
+    const img = new window.Image();
+    img.crossOrigin = 'anonymous';
+    
+    img.onload = () => {
+      const canvas = document.createElement('canvas');
+      const ctx = canvas.getContext('2d');
+      
+      if (!ctx) {
+        resolve('#FFD700'); // fallback
+        return;
+      }
+      
+      // Use small canvas for performance
+      canvas.width = 50;
+      canvas.height = 50;
+      
+      ctx.drawImage(img, 0, 0, 50, 50);
+      
+      try {
+        const imageData = ctx.getImageData(0, 0, 50, 50);
+        const data = imageData.data;
+        
+        // Color bucket approach - group similar colors
+        const colorBuckets: { [key: string]: { count: number, r: number, g: number, b: number, saturation: number } } = {};
+        const vibrantColors: { r: number, g: number, b: number, score: number }[] = [];
+        
+        // Sample every 4th pixel for performance
+        for (let i = 0; i < data.length; i += 16) {
+          const r = data[i];
+          const g = data[i + 1];
+          const b = data[i + 2];
+          
+          // Skip very dark, very light, or very gray pixels
+          const brightness = (r + g + b) / 3;
+          if (brightness < 40 || brightness > 220) continue;
+          
+          // Calculate saturation and other color properties
+          const max = Math.max(r, g, b);
+          const min = Math.min(r, g, b);
+          const saturation = max === 0 ? 0 : (max - min) / max;
+          
+          // Skip very gray pixels
+          if (saturation < 0.2) continue;
+          
+          // Create color bucket (round to nearest 32 to group similar colors)
+          const bucketR = Math.round(r / 32) * 32;
+          const bucketG = Math.round(g / 32) * 32;
+          const bucketB = Math.round(b / 32) * 32;
+          const bucketKey = `${bucketR}-${bucketG}-${bucketB}`;
+          
+          if (!colorBuckets[bucketKey]) {
+            colorBuckets[bucketKey] = { count: 0, r: bucketR, g: bucketG, b: bucketB, saturation };
+          }
+          colorBuckets[bucketKey].count++;
+          
+          // Score colors based on vibrancy (saturation + brightness balance)
+          const vibrancyScore = saturation * (1 - Math.abs(brightness - 127) / 127) * 2;
+          if (vibrancyScore > 0.4) {
+            vibrantColors.push({ r, g, b, score: vibrancyScore });
+          }
+        }
+        
+        let selectedColor = { r: 0, g: 0, b: 0 };
+        
+        // Method 1: Find most vibrant color
+        if (vibrantColors.length > 0) {
+          vibrantColors.sort((a, b) => b.score - a.score);
+          selectedColor = vibrantColors[0];
+        }
+        // Method 2: Fallback to most common saturated color
+        else {
+          const sortedBuckets = Object.values(colorBuckets)
+            .filter(bucket => bucket.saturation > 0.3)
+            .sort((a, b) => b.count - a.count);
+          
+          if (sortedBuckets.length > 0) {
+            selectedColor = sortedBuckets[0];
+          }
+        }
+        
+        // Enhance the color for better visual impact
+        let { r, g, b } = selectedColor;
+        
+        // Boost saturation slightly
+        const max = Math.max(r, g, b);
+        const min = Math.min(r, g, b);
+        if (max > min) {
+          const saturation = (max - min) / max;
+          const newSaturation = Math.min(1, saturation * 1.3);
+          const diff = max - min;
+          const newDiff = max * newSaturation;
+          const multiplier = newDiff / diff;
+          
+          r = Math.round(min + (r - min) * multiplier);
+          g = Math.round(min + (g - min) * multiplier);
+          b = Math.round(min + (b - min) * multiplier);
+        }
+        
+        // Ensure valid range
+        r = Math.max(0, Math.min(255, r));
+        g = Math.max(0, Math.min(255, g));
+        b = Math.max(0, Math.min(255, b));
+        
+        // Ensure we have a valid color
+        if (r === 0 && g === 0 && b === 0) {
+          resolve('#FFD700'); // fallback
+        } else {
+          resolve(`rgb(${r}, ${g}, ${b})`);
+        }
+      } catch (error) {
+        resolve('#FFD700'); // fallback
+      }
+    };
+    
+    img.onerror = () => resolve('#FFD700'); // fallback
+    img.src = imageSrc;
+  });
+};
+
 export default function CaseStudyPage({ params }: { params: Promise<{ slug: string }> }) {
   const router = useRouter();
   const { slug } = use(params);
   const caseStudy = caseStudiesData[slug];
   const containerRef = useRef<HTMLDivElement>(null);
+  const [dominantColor, setDominantColor] = useState<string>(caseStudy?.backgroundColor || '#FFD700');
 
   // Parallax scroll effects
   const { scrollYProgress } = useScroll({
@@ -115,6 +238,15 @@ export default function CaseStudyPage({ params }: { params: Promise<{ slug: stri
   const headerY = useTransform(scrollYProgress, [0, 1], [0, -50]);
   const descriptionY = useTransform(scrollYProgress, [0, 1], [0, -75]);
   const gridY = useTransform(scrollYProgress, [0, 1], [0, -25]);
+
+  // Extract dominant color from hero image
+  useEffect(() => {
+    if (caseStudy?.heroImage) {
+      extractDominantColor(caseStudy.heroImage)
+        .then(color => setDominantColor(color))
+        .catch(() => setDominantColor(caseStudy.backgroundColor));
+    }
+  }, [caseStudy?.heroImage, caseStudy?.backgroundColor]);
 
   if (!caseStudy) {
     return <div>Case study not found</div>;
@@ -144,7 +276,7 @@ export default function CaseStudyPage({ params }: { params: Promise<{ slug: stri
         <motion.div
           className="case-study-hero"
           style={{
-            backgroundColor: caseStudy.backgroundColor,
+            backgroundColor: dominantColor,
             y: heroY
           }}
           initial={{ x: -100, opacity: 0 }}
