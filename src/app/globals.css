@@ -139,7 +139,7 @@ a {
 }
 
 .scene-container {
-  height: 100vh;
+  height: 75vh;
   width: 100%;
   /* border-radius: 1rem; */
   overflow: hidden;
@@ -148,13 +148,13 @@ a {
 
 @media (max-width: 1024px) and (min-width: 769px) {
   .scene-container {
-    height: 100vh;
+    height: 85vh;
   }
 }
 
 @media (max-width: 768px) {
   .scene-container {
-    height: 100vh;
+    height: 92vh;
   }
 }
 

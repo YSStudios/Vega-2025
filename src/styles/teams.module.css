@@ -598,7 +598,6 @@
   max-width: 100%;
   font-weight: 400;
   letter-spacing: 0.01em;
-  text-align: left;
 }
 
 /* Responsive Design */
@@ -631,7 +630,6 @@
   
   .description {
     font-size: 1.125rem;
-    text-align: left;
   }
 }
 
@@ -684,6 +682,5 @@
   
   .description {
     font-size: 1rem;
-    text-align: left;
   }
 }

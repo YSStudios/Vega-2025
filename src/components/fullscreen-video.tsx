@@ -46,7 +46,6 @@ export default function FullscreenVideo({
   const [isPlaying, setIsPlaying] = useState(false);
   const [showControls, setShowControls] = useState(false);
   const [hasError, setHasError] = useState(false);
-  const [hasUserInteracted, setHasUserInteracted] = useState(false);
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const muxPlayerRefs = useRef<(any | null)[]>([]);
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
@@ -70,51 +69,27 @@ export default function FullscreenVideo({
   useEffect(() => {
     setHasError(false);
     setIsPlaying(false);
-
+    
     // Pause all other videos and play the current one
     muxPlayerRefs.current.forEach((player, index) => {
       if (player) {
         if (index === currentIndex) {
-          if (autoPlay) {
-            // On mobile, try to play immediately and handle loading state
-            const attemptPlay = () => {
-              if (player.readyState >= 3 || loadedVideos.has(index)) {
-                // Only attempt autoplay if user has interacted or it's not a mobile device
-                const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
-                if (!isMobile || hasUserInteracted) {
-                  player.play().catch(() => {
-                    console.log('Autoplay prevented by browser');
-                  });
-                }
-              } else {
-                // If not ready, wait for loadeddata event
-                const onLoadedData = () => {
-                  const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
-                  if (!isMobile || hasUserInteracted) {
-                    player.play().catch(() => {
-                      console.log('Autoplay prevented by browser');
-                    });
-                  }
-                  player.removeEventListener('loadeddata', onLoadedData);
-                };
-                player.addEventListener('loadeddata', onLoadedData);
-              }
-            };
-            attemptPlay();
+          if (autoPlay && loadedVideos.has(index)) {
+            player.play().catch(() => {
+              console.log('Autoplay prevented by browser');
+            });
           }
         } else {
           player.pause();
         }
       }
     });
-  }, [currentIndex, autoPlay, loadedVideos, hasUserInteracted]);
+  }, [currentIndex, autoPlay, loadedVideos]);
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (videos.length <= 1) return;
-
-      setHasUserInteracted(true);
-
+      
       switch (e.key) {
         case 'ArrowLeft':
           e.preventDefault();
@@ -127,44 +102,16 @@ export default function FullscreenVideo({
       }
     };
 
-    const handleFirstInteraction = () => {
-      setHasUserInteracted(true);
-      // Try to play current video after first interaction
-      const currentPlayer = muxPlayerRefs.current[currentIndex];
-      if (currentPlayer && autoPlay && loadedVideos.has(currentIndex)) {
-        currentPlayer.play().catch(() => {
-          console.log('Autoplay prevented by browser');
-        });
-      }
-    };
-
     document.addEventListener('keydown', handleKeyDown);
-    document.addEventListener('touchstart', handleFirstInteraction, { once: true });
-    document.addEventListener('click', handleFirstInteraction, { once: true });
-
-    return () => {
-      document.removeEventListener('keydown', handleKeyDown);
-      document.removeEventListener('touchstart', handleFirstInteraction);
-      document.removeEventListener('click', handleFirstInteraction);
-    };
-  }, [videos.length, goToNext, goToPrevious, currentIndex, autoPlay, loadedVideos]);
+    return () => document.removeEventListener('keydown', handleKeyDown);
+  }, [videos.length, goToNext, goToPrevious]);
 
   const handleLoadedData = (index: number) => {
     setLoadedVideos(prev => new Set([...prev, index]));
     if (autoPlay && index === currentIndex && muxPlayerRefs.current[index]) {
-      // Force play attempt on mobile after load
-      const player = muxPlayerRefs.current[index];
-      if (player) {
-        // Use a small delay to ensure the video is truly ready
-        setTimeout(() => {
-          const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
-          if (!isMobile || hasUserInteracted) {
-            player.play().catch(() => {
-              console.log('Autoplay prevented by browser');
-            });
-          }
-        }, 100);
-      }
+      muxPlayerRefs.current[index]?.play().catch(() => {
+        console.log('Autoplay prevented by browser');
+      });
     }
   };
 
@@ -220,7 +167,6 @@ export default function FullscreenVideo({
 
   const handleVideoClick = (e: React.MouseEvent) => {
     e.preventDefault();
-    setHasUserInteracted(true);
     const currentVideo = videos[currentIndex];
     console.log('Video clicked!', currentVideo?.caseStudySlug); // Debug log
     if (currentVideo?.caseStudySlug) {
@@ -232,7 +178,6 @@ export default function FullscreenVideo({
   };
 
   const handleTouchStart = (e: React.TouchEvent) => {
-    setHasUserInteracted(true);
     if (videos.length <= 1) return;
     const touch = e.touches[0];
     touchStartX.current = touch.clientX;

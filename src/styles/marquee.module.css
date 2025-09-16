@@ -2,11 +2,8 @@
   width: 100%;
   overflow: hidden;
   background-color: #f5f5f5;
-  padding: 2rem 0;
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  z-index: 10;
+  padding: 3rem 0;
+  position: relative;
 }
 
 .marquee {
@@ -67,11 +64,13 @@
 @media (max-width: 1024px) {
   .marqueeContainer {
     padding: 1rem 0;
-    width: 100vw;
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    z-index: 10;
+    margin: 0 -4rem;
+    width: calc(100vw);
+    position: relative;
+    left: 50%;
+    right: 50%;
+    margin-left: -50vw;
+    margin-right: -50vw;
   }
 
   .marqueeItem {

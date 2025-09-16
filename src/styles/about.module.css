@@ -165,15 +165,15 @@
 /* Mobile */
 @media (max-width: 768px) {
   .aboutSection {
-    padding: 2rem 2rem;
+    padding: 2rem 0;
   }
 
   .container {
-    padding: 0 1rem;
+    padding: 0;
   }
 
   .mainText {
-    font-size: clamp(1.8rem, 8vw, 2rem);
+    font-size: clamp(2.2rem, 10vw, 2rem);
     line-height: 1.2;
     display: block;
   }
@@ -188,14 +188,14 @@
   }
 
   .learnMoreButton {
-    padding: 0.6rem 1.2rem;
-    font-size: 1.2rem;
+    padding: 0.7rem 1.5rem;
+    font-size: 1.5rem;
     display: inline-block;
   }
 
   .arrow {
-    width: 1.4em;
-    height: 1.4em;
+    width: 1.7em;
+    height: 1.7em;
     display: inline-block;
     vertical-align: middle;
   }

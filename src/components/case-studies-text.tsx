@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { useScroll, motion, useMotionValueEvent } from "framer-motion";
+import { useScroll, useTransform } from "framer-motion";
 import { useRouter } from "next/navigation";
 import styles from "../styles/scroll-video.module.css";
 
@@ -41,45 +41,29 @@ const caseStudies: CaseStudy[] = [
 
 interface CaseStudiesTextProps {
   onVideoChange: (index: number) => void;
+  currentVideoIndex: number;
   onShouldPlay?: (shouldPlay: boolean) => void;
 }
 
 export default function CaseStudiesText({
   onVideoChange,
+  currentVideoIndex,
   onShouldPlay,
 }: CaseStudiesTextProps) {
   const sectionsRef = useRef<(HTMLDivElement | null)[]>([]);
   const containerRef = useRef<HTMLDivElement>(null);
   const [activeIndex, setActiveIndex] = useState(0);
-  const [scrollDirection, setScrollDirection] = useState<'up' | 'down'>('down');
-  const [visibleSections, setVisibleSections] = useState<Set<number>>(new Set());
   const router = useRouter();
 
   // Global scroll progress for different parallax speeds
   const { scrollY } = useScroll();
-
-  // Track scroll direction
-  useMotionValueEvent(scrollY, "change", (latest) => {
-    const previous = scrollY.getPrevious() ?? 0;
-    setScrollDirection(latest > previous ? 'down' : 'up');
-  });
+  const subtitleY = useTransform(scrollY, [0, 2000], [0, -100]); // Slowest
+  const titleY = useTransform(scrollY, [0, 2000], [0, -300]); // Fastest
+  const ctaY = useTransform(scrollY, [0, 2000], [0, -200]); // Medium
 
   useEffect(() => {
     const handleScroll = () => {
       const viewportHeight = window.innerHeight;
-
-      // Track which sections are visible
-      const newVisibleSections = new Set<number>();
-      sectionsRef.current.forEach((section, index) => {
-        if (section && index < caseStudies.length) {
-          const rect = section.getBoundingClientRect();
-          // Consider section visible if it's within the viewport with some buffer
-          if (rect.top < viewportHeight && rect.bottom > 0) {
-            newVisibleSections.add(index);
-          }
-        }
-      });
-      setVisibleSections(newVisibleSections);
 
       // Find the parent section to get scroll bounds
       const firstSection = sectionsRef.current[0];
@@ -89,13 +73,11 @@ export default function CaseStudiesText({
       if (!parentSection) return;
 
       const parentRect = parentSection.getBoundingClientRect();
+      const parentHeight = parentRect.height;
 
-      // Check if videos should play - slightly more responsive on mobile
+      // Check if the first text section is entering from bottom of viewport
       const firstSectionRect = firstSection.getBoundingClientRect();
-      const isMobile = window.innerWidth <= 768;
-      const videoPlayThreshold = isMobile ? viewportHeight * 1.8 : viewportHeight * 2;
-
-      const shouldPlayVideo = firstSectionRect.bottom <= videoPlayThreshold;
+      const shouldPlayVideo = firstSectionRect.bottom <= viewportHeight * 2;
       onShouldPlay?.(shouldPlayVideo);
 
       // Only update video when scrolling within this section
@@ -103,42 +85,25 @@ export default function CaseStudiesText({
         return; // Section is not in view
       }
 
-      // Check which case study text is closest to the center of the viewport
-      const centerPoint = viewportHeight / 2;
-      let closestIndex = 0;
-      let closestDistance = Infinity;
+      // Calculate progress through the section (0 to 1)
+      const sectionProgress = Math.max(
+        0,
+        Math.min(1, -parentRect.top / (parentHeight - viewportHeight))
+      );
 
-      sectionsRef.current.forEach((section, index) => {
-        if (section && index < caseStudies.length) {
-          const rect = section.getBoundingClientRect();
-          const sectionCenter = rect.top + rect.height / 2;
-          const distance = Math.abs(sectionCenter - centerPoint);
+      // Calculate which video should be active based on progress
+      // Cap at the number of actual case studies (excluding empty section)
+      const videoIndex = Math.floor(
+        sectionProgress * (caseStudies.length - 0.1)
+      );
+      const clampedIndex = Math.max(
+        0,
+        Math.min(caseStudies.length - 1, videoIndex)
+      );
 
-          // On mobile, be more aggressive about switching when text is near center
-          const threshold = isMobile ? viewportHeight * 0.3 : viewportHeight * 0.4;
-
-          if (distance < closestDistance && rect.top < threshold && rect.bottom > -threshold) {
-            closestDistance = distance;
-            closestIndex = index;
-          }
-        }
-      });
-
-      // On mobile, be more responsive to last case study transitions but don't cut off too early
-      if (isMobile) {
-        const lastSection = sectionsRef.current[caseStudies.length - 1];
-        if (lastSection) {
-          const lastRect = lastSection.getBoundingClientRect();
-          // Only stop updating if we're well past the last section
-          if (lastRect.bottom < -viewportHeight * 0.2) {
-            return;
-          }
-        }
-      }
-
-      if (closestIndex !== activeIndex) {
-        setActiveIndex(closestIndex);
-        onVideoChange(closestIndex);
+      if (clampedIndex !== activeIndex) {
+        setActiveIndex(clampedIndex);
+        onVideoChange(clampedIndex);
       }
     };
 
@@ -170,48 +135,16 @@ export default function CaseStudiesText({
             style={{ cursor: "pointer" }}
           >
             <div className={styles.caseStudyHeader}>
-              <motion.div
-                className={styles.caseStudyNumber}
-                animate={
-                  visibleSections.has(index)
-                    ? { x: 0, opacity: 1 }
-                    : scrollDirection === 'down'
-                    ? { x: -50, opacity: 0 }
-                    : { x: 50, opacity: 0 }
-                }
-                transition={{ duration: 0.6, delay: index * 0.05 }}
-              >
+              <div className={styles.caseStudyNumber}>
                 CASE — {String(index + 1).padStart(3, "0")}
-              </motion.div>
+              </div>
 
-              <motion.h2
-                className={styles.caseStudyTitle}
-                animate={
-                  visibleSections.has(index)
-                    ? { x: 0, opacity: 1 }
-                    : scrollDirection === 'down'
-                    ? { x: -100, opacity: 0 }
-                    : { x: 100, opacity: 0 }
-                }
-                transition={{ duration: 0.8, delay: 0.1 + (index * 0.05) }}
-              >
-                {caseStudy.clientName}
-              </motion.h2>
+              <h2 className={styles.caseStudyTitle}>{caseStudy.clientName}</h2>
 
               <div className={styles.caseStudySubtitleContainer}>
-                <motion.p
-                  className={styles.caseStudySubtitle}
-                  animate={
-                    visibleSections.has(index)
-                      ? { x: 0, opacity: 1 }
-                      : scrollDirection === 'down'
-                      ? { x: 100, opacity: 0 }
-                      : { x: -100, opacity: 0 }
-                  }
-                  transition={{ duration: 0.8, delay: 0.2 + (index * 0.05) }}
-                >
+                <p className={styles.caseStudySubtitle}>
                   {caseStudy.subtitle} ⟵
-                </motion.p>
+                </p>
               </div>
             </div>
           </div>
