@@ -7,7 +7,7 @@ import { useGLTF, MeshTransmissionMaterial, Environment, Lightformer, OrbitContr
 import { CuboidCollider, BallCollider, Physics, RigidBody, RapierRigidBody } from '@react-three/rapier'
 import { EffectComposer, N8AO } from '@react-three/postprocessing'
 import { easing } from 'maath'
-import { motion } from 'framer-motion'
+import { motion, useScroll, useTransform } from 'framer-motion'
 import { useAccentColor } from '../contexts/accent-color-context'
 
 const accents = ['#0093d0', '#00a78f', '#ff5057', '#ffde00']
@@ -47,30 +47,15 @@ function OrbitingScene({ children }: { children: React.ReactNode }) {
 export function Scene(props: SceneProps) {
   const [accent, click] = useReducer((state: number) => ++state % accents.length, 0)
   const connectors = useMemo(() => shuffle(accent), [accent])
-  const [isVisible, setIsVisible] = useState(true)
-  const [scrollY, setScrollY] = useState(0)
   const { setCurrentAccent } = useAccentColor()
+  const containerRef = useRef<HTMLDivElement>(null)
+  const { scrollY } = useScroll()
+  const opacity = useTransform(scrollY, [0, 100], [1, 0])
   
   // Update context when accent changes
   useEffect(() => {
     setCurrentAccent(accents[accent])
   }, [accent, setCurrentAccent])
-  
-  useEffect(() => {
-    const handleScroll = () => {
-      const currentScrollY = window.scrollY
-      setScrollY(currentScrollY)
-      
-      if (currentScrollY > 10) {
-        setIsVisible(false)
-      } else {
-        setIsVisible(true)
-      }
-    }
-    
-    window.addEventListener('scroll', handleScroll)
-    return () => window.removeEventListener('scroll', handleScroll)
-  }, [])
   
   return (
     <>
@@ -143,11 +128,11 @@ export function Scene(props: SceneProps) {
       </Canvas>
       
       <motion.div 
-        initial={{ x: '-50%' }}
-        animate={{ 
-          opacity: isVisible ? 1 : 0
+        initial={{ x: '-50%', opacity: 1 }}
+        style={{ 
+          opacity,
+          x: '-50%'
         }}
-        transition={{ duration: 0.3 }}
         className="scroll-indicator-fixed"
       >
         <span className="scroll-text">scroll down</span>
