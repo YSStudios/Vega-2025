@@ -24,7 +24,7 @@ const caseStudiesData: Record<string, CaseStudyData> = {
     title: 'DTLR x McDonald\'s HBCU Tour',
     subtitle: 'AI-generated advertisement & creative production',
     clientName: 'DTLR x McDonald\'s',
-    heroImage: 'https://images.unsplash.com/photo-1596462502278-27bfdc403348?w=400&h=600&fit=crop',
+    heroImage: 'https://res.cloudinary.com/dhj9rq4mu/image/upload/v1758051458/magic-snack-wrap_pisjqp.jpg',
     backgroundColor: '#FFD700',
     services: [
       'AI content generation',
@@ -43,7 +43,7 @@ const caseStudiesData: Record<string, CaseStudyData> = {
     title: 'Drake Warehouse Release',
     subtitle: 'AI-powered 3D animation & launch assets',
     clientName: 'Amazon Music x Drake',
-    heroImage: 'https://images.unsplash.com/photo-1541961017774-22349e4a1262?w=400&h=600&fit=crop',
+    heroImage: 'https://res.cloudinary.com/dhj9rq4mu/image/upload/v1758051457/amazon-drake_cumi5c.jpg',
     backgroundColor: '#FF6B6B',
     services: [
       'AI pipeline development',
@@ -62,7 +62,7 @@ const caseStudiesData: Record<string, CaseStudyData> = {
     title: 'Nike Air Max Day',
     subtitle: 'AI-generated visuals & brand amplification',
     clientName: 'Nike x MCA Chicago',
-    heroImage: 'https://images.unsplash.com/photo-1522338242992-e1a54906a8da?w=400&h=600&fit=crop',
+    heroImage: 'https://res.cloudinary.com/dhj9rq4mu/image/upload/v1758051457/airmax-day-2025_uxelne.jpg',
     backgroundColor: '#E91E63',
     services: [
       'AI-generated visuals',
@@ -81,7 +81,7 @@ const caseStudiesData: Record<string, CaseStudyData> = {
     title: 'MAC Cosmetics Giant Receipt',
     subtitle: 'AI video installation & experiential design',
     clientName: 'MAC Cosmetics',
-    heroImage: 'https://images.unsplash.com/photo-1542744094-3a31f272c490?w=400&h=600&fit=crop',
+    heroImage: 'https://res.cloudinary.com/dhj9rq4mu/image/upload/v1758051458/giant-receipt_gth4qq.jpg',
     backgroundColor: '#9C27B0',
     services: [
       'AI video production',
