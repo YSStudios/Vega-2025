@@ -15,27 +15,27 @@ interface CaseStudy {
 const caseStudies: CaseStudy[] = [
   {
     id: 'mac-cosmetics',
-    title: 'MAC Cosmetics',
-    subtitle: 'Experiential design & brand activation',
-    clientName: 'MAC Cosmetics'
+    title: 'DTLR x McDonald\'s HBCU Tour',
+    subtitle: 'AI-generated advertisement & creative production',
+    clientName: 'DTLR x McDonald\'s'
   },
   {
     id: 'soho-installation',
-    title: 'SoHo Creative Installation',
-    subtitle: 'Experiential design & brand activation',
-    clientName: 'Creative Studio'
+    title: 'Drake Warehouse Release',
+    subtitle: 'AI-powered 3D animation & launch assets',
+    clientName: 'Amazon Music x Drake'
   },
   {
     id: 'lipstick-campaign',
-    title: 'Lipstick Day Campaign',
-    subtitle: 'Digital campaign & social strategy',
-    clientName: 'Beauty Brand'
+    title: 'Nike Air Max Day',
+    subtitle: 'AI-generated visuals & brand amplification',
+    clientName: 'Nike x MCA Chicago'
   },
   {
     id: 'creative-campaign',
-    title: 'Creative Campaign Project',
-    subtitle: 'Brand strategy & creative direction',
-    clientName: 'Global Brand'
+    title: 'MAC Cosmetics Giant Receipt',
+    subtitle: 'AI video installation & experiential design',
+    clientName: 'MAC Cosmetics'
   }
 ];
 

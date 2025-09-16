@@ -21,75 +21,79 @@ interface CaseStudyData {
 const caseStudiesData: Record<string, CaseStudyData> = {
   'mac-cosmetics': {
     id: 'mac-cosmetics',
-    title: 'MAC Cosmetics',
-    subtitle: 'Experiential design & brand activation',
-    clientName: 'MAC Cosmetics',
+    title: 'DTLR x McDonald\'s HBCU Tour',
+    subtitle: 'AI-generated advertisement & creative production',
+    clientName: 'DTLR x McDonald\'s',
     heroImage: 'https://images.unsplash.com/photo-1596462502278-27bfdc403348?w=400&h=600&fit=crop',
     backgroundColor: '#FFD700',
     services: [
-      'Experiential design',
-      'Brand activation', 
-      'Installation art'
+      'AI content generation',
+      'Character design', 
+      'Visual effects',
+      'Dialog creation'
     ],
     overview: [
-      'We created a groundbreaking installation experience in SoHo that transformed the way people interact with MAC Cosmetics, creating viral moments and lasting brand connections.',
-      'The giant receipt installation drove massive social engagement and foot traffic, establishing a new benchmark for experiential marketing in the beauty industry.'
+      'We developed our first fully AI-generated advertisement using a custom pipeline to create consistent characters, scenes, dialog and visual effects - all generated through prompts. This groundbreaking project represents the beginning of a shift in creative production.',
+      'The innovative approach allowed us to experiment with new creative possibilities while maintaining brand consistency and storytelling quality, setting new standards for AI-powered advertising content.'
     ],
-    description: 'Giant Receipt Project - transforming cosmetics retail through immersive brand experiences.'
+    description: 'Our first fully AI-generated advert showcasing the future of creative production through innovative technology and custom AI pipelines.'
   },
   'soho-installation': {
     id: 'soho-installation',
-    title: 'SoHo Creative Installation',
-    subtitle: 'Experiential design & brand activation',
-    clientName: 'Creative Studio',
+    title: 'Drake Warehouse Release',
+    subtitle: 'AI-powered 3D animation & launch assets',
+    clientName: 'Amazon Music x Drake',
     heroImage: 'https://images.unsplash.com/photo-1541961017774-22349e4a1262?w=400&h=600&fit=crop',
     backgroundColor: '#FF6B6B',
     services: [
-      'Experiential design',
-      'Brand activation',
-      'Installation art'
+      'AI pipeline development',
+      '3D scene creation',
+      'Asset animation',
+      'Launch content production'
     ],
     overview: [
-      'An immersive brand experience in the heart of SoHo, creating a memorable connection between brands and their audiences through interactive installations.',
-      'The installation drove significant foot traffic and social media engagement, amplifying brand awareness in a key market while setting new standards for experiential marketing.'
+      'We partnered with Amazon Music to create launch assets for Drake\'s Warehouse release, utilizing our cutting-edge AI pipeline to bring 3D scenes to life and transform static images into fully animated 3D assets.',
+      'This collaboration showcased our ability to deliver high-quality animated content at scale, demonstrating the power of AI-driven creative production for major music releases and establishing new workflows for digital content creation.'
     ],
-    description: 'Behind the scenes of our groundbreaking SoHo installation project.'
+    description: 'AI-powered launch assets for Drake\'s Warehouse release, transforming stills into dynamic 3D animated content through innovative pipeline technology.'
   },
   'lipstick-campaign': {
     id: 'lipstick-campaign',
-    title: 'Lipstick Day Campaign',
-    subtitle: 'Digital campaign & social strategy',
-    clientName: 'Beauty Brand',
+    title: 'Nike Air Max Day',
+    subtitle: 'AI-generated visuals & brand amplification',
+    clientName: 'Nike x MCA Chicago',
     heroImage: 'https://images.unsplash.com/photo-1522338242992-e1a54906a8da?w=400&h=600&fit=crop',
     backgroundColor: '#E91E63',
     services: [
-      'Digital campaign',
-      'Social media strategy',
-      'Content creation'
+      'AI-generated visuals',
+      'Product visualization',
+      'CGI environments',
+      'Sound design'
     ],
     overview: [
-      'A comprehensive digital campaign celebrating National Lipstick Day, engaging millions across social platforms with innovative content and interactive experiences.',
-      'The campaign achieved record-breaking engagement rates and drove significant sales during the promotional period, establishing new benchmarks for beauty marketing.'
+      'We were selected to create AI-generated visuals to amplify Nike Air Max Day in collaboration with MCA Chicago, leveraging our generative pipeline to maintain precise product likeness while building CGI-quality environments.',
+      'The project showcased our ability to deliver brand-accurate AI visuals at scale, combining technical precision with creative excellence to enhance one of Nike\'s most important annual celebrations through innovative visual storytelling and immersive sound design.'
     ],
-    description: 'Final cut of our award-winning Lipstick Day campaign.'
+    description: 'AI-generated visual campaign for Nike Air Max Day, featuring CGI-quality environments and precise product visualization through cutting-edge generative technology.'
   },
   'creative-campaign': {
     id: 'creative-campaign',
-    title: 'Creative Campaign Project',
-    subtitle: 'Brand strategy & creative direction',
-    clientName: 'Global Brand',
+    title: 'MAC Cosmetics Giant Receipt',
+    subtitle: 'AI video installation & experiential design',
+    clientName: 'MAC Cosmetics',
     heroImage: 'https://images.unsplash.com/photo-1542744094-3a31f272c490?w=400&h=600&fit=crop',
     backgroundColor: '#9C27B0',
     services: [
-      'Brand strategy',
-      'Creative direction',
-      'Campaign development'
+      'AI video production',
+      'Experiential installation',
+      'Concept development',
+      'Visual storytelling'
     ],
     overview: [
-      'An innovative campaign that pushed creative boundaries and established new industry standards for brand storytelling and audience engagement.',
-      'The project delivered exceptional results across all metrics, driving brand awareness and customer engagement to unprecedented levels.'
+      'We created a striking giant receipt installation in SoHo for MAC Cosmetics, featuring an AI-generated video of a massive receipt dramatically falling down the storefront, creating an unforgettable visual spectacle that transformed the shopping experience.',
+      'This innovative installation combined cutting-edge AI video technology with experiential design, generating significant social media buzz and foot traffic while establishing a new benchmark for retail activations and immersive brand experiences.'
     ],
-    description: 'A comprehensive creative campaign that redefined brand storytelling.'
+    description: 'A groundbreaking AI video installation featuring a giant receipt falling down MAC Cosmetics\' SoHo location, blending digital innovation with experiential retail design.'
   }
 };
 
