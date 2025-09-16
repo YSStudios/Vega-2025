@@ -401,7 +401,7 @@
   .categoryItem,
   .subItem {
     font-size: 0.9rem;
-    text-align: left;
+    text-align: center;
   }
 
   /* Adjust cube elements for mobile */
@@ -506,5 +506,6 @@
   .categoryItem,
   .subItem {
     font-size: 0.85rem;
+    text-align: center;
   }
 }
