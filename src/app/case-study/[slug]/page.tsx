@@ -1,4 +1,4 @@
-'use client';
+"use client";
 
 import { useRouter } from 'next/navigation';
 import { motion, useScroll, useTransform } from 'framer-motion';
@@ -27,16 +27,17 @@ const caseStudiesData: Record<string, CaseStudyData> = {
     heroImage: 'https://res.cloudinary.com/dhj9rq4mu/image/upload/v1758051458/magic-snack-wrap_pisjqp.jpg',
     backgroundColor: '#FFD700',
     services: [
-      'AI content generation',
-      'Character design', 
-      'Visual effects',
-      'Dialog creation'
+      "AI content generation",
+      "Character design",
+      "Visual effects",
+      "Dialog creation",
     ],
     overview: [
-      'We developed our first fully AI-generated advertisement using a custom pipeline to create consistent characters, scenes, dialog and visual effects - all generated through prompts. This groundbreaking project represents the beginning of a shift in creative production.',
-      'The innovative approach allowed us to experiment with new creative possibilities while maintaining brand consistency and storytelling quality, setting new standards for AI-powered advertising content.'
+      "We developed our first fully AI-generated advertisement using a custom pipeline to create consistent characters, scenes, dialog and visual effects - all generated through prompts. This groundbreaking project represents the beginning of a shift in creative production.",
+      "The innovative approach allowed us to experiment with new creative possibilities while maintaining brand consistency and storytelling quality, setting new standards for AI-powered advertising content.",
     ],
-    description: 'Our first fully AI-generated advert showcasing the future of creative production through innovative technology and custom AI pipelines.'
+    description:
+      "Our first fully AI-generated advert showcasing the future of creative production through innovative technology and custom AI pipelines.",
   },
   'soho-installation': {
     id: 'soho-installation',
@@ -46,16 +47,17 @@ const caseStudiesData: Record<string, CaseStudyData> = {
     heroImage: 'https://res.cloudinary.com/dhj9rq4mu/image/upload/v1758051457/amazon-drake_cumi5c.jpg',
     backgroundColor: '#FF6B6B',
     services: [
-      'AI pipeline development',
-      '3D scene creation',
-      'Asset animation',
-      'Launch content production'
+      "AI pipeline development",
+      "3D scene creation",
+      "Asset animation",
+      "Launch content production",
     ],
     overview: [
-      'We partnered with Amazon Music to create launch assets for Drake\'s Warehouse release, utilizing our cutting-edge AI pipeline to bring 3D scenes to life and transform static images into fully animated 3D assets.',
-      'This collaboration showcased our ability to deliver high-quality animated content at scale, demonstrating the power of AI-driven creative production for major music releases and establishing new workflows for digital content creation.'
+      "We partnered with Amazon Music to create launch assets for Drake's Warehouse release, utilizing our cutting-edge AI pipeline to bring 3D scenes to life and transform static images into fully animated 3D assets.",
+      "This collaboration showcased our ability to deliver high-quality animated content at scale, demonstrating the power of AI-driven creative production for major music releases and establishing new workflows for digital content creation.",
     ],
-    description: 'AI-powered launch assets for Drake\'s Warehouse release, transforming stills into dynamic 3D animated content through innovative pipeline technology.'
+    description:
+      "AI-powered launch assets for Drake's Warehouse release, transforming stills into dynamic 3D animated content through innovative pipeline technology.",
   },
   'lipstick-campaign': {
     id: 'lipstick-campaign',
@@ -65,16 +67,17 @@ const caseStudiesData: Record<string, CaseStudyData> = {
     heroImage: 'https://res.cloudinary.com/dhj9rq4mu/image/upload/v1758051457/airmax-day-2025_uxelne.jpg',
     backgroundColor: '#E91E63',
     services: [
-      'AI-generated visuals',
-      'Product visualization',
-      'CGI environments',
-      'Sound design'
+      "AI-generated visuals",
+      "Product visualization",
+      "CGI environments",
+      "Sound design",
     ],
     overview: [
-      'We were selected to create AI-generated visuals to amplify Nike Air Max Day in collaboration with MCA Chicago, leveraging our generative pipeline to maintain precise product likeness while building CGI-quality environments.',
-      'The project showcased our ability to deliver brand-accurate AI visuals at scale, combining technical precision with creative excellence to enhance one of Nike\'s most important annual celebrations through innovative visual storytelling and immersive sound design.'
+      "We were selected to create AI-generated visuals to amplify Nike Air Max Day in collaboration with MCA Chicago, leveraging our generative pipeline to maintain precise product likeness while building CGI-quality environments.",
+      "The project showcased our ability to deliver brand-accurate AI visuals at scale, combining technical precision with creative excellence to enhance one of Nike's most important annual celebrations through innovative visual storytelling and immersive sound design.",
     ],
-    description: 'AI-generated visual campaign for Nike Air Max Day, featuring CGI-quality environments and precise product visualization through cutting-edge generative technology.'
+    description:
+      "AI-generated visual campaign for Nike Air Max Day, featuring CGI-quality environments and precise product visualization through cutting-edge generative technology.",
   },
   'creative-campaign': {
     id: 'creative-campaign',
@@ -84,14 +87,14 @@ const caseStudiesData: Record<string, CaseStudyData> = {
     heroImage: 'https://res.cloudinary.com/dhj9rq4mu/image/upload/v1758051458/giant-receipt_gth4qq.jpg',
     backgroundColor: '#9C27B0',
     services: [
-      'AI video production',
-      'Experiential installation',
-      'Concept development',
-      'Visual storytelling'
+      "AI video production",
+      "Experiential installation",
+      "Concept development",
+      "Visual storytelling",
     ],
     overview: [
-      'We created a striking giant receipt installation in SoHo for MAC Cosmetics, featuring an AI-generated video of a massive receipt dramatically falling down the storefront, creating an unforgettable visual spectacle that transformed the shopping experience.',
-      'This innovative installation combined cutting-edge AI video technology with experiential design, generating significant social media buzz and foot traffic while establishing a new benchmark for retail activations and immersive brand experiences.'
+      "We created a striking giant receipt installation in SoHo for MAC Cosmetics, featuring an AI-generated video of a massive receipt dramatically falling down the storefront, creating an unforgettable visual spectacle that transformed the shopping experience.",
+      "This innovative installation combined cutting-edge AI video technology with experiential design, generating significant social media buzz and foot traffic while establishing a new benchmark for retail activations and immersive brand experiences.",
     ],
     description: 'A groundbreaking AI video installation featuring a giant receipt falling down MAC Cosmetics\' SoHo location, blending digital innovation with experiential retail design.'
   }
@@ -229,7 +232,7 @@ export default function CaseStudyPage({ params }: { params: Promise<{ slug: stri
   // Parallax scroll effects
   const { scrollYProgress } = useScroll({
     target: containerRef,
-    offset: ["start start", "end start"]
+    offset: ["start start", "end start"],
   });
 
   const heroY = useTransform(scrollYProgress, [0, 1], [0, -200]);
@@ -303,10 +306,7 @@ export default function CaseStudyPage({ params }: { params: Promise<{ slug: stri
           transition={{ duration: 0.6, delay: 0.4 }}
         >
           {/* Client Logo & Subtitle */}
-          <motion.div
-            className="case-study-header"
-            style={{ y: headerY }}
-          >
+          <motion.div className="case-study-header" style={{ y: headerY }}>
             {caseStudy.clientLogo && (
               <div className="client-logo">
                 <Image
@@ -322,10 +322,7 @@ export default function CaseStudyPage({ params }: { params: Promise<{ slug: stri
           </motion.div>
 
           {/* Title */}
-          <motion.h1
-            className="case-study-title"
-            style={{ y: titleY }}
-          >
+          <motion.h1 className="case-study-title" style={{ y: titleY }}>
             {caseStudy.title} —
           </motion.h1>
 
@@ -338,10 +335,7 @@ export default function CaseStudyPage({ params }: { params: Promise<{ slug: stri
           </motion.p>
 
           {/* Services & Overview Grid */}
-          <motion.div
-            className="case-study-grid"
-            style={{ y: gridY }}
-          >
+          <motion.div className="case-study-grid" style={{ y: gridY }}>
             {/* Services */}
             <div className="services-section">
               <h3>Services —</h3>

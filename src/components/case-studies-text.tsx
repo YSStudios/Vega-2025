@@ -1,9 +1,9 @@
-'use client';
+"use client";
 
-import { useEffect, useRef, useState } from 'react';
-import { motion, useScroll, useTransform } from 'framer-motion';
-import { useRouter } from 'next/navigation';
-import styles from '../styles/scroll-video.module.css';
+import { useEffect, useRef, useState } from "react";
+import { useScroll, useTransform } from "framer-motion";
+import { useRouter } from "next/navigation";
+import styles from "../styles/scroll-video.module.css";
 
 interface CaseStudy {
   id: string;
@@ -14,29 +14,29 @@ interface CaseStudy {
 
 const caseStudies: CaseStudy[] = [
   {
-    id: 'mac-cosmetics',
-    title: 'DTLR x McDonald\'s HBCU Tour',
-    subtitle: 'AI-generated advertisement & creative production',
-    clientName: 'DTLR x McDonald\'s'
+    id: "mac-cosmetics",
+    title: "DTLR x McDonald's HBCU Tour",
+    subtitle: "AI-generated advertisement & creative production",
+    clientName: "DTLR x McDonald's",
   },
   {
-    id: 'soho-installation',
-    title: 'Drake Warehouse Release',
-    subtitle: 'AI-powered 3D animation & launch assets',
-    clientName: 'Amazon Music x Drake'
+    id: "soho-installation",
+    title: "Drake Warehouse Release",
+    subtitle: "AI-powered 3D animation & launch assets",
+    clientName: "Amazon Music x Drake",
   },
   {
-    id: 'lipstick-campaign',
-    title: 'Nike Air Max Day',
-    subtitle: 'AI-generated visuals & brand amplification',
-    clientName: 'Nike x MCA Chicago'
+    id: "lipstick-campaign",
+    title: "Nike Air Max Day",
+    subtitle: "AI-generated visuals & brand amplification",
+    clientName: "Nike x MCA Chicago",
   },
   {
-    id: 'creative-campaign',
-    title: 'MAC Cosmetics Giant Receipt',
-    subtitle: 'AI video installation & experiential design',
-    clientName: 'MAC Cosmetics'
-  }
+    id: "creative-campaign",
+    title: "MAC Cosmetics Giant Receipt #lipstickday",
+    subtitle: "AI video installation & experiential design",
+    clientName: "MAC Cosmetics",
+  },
 ];
 
 interface CaseStudiesTextProps {
@@ -45,7 +45,11 @@ interface CaseStudiesTextProps {
   onShouldPlay?: (shouldPlay: boolean) => void;
 }
 
-export default function CaseStudiesText({ onVideoChange, currentVideoIndex, onShouldPlay }: CaseStudiesTextProps) {
+export default function CaseStudiesText({
+  onVideoChange,
+  currentVideoIndex,
+  onShouldPlay,
+}: CaseStudiesTextProps) {
   const sectionsRef = useRef<(HTMLDivElement | null)[]>([]);
   const containerRef = useRef<HTMLDivElement>(null);
   const [activeIndex, setActiveIndex] = useState(0);
@@ -53,41 +57,49 @@ export default function CaseStudiesText({ onVideoChange, currentVideoIndex, onSh
 
   // Global scroll progress for different parallax speeds
   const { scrollY } = useScroll();
-  const subtitleY = useTransform(scrollY, [0, 2000], [0, -100]);  // Slowest
-  const titleY = useTransform(scrollY, [0, 2000], [0, -300]);     // Fastest
-  const ctaY = useTransform(scrollY, [0, 2000], [0, -200]);       // Medium
+  const subtitleY = useTransform(scrollY, [0, 2000], [0, -100]); // Slowest
+  const titleY = useTransform(scrollY, [0, 2000], [0, -300]); // Fastest
+  const ctaY = useTransform(scrollY, [0, 2000], [0, -200]); // Medium
 
   useEffect(() => {
     const handleScroll = () => {
       const viewportHeight = window.innerHeight;
-      
+
       // Find the parent section to get scroll bounds
       const firstSection = sectionsRef.current[0];
       if (!firstSection) return;
-      
-      const parentSection = firstSection.closest('[data-scroll-video-section]');
+
+      const parentSection = firstSection.closest("[data-scroll-video-section]");
       if (!parentSection) return;
-      
+
       const parentRect = parentSection.getBoundingClientRect();
       const parentHeight = parentRect.height;
-      
+
       // Check if the first text section is entering from bottom of viewport
       const firstSectionRect = firstSection.getBoundingClientRect();
       const shouldPlayVideo = firstSectionRect.bottom <= viewportHeight * 2;
       onShouldPlay?.(shouldPlayVideo);
-      
+
       // Only update video when scrolling within this section
       if (parentRect.top > viewportHeight || parentRect.bottom < 0) {
         return; // Section is not in view
       }
-      
+
       // Calculate progress through the section (0 to 1)
-      const sectionProgress = Math.max(0, Math.min(1, -parentRect.top / (parentHeight - viewportHeight)));
-      
+      const sectionProgress = Math.max(
+        0,
+        Math.min(1, -parentRect.top / (parentHeight - viewportHeight))
+      );
+
       // Calculate which video should be active based on progress
       // Cap at the number of actual case studies (excluding empty section)
-      const videoIndex = Math.floor(sectionProgress * (caseStudies.length - 0.1));
-      const clampedIndex = Math.max(0, Math.min(caseStudies.length - 1, videoIndex));
+      const videoIndex = Math.floor(
+        sectionProgress * (caseStudies.length - 0.1)
+      );
+      const clampedIndex = Math.max(
+        0,
+        Math.min(caseStudies.length - 1, videoIndex)
+      );
 
       if (clampedIndex !== activeIndex) {
         setActiveIndex(clampedIndex);
@@ -95,11 +107,11 @@ export default function CaseStudiesText({ onVideoChange, currentVideoIndex, onSh
       }
     };
 
-    window.addEventListener('scroll', handleScroll);
+    window.addEventListener("scroll", handleScroll);
     handleScroll();
 
     return () => {
-      window.removeEventListener('scroll', handleScroll);
+      window.removeEventListener("scroll", handleScroll);
     };
   }, [activeIndex, onVideoChange, onShouldPlay]);
 
@@ -111,53 +123,38 @@ export default function CaseStudiesText({ onVideoChange, currentVideoIndex, onSh
     <div ref={containerRef} className={styles.caseStudiesTextContainer}>
       <div className={styles.caseStudiesContent}>
         {caseStudies.map((caseStudy, index) => (
-          <motion.div
+          <div
             key={caseStudy.id}
-            ref={el => { sectionsRef.current[index] = el; }}
-            className={`${styles.caseStudySection} ${index === activeIndex ? styles.active : ''}`}
-            initial={{ opacity: 0.3 }}
-            animate={{ 
-              opacity: index === activeIndex ? 1 : 0.3,
-              scale: index === activeIndex ? 1 : 0.95
+            ref={(el) => {
+              sectionsRef.current[index] = el;
             }}
-            transition={{ duration: 0.5, ease: 'easeOut' }}
+            className={`${styles.caseStudySection} ${
+              index === activeIndex ? styles.active : ""
+            }`}
             onClick={() => handleCaseStudyClick(caseStudy.id)}
-            style={{ cursor: 'pointer' }}
+            style={{ cursor: "pointer" }}
           >
             <div className={styles.caseStudyHeader}>
-              <motion.p 
-                className={styles.caseStudySubtitle}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: 0.1 }}
-              >
-                {caseStudy.subtitle} —
-              </motion.p>
-              
-              <motion.h2 
-                className={styles.caseStudyTitle}
-                initial={{ opacity: 0, y: 30 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: 0.2 }}
-              >
-                {caseStudy.title} —
-              </motion.h2>
-              
-              <motion.p 
-                className={styles.caseStudyClickCta}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: 0.3 }}
-              >
-                Click to view case study →
-              </motion.p>
+              <div className={styles.caseStudyNumber}>
+                CASE — {String(index + 1).padStart(3, "0")}
+              </div>
+
+              <h2 className={styles.caseStudyTitle}>{caseStudy.clientName}</h2>
+
+              <div className={styles.caseStudySubtitleContainer}>
+                <p className={styles.caseStudySubtitle}>
+                  {caseStudy.subtitle} ⟵
+                </p>
+              </div>
             </div>
-          </motion.div>
+          </div>
         ))}
-        
+
         {/* Empty section to allow scrolling away the last slide */}
-        <div 
-          ref={el => { sectionsRef.current[caseStudies.length] = el; }}
+        <div
+          ref={(el) => {
+            sectionsRef.current[caseStudies.length] = el;
+          }}
           className={styles.emptySectionForScroll}
         />
       </div>
