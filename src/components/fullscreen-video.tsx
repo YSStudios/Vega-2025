@@ -104,7 +104,7 @@ export default function FullscreenVideo({
       await player.play();
       setAutoplayBlocked(false);
       return true;
-    } catch (error) {
+    } catch {
       console.log('Autoplay prevented by browser, attempting fallback');
       setAutoplayBlocked(true);
 
