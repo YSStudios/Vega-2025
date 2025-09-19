@@ -251,6 +251,14 @@ export default function CaseStudyPage({ params }: { params: Promise<{ slug: stri
     }
   }, [caseStudy?.heroImage, caseStudy?.backgroundColor]);
 
+  // Add/remove body class for mobile header hiding
+  useEffect(() => {
+    document.body.classList.add('case-study-open');
+    return () => {
+      document.body.classList.remove('case-study-open');
+    };
+  }, []);
+
   if (!caseStudy) {
     return <div>Case study not found</div>;
   }

@@ -646,23 +646,54 @@ a {
 }
 
 @media (max-width: 768px) {
+  /* Overlay the entire page for mobile while maintaining normal scrolling */
+  .case-study-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: #f5f5f5;
+    z-index: 1001;
+    overflow-y: auto;
+  }
+
+  .case-study-content {
+    display: block;
+    min-height: 100vh;
+    padding: 0;
+  }
+
+  .case-study-hero {
+    position: static;
+    height: 50vh;
+    padding: 0;
+  }
+
+  .hero-image-container {
+    width: 100%;
+    height: 100%;
+    max-width: none;
+    aspect-ratio: unset;
+    border-radius: 0;
+  }
+
+  .case-study-details {
+    position: static;
+    overflow: visible;
+    padding: 2rem 1.5rem 4rem 1.5rem;
+  }
+
+  /* Hide navigation header when viewing case studies */
+  body.case-study-open header {
+    display: none !important;
+  }
+
   .case-study-close {
     top: 1rem;
     right: 1rem;
     padding: 0.75rem 1rem;
     font-size: 0.9rem;
-  }
-
-  .case-study-hero {
-    padding: 1rem;
-  }
-
-  .hero-image-container {
-    max-width: 280px;
-  }
-
-  .case-study-details {
-    padding: 2rem 1.5rem;
   }
 
   .case-study-title {
@@ -675,5 +706,25 @@ a {
 
   .case-study-grid {
     gap: 1.5rem;
+  }
+}
+
+/* Additional mobile breakpoint for very small screens and landscape phones */
+@media (max-width: 480px) {
+  .case-study-hero {
+    padding: 0;
+    height: 50vh;
+  }
+
+  .case-study-details {
+    padding: 1.5rem 1rem 3rem 1rem;
+  }
+
+  .case-study-title {
+    font-size: 1.75rem;
+  }
+
+  .case-study-description {
+    font-size: 1rem;
   }
 }
