@@ -79,7 +79,7 @@ export default function FullscreenVideo({
     detectMobile();
   }, []);
 
-  const attemptPlay = async (player: any, index: number) => {
+  const attemptPlay = useCallback(async (player: HTMLVideoElement | null) => {
     if (!player) return false;
 
     try {
@@ -104,7 +104,7 @@ export default function FullscreenVideo({
       }
       return false;
     }
-  };
+  }, [isMobile]);
 
   useEffect(() => {
     setHasError(false);
@@ -116,7 +116,7 @@ export default function FullscreenVideo({
         if (index === currentIndex) {
           if (loadedVideos.has(index)) {
             if (autoPlay) {
-              await attemptPlay(player, index);
+              await attemptPlay(player);
             } else if (isMobile) {
               // Even if autoPlay is false, prepare the video on mobile
               try {
@@ -132,7 +132,7 @@ export default function FullscreenVideo({
         }
       }
     });
-  }, [currentIndex, autoPlay, loadedVideos, isMobile]);
+  }, [currentIndex, autoPlay, loadedVideos, isMobile, attemptPlay]);
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -161,7 +161,7 @@ export default function FullscreenVideo({
       const player = muxPlayerRefs.current[index];
 
       if (autoPlay) {
-        await attemptPlay(player, index);
+        await attemptPlay(player);
       } else if (isMobile) {
         // Prepare video for mobile even without autoplay
         try {
@@ -217,7 +217,7 @@ export default function FullscreenVideo({
     if (isPlaying) {
       video.pause();
     } else {
-      await attemptPlay(video, currentIndex);
+      await attemptPlay(video);
     }
   };
 
