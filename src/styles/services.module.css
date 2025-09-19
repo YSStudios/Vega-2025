@@ -320,6 +320,7 @@
   .sectionTitle {
     font-size: 2.8rem;
     margin-bottom: 3rem;
+    text-align: center;
   }
 
   .cardsGrid {
@@ -330,6 +331,7 @@
   .serviceCard {
     padding: 2.5rem;
     min-height: 500px;
+    text-align: center;
   }
 
   .cubeContainer {
@@ -354,8 +356,20 @@
   }
 
   .itemsList {
-    grid-template-columns: 1fr;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
     gap: 1rem;
+  }
+
+  .itemGroup {
+    text-align: center;
+    width: 100%;
+  }
+
+  .categoryItem,
+  .subItem {
+    text-align: center;
   }
 }
 
@@ -398,10 +412,22 @@
     margin-bottom: 1.5rem;
   }
 
+  .itemsList {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  .itemGroup {
+    text-align: center;
+    width: 100%;
+  }
+
   .categoryItem,
   .subItem {
     font-size: 0.9rem;
-    text-align: left;
+    text-align: center;
   }
 
   /* Adjust cube elements for mobile */

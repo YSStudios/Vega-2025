@@ -51,20 +51,42 @@ export function Scene(props: SceneProps) {
   const containerRef = useRef<HTMLDivElement>(null)
   const { scrollY } = useScroll()
   const opacity = useTransform(scrollY, [0, 100], [1, 0])
-  
+  const [cameraPosition, setCameraPosition] = useState<[number, number, number]>([0, 0, 15])
+
   // Update context when accent changes
   useEffect(() => {
     setCurrentAccent(accents[accent])
   }, [accent, setCurrentAccent])
+
+  // Adjust camera position based on screen size
+  useEffect(() => {
+    const updateCameraPosition = () => {
+      const width = window.innerWidth
+      if (width <= 768) {
+        // Mobile: move camera further back
+        setCameraPosition([0, 0, 22] as [number, number, number])
+      } else if (width <= 1024) {
+        // Tablet: move camera back moderately
+        setCameraPosition([0, 0, 19] as [number, number, number])
+      } else {
+        // Desktop: default position
+        setCameraPosition([0, 0, 15] as [number, number, number])
+      }
+    }
+
+    updateCameraPosition()
+    window.addEventListener('resize', updateCameraPosition)
+    return () => window.removeEventListener('resize', updateCameraPosition)
+  }, [])
   
   return (
     <>
-      <Canvas 
-        onClick={click} 
-        shadows 
-        dpr={[1, 1.5]} 
-        gl={{ antialias: false }} 
-        camera={{ position: [0, 0, 15], fov: 17.5, near: 1, far: 30 }} 
+      <Canvas
+        onClick={click}
+        shadows
+        dpr={[1, 1.5]}
+        gl={{ antialias: false }}
+        camera={{ position: cameraPosition, fov: 17.5, near: 1, far: 30 }}
         {...props}
       >
         <color attach="background" args={['#000']} />

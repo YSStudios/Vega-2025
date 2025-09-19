@@ -78,6 +78,23 @@ export default function FullscreenVideo({
     };
 
     detectMobile();
+
+    // Suppress common HLS console errors that don't affect functionality
+    const originalError = console.error;
+    console.error = (...args) => {
+      const message = args[0]?.toString() || '';
+      // Suppress HLS stall and buffering errors
+      if (message.includes('getErrorFromHlsErrorData') ||
+          message.includes('bufferStalledError') ||
+          message.includes('fragBufferTimeOut')) {
+        return;
+      }
+      originalError.apply(console, args);
+    };
+
+    return () => {
+      console.error = originalError;
+    };
   }, []);
 
   const attemptPlay = useCallback(async (player: any) => { // eslint-disable-line @typescript-eslint/no-explicit-any
@@ -87,7 +104,7 @@ export default function FullscreenVideo({
       await player.play();
       setAutoplayBlocked(false);
       return true;
-    } catch (error) {
+    } catch {
       console.log('Autoplay prevented by browser, attempting fallback');
       setAutoplayBlocked(true);
 
@@ -179,8 +196,12 @@ export default function FullscreenVideo({
     }
   };
 
-  const handleError = (index: number) => {
-    console.error(`Video ${index} failed to load`);
+  const handleError = (index: number, error?: any) => { // eslint-disable-line @typescript-eslint/no-explicit-any
+    // Suppress HLS stall errors which are common on mobile
+    if (error && error.type === 'hlsError' && error.details === 'bufferStalledError') {
+      return;
+    }
+    console.error(`Video ${index} failed to load`, error);
     setHasError(true);
   };
 
@@ -326,7 +347,7 @@ export default function FullscreenVideo({
             preload="auto"
             disableTracking
             onLoadedData={() => handleLoadedData(index)}
-            onError={() => handleError(index)}
+            onError={(error) => handleError(index, error)}
             onPlay={index === currentIndex ? handlePlay : undefined}
             onPause={index === currentIndex ? handlePause : undefined}
             onEnded={index === currentIndex ? handleEnded : undefined}
