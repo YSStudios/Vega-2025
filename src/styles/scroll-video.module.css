@@ -163,8 +163,69 @@
   width: 100%;
 }
 
+/* Tablet Styles */
+@media (max-width: 1024px) and (min-width: 769px) {
+  .scrollVideoSection {
+    margin: 0 0 0 0;
+  }
+
+  .sectionTitle {
+    padding: 6rem 3rem;
+    min-height: 70vh;
+  }
+
+  .sectionTitle h2 {
+    font-size: 6rem;
+    line-height: 0.9;
+  }
+
+  .sectionSubtitle {
+    font-size: 1.8rem;
+    max-width: 400px;
+    top: 10rem;
+  }
+
+  .caseStudySection {
+    padding: 6rem 3rem;
+    min-height: 100vh;
+  }
+
+  .caseStudyHeader {
+    height: 80vh;
+    max-width: 100%;
+  }
+
+  .caseStudyTitle {
+    font-size: 5rem;
+    line-height: 0.9;
+    margin-top: 10vh;
+    padding: 1rem;
+  }
+
+  .caseStudySubtitle {
+    font-size: 1.6rem;
+    max-width: 350px;
+    padding: 1rem;
+  }
+
+  .caseStudySubtitleContainer {
+    position: absolute;
+    bottom: 25vh;
+    right: 3rem;
+    text-align: right;
+  }
+
+  .caseStudyNumber {
+    position: absolute;
+    top: 0;
+    left: 0;
+    padding: 1rem;
+    font-size: 1rem;
+  }
+}
+
 /* Mobile Styles */
-@media (max-width: 991px) {
+@media (max-width: 768px) {
   .scrollVideoSection {
     margin: 0 0 0 0;
   }
@@ -175,35 +236,52 @@
   }
 
   .sectionTitle h2 {
-    font-size: 4rem;
-    line-height: 0.8;
+    font-size: 4.5rem;
+    line-height: 0.9;
   }
 
   .sectionSubtitle {
-    font-size: 1.3rem;
-    max-width: 280px;
-    top: 8rem;
-  }
-
-  .caseStudyTitle {
-    font-size: 4rem;
-  }
-
-  .caseStudySubtitle {
-    font-size: 1.2rem;
+    font-size: 1.5rem;
     max-width: 300px;
-  }
-
-  .caseStudyHeader {
-    height: 70vh;
+    top: 8rem;
+    right: 2rem;
   }
 
   .caseStudySection {
     padding: 4rem 2rem;
-    min-height: 80vh;
+    min-height: 100vh;
   }
 
   .caseStudyHeader {
+    height: 80vh;
     max-width: 100%;
+  }
+
+  .caseStudyTitle {
+    font-size: 4rem;
+    line-height: 0.9;
+    margin-top: 10vh;
+    padding: 1rem;
+  }
+
+  .caseStudySubtitle {
+    font-size: 1.5rem;
+    max-width: 300px;
+    padding: 1rem;
+  }
+
+  .caseStudySubtitleContainer {
+    position: absolute;
+    bottom: 25vh;
+    right: 2rem;
+    text-align: right;
+  }
+
+  .caseStudyNumber {
+    position: absolute;
+    top: 0;
+    left: 0;
+    padding: 1rem;
+    font-size: 1rem;
   }
 }
