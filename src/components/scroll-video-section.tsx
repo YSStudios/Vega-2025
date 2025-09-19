@@ -31,6 +31,7 @@ const videos = [
 export default function ScrollVideoSection() {
   const [currentVideoIndex, setCurrentVideoIndex] = useState(0);
   const [shouldPlay, setShouldPlay] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
   const sectionRef = useRef<HTMLElement>(null);
   const videoRef = useRef<HTMLDivElement>(null);
 
@@ -41,6 +42,16 @@ export default function ScrollVideoSection() {
   const handleShouldPlay = (play: boolean) => {
     setShouldPlay(play);
   };
+
+  useEffect(() => {
+    const detectMobile = () => {
+      const userAgent = navigator.userAgent || navigator.vendor;
+      const isMobileDevice = /android|webos|iphone|ipad|ipod|blackberry|iemobile|opera mini/i.test(userAgent.toLowerCase());
+      setIsMobile(isMobileDevice);
+    };
+
+    detectMobile();
+  }, []);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -96,8 +107,8 @@ export default function ScrollVideoSection() {
           <FullscreenVideo
             videos={videos}
             currentIndex={currentVideoIndex}
-            autoPlay={shouldPlay}
-            opacity={shouldPlay ? 1 : 0}
+            autoPlay={shouldPlay || isMobile}
+            opacity={shouldPlay || isMobile ? 1 : 0}
             muted={true}
             loop={true}
           />

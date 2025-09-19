@@ -46,6 +46,8 @@ export default function FullscreenVideo({
   const [isPlaying, setIsPlaying] = useState(false);
   const [showControls, setShowControls] = useState(false);
   const [hasError, setHasError] = useState(false);
+  const [autoplayBlocked, setAutoplayBlocked] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const muxPlayerRefs = useRef<(any | null)[]>([]);
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
@@ -66,25 +68,71 @@ export default function FullscreenVideo({
     setHasError(false);
   }, [externalIndex, videos.length]);
 
+  // Detect mobile devices and setup
+  useEffect(() => {
+    const detectMobile = () => {
+      const userAgent = navigator.userAgent || navigator.vendor;
+      const isMobileDevice = /android|webos|iphone|ipad|ipod|blackberry|iemobile|opera mini/i.test(userAgent.toLowerCase());
+      setIsMobile(isMobileDevice);
+    };
+
+    detectMobile();
+  }, []);
+
+  const attemptPlay = async (player: any, index: number) => {
+    if (!player) return false;
+
+    try {
+      await player.play();
+      setAutoplayBlocked(false);
+      return true;
+    } catch (error) {
+      console.log('Autoplay prevented by browser, attempting fallback');
+      setAutoplayBlocked(true);
+
+      // For mobile, try to load and prepare the video without playing
+      if (isMobile) {
+        try {
+          player.load();
+          player.currentTime = 0;
+          // Show first frame
+          return true;
+        } catch (loadError) {
+          console.error('Failed to load video on mobile:', loadError);
+          return false;
+        }
+      }
+      return false;
+    }
+  };
+
   useEffect(() => {
     setHasError(false);
     setIsPlaying(false);
-    
-    // Pause all other videos and play the current one
-    muxPlayerRefs.current.forEach((player, index) => {
+
+    // Pause all other videos and handle the current one
+    muxPlayerRefs.current.forEach(async (player, index) => {
       if (player) {
         if (index === currentIndex) {
-          if (autoPlay && loadedVideos.has(index)) {
-            player.play().catch(() => {
-              console.log('Autoplay prevented by browser');
-            });
+          if (loadedVideos.has(index)) {
+            if (autoPlay) {
+              await attemptPlay(player, index);
+            } else if (isMobile) {
+              // Even if autoPlay is false, prepare the video on mobile
+              try {
+                player.load();
+                player.currentTime = 0;
+              } catch (error) {
+                console.log('Failed to prepare video on mobile:', error);
+              }
+            }
           }
         } else {
           player.pause();
         }
       }
     });
-  }, [currentIndex, autoPlay, loadedVideos]);
+  }, [currentIndex, autoPlay, loadedVideos, isMobile]);
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -106,12 +154,22 @@ export default function FullscreenVideo({
     return () => document.removeEventListener('keydown', handleKeyDown);
   }, [videos.length, goToNext, goToPrevious]);
 
-  const handleLoadedData = (index: number) => {
+  const handleLoadedData = async (index: number) => {
     setLoadedVideos(prev => new Set([...prev, index]));
-    if (autoPlay && index === currentIndex && muxPlayerRefs.current[index]) {
-      muxPlayerRefs.current[index]?.play().catch(() => {
-        console.log('Autoplay prevented by browser');
-      });
+
+    if (index === currentIndex && muxPlayerRefs.current[index]) {
+      const player = muxPlayerRefs.current[index];
+
+      if (autoPlay) {
+        await attemptPlay(player, index);
+      } else if (isMobile) {
+        // Prepare video for mobile even without autoplay
+        try {
+          player.currentTime = 0;
+        } catch (error) {
+          console.log('Failed to prepare mobile video:', error);
+        }
+      }
     }
   };
 
@@ -152,16 +210,14 @@ export default function FullscreenVideo({
     }
   };
 
-  const togglePlayPause = () => {
+  const togglePlayPause = async () => {
     const video = muxPlayerRefs.current[currentIndex];
     if (!video) return;
 
     if (isPlaying) {
       video.pause();
     } else {
-      video.play().catch(() => {
-        console.log('Play prevented by browser');
-      });
+      await attemptPlay(video, currentIndex);
     }
   };
 
@@ -248,7 +304,7 @@ export default function FullscreenVideo({
             muted={muted}
             loop={loop}
             playsInline
-            preload="auto"
+            preload={isMobile ? "metadata" : "auto"}
             disableTracking
             onLoadedData={() => handleLoadedData(index)}
             onError={() => handleError(index)}
@@ -256,8 +312,8 @@ export default function FullscreenVideo({
             onPause={index === currentIndex ? handlePause : undefined}
             onEnded={index === currentIndex ? handleEnded : undefined}
             className="fullscreen-video"
-            style={{ 
-              width: '100%', 
+            style={{
+              width: '100%',
               height: '100%',
               '--controls': 'none',
               '--media-object-fit': 'cover'
@@ -293,6 +349,29 @@ export default function FullscreenVideo({
           >
             Retry
           </button>
+        </motion.div>
+      )}
+
+      {/* Mobile autoplay blocked overlay */}
+      {isMobile && autoplayBlocked && loadedVideos.has(currentIndex) && !isPlaying && (
+        <motion.div
+          className="video-overlay play-prompt"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          onClick={togglePlayPause}
+          style={{
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            justifyContent: 'center',
+            background: 'rgba(0, 0, 0, 0.3)',
+            color: 'white',
+            cursor: 'pointer'
+          }}
+        >
+          <div style={{ fontSize: '3rem', marginBottom: '1rem' }}>▶</div>
+          <div style={{ fontSize: '1rem', textAlign: 'center' }}>Tap to play video</div>
         </motion.div>
       )}
 
