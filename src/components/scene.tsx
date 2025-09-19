@@ -51,7 +51,7 @@ export function Scene(props: SceneProps) {
   const containerRef = useRef<HTMLDivElement>(null)
   const { scrollY } = useScroll()
   const opacity = useTransform(scrollY, [0, 100], [1, 0])
-  const [cameraPosition, setCameraPosition] = useState([0, 0, 15])
+  const [cameraPosition, setCameraPosition] = useState<[number, number, number]>([0, 0, 15])
 
   // Update context when accent changes
   useEffect(() => {
@@ -64,13 +64,13 @@ export function Scene(props: SceneProps) {
       const width = window.innerWidth
       if (width <= 768) {
         // Mobile: move camera further back
-        setCameraPosition([0, 0, 22])
+        setCameraPosition([0, 0, 22] as [number, number, number])
       } else if (width <= 1024) {
         // Tablet: move camera back moderately
-        setCameraPosition([0, 0, 19])
+        setCameraPosition([0, 0, 19] as [number, number, number])
       } else {
         // Desktop: default position
-        setCameraPosition([0, 0, 15])
+        setCameraPosition([0, 0, 15] as [number, number, number])
       }
     }
 
