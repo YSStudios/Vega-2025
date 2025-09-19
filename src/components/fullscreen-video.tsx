@@ -80,7 +80,7 @@ export default function FullscreenVideo({
     detectMobile();
   }, []);
 
-  const attemptPlay = useCallback(async (player: any) => {
+  const attemptPlay = useCallback(async (player: any) => { // eslint-disable-line @typescript-eslint/no-explicit-any
     if (!player) return false;
 
     try {
