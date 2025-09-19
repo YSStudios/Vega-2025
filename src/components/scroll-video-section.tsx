@@ -48,6 +48,11 @@ export default function ScrollVideoSection() {
       const userAgent = navigator.userAgent || navigator.vendor;
       const isMobileDevice = /android|webos|iphone|ipad|ipod|blackberry|iemobile|opera mini/i.test(userAgent.toLowerCase());
       setIsMobile(isMobileDevice);
+
+      // On mobile, force video to be visible and playing
+      if (isMobileDevice) {
+        setShouldPlay(true);
+      }
     };
 
     detectMobile();
@@ -87,6 +92,29 @@ export default function ScrollVideoSection() {
       window.removeEventListener("scroll", handleScroll);
     };
   }, [currentVideoIndex]);
+
+  // Mobile-specific intersection observer to force video playing
+  useEffect(() => {
+    if (!isMobile || !sectionRef.current) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            // Force videos to play when section is visible on mobile
+            setShouldPlay(true);
+          }
+        });
+      },
+      { threshold: 0.1 }
+    );
+
+    observer.observe(sectionRef.current);
+
+    return () => {
+      observer.disconnect();
+    };
+  }, [isMobile]);
 
   return (
     <>

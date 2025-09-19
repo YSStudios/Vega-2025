@@ -48,6 +48,7 @@ export default function FullscreenVideo({
   const [hasError, setHasError] = useState(false);
   const [autoplayBlocked, setAutoplayBlocked] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
+  const [userInteracted, setUserInteracted] = useState(false);
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const muxPlayerRefs = useRef<(any | null)[]>([]);
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
@@ -79,7 +80,7 @@ export default function FullscreenVideo({
     detectMobile();
   }, []);
 
-  const attemptPlay = useCallback(async (player: HTMLVideoElement | null) => {
+  const attemptPlay = useCallback(async (player: any) => {
     if (!player) return false;
 
     try {
@@ -93,9 +94,14 @@ export default function FullscreenVideo({
       // For mobile, try to load and prepare the video without playing
       if (isMobile) {
         try {
-          player.load();
-          player.currentTime = 0;
-          // Show first frame
+          // MuxPlayer specific methods
+          if (player.load) {
+            player.load();
+          }
+          if (player.currentTime !== undefined) {
+            player.currentTime = 0;
+          }
+          // Force show first frame
           return true;
         } catch (loadError) {
           console.error('Failed to load video on mobile:', loadError);
@@ -234,6 +240,18 @@ export default function FullscreenVideo({
   };
 
   const handleTouchStart = (e: React.TouchEvent) => {
+    // Mark user interaction for mobile autoplay
+    if (isMobile && !userInteracted) {
+      setUserInteracted(true);
+      // Try to play current video after user interaction
+      const currentPlayer = muxPlayerRefs.current[currentIndex];
+      if (currentPlayer && autoplayBlocked) {
+        currentPlayer.play().catch(() => {
+          console.log('Still unable to play after user interaction');
+        });
+      }
+    }
+
     if (videos.length <= 1) return;
     const touch = e.touches[0];
     touchStartX.current = touch.clientX;
@@ -304,19 +322,37 @@ export default function FullscreenVideo({
             muted={muted}
             loop={loop}
             playsInline
-            preload={isMobile ? "metadata" : "auto"}
+            autoPlay="muted"
+            preload="auto"
             disableTracking
             onLoadedData={() => handleLoadedData(index)}
             onError={() => handleError(index)}
             onPlay={index === currentIndex ? handlePlay : undefined}
             onPause={index === currentIndex ? handlePause : undefined}
             onEnded={index === currentIndex ? handleEnded : undefined}
+            onCanPlay={() => {
+              if (isMobile && index === currentIndex && autoPlay) {
+                const player = muxPlayerRefs.current[index];
+                if (player) {
+                  player.play().catch(() => {
+                    console.log('Mobile autoplay failed');
+                    setAutoplayBlocked(true);
+                  });
+                }
+              }
+            }}
             className="fullscreen-video"
             style={{
               width: '100%',
               height: '100%',
               '--controls': 'none',
-              '--media-object-fit': 'cover'
+              '--media-object-fit': 'cover',
+              ...(isMobile && {
+                '--media-webkit-playsinline': '',
+                '--media-x5-playsinline': '',
+                '--media-x5-video-player-type': 'h5',
+                '--media-x5-video-player-fullscreen': 'true'
+              })
             } as React.CSSProperties}
           />
         </motion.div>
