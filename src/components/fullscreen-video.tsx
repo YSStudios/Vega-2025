@@ -196,7 +196,7 @@ export default function FullscreenVideo({
     }
   };
 
-  const handleError = (index: number, error?: any) => {
+  const handleError = (index: number, error?: any) => { // eslint-disable-line @typescript-eslint/no-explicit-any
     // Suppress HLS stall errors which are common on mobile
     if (error && error.type === 'hlsError' && error.details === 'bufferStalledError') {
       return;
