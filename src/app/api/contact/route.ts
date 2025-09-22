@@ -2,8 +2,8 @@ import type { NextRequest } from 'next/server';
 import { NextResponse } from 'next/server';
 import nodemailer from 'nodemailer';
 
-export const runtime = 'nodejs';          // ensure Node runtime (not edge)
-export const dynamic = 'force-dynamic';   // avoid caching responses
+export const runtime = 'nodejs';
+export const dynamic = 'force-dynamic';
 
 type ContactFormData = {
   name: string;
@@ -29,12 +29,10 @@ export async function POST(req: NextRequest) {
       return badReq('Name, email, and message are required');
     }
 
-    // very light email sanity check
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return badReq('Invalid email');
 
     const toEmail = process.env.EMAIL_TO || 'kirillginko@gmail.com';
 
-    // Development mode - set EMAIL_DEV_MODE=true to log instead of sending
     if (process.env.EMAIL_DEV_MODE === 'true') {
       const msg = {
         to: toEmail,
@@ -44,9 +42,7 @@ export async function POST(req: NextRequest) {
         text: `Name: ${name}\nEmail: ${email}\nCompany: ${company || 'Not provided'}\nMessage:\n${message}`,
         html: `
         <div style="font-family: Arial, sans-serif; max-width: 600px; margin:0 auto;">
-          <h2 style="color:#333;border-bottom:2px solid #ff5057;padding-bottom:10px;">
-            New Contact Form Submission
-          </h2>
+          <h2 style="color:#333;border-bottom:2px solid #ff5057;padding-bottom:10px;">New Contact Form Submission</h2>
           <p><strong>Name:</strong> ${escapeHtml(name)}</p>
           <p><strong>Email:</strong> ${escapeHtml(email)}</p>
           <p><strong>Company:</strong> ${escapeHtml(company || 'Not provided')}</p>
@@ -56,8 +52,7 @@ export async function POST(req: NextRequest) {
           </div>
           <hr style="border:none;border-top:1px solid #eee;margin:30px 0;">
           <p style="color:#666;font-size:14px;">Sent from your contact form.</p>
-        </div>
-      `
+        </div>`
       };
       console.log('DEV MODE - Would send email:', JSON.stringify(msg, null, 2));
       return NextResponse.json({ message: 'Email logged (dev mode)' });
@@ -68,12 +63,12 @@ export async function POST(req: NextRequest) {
       port: 465,
       secure: true,
       auth: {
-        user: process.env.EMAIL_USER,
-        pass: process.env.EMAIL_PASS,
+        user: process.env.EMAIL_USER!,
+        pass: process.env.EMAIL_PASS!,
       },
     });
 
-    const mailOptions = {
+    const mailOptions: nodemailer.SendMailOptions = {
       from: process.env.EMAIL_USER,
       to: toEmail,
       subject: `New Contact Form Submission from ${name}`,
@@ -81,9 +76,7 @@ export async function POST(req: NextRequest) {
       text: `Name: ${name}\nEmail: ${email}\nCompany: ${company || 'Not provided'}\nMessage:\n${message}`,
       html: `
         <div style="font-family: Arial, sans-serif; max-width: 600px; margin:0 auto;">
-          <h2 style="color:#333;border-bottom:2px solid #ff5057;padding-bottom:10px;">
-            New Contact Form Submission
-          </h2>
+          <h2 style="color:#333;border-bottom:2px solid #ff5057;padding-bottom:10px;">New Contact Form Submission</h2>
           <p><strong>Name:</strong> ${escapeHtml(name)}</p>
           <p><strong>Email:</strong> ${escapeHtml(email)}</p>
           <p><strong>Company:</strong> ${escapeHtml(company || 'Not provided')}</p>
@@ -93,23 +86,19 @@ export async function POST(req: NextRequest) {
           </div>
           <hr style="border:none;border-top:1px solid #eee;margin:30px 0;">
           <p style="color:#666;font-size:14px;">Sent from your contact form.</p>
-        </div>
-      `,
+        </div>`,
     };
 
     await transporter.sendMail(mailOptions);
 
     return NextResponse.json({ message: 'Email sent successfully' });
-  } catch (err: any) {
+  } catch (err: unknown) {
+    const msg = err instanceof Error ? err.message : 'Unknown error';
     console.error('Email error:', err);
-    return NextResponse.json(
-      { error: 'Failed to send email' },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: 'Failed to send email', detail: msg }, { status: 500 });
   }
 }
 
-// Small helper to avoid HTML injection in the email
 function escapeHtml(input: string) {
   return String(input)
     .replace(/&/g, '&amp;')
