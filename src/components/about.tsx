@@ -15,6 +15,7 @@ const textLines = [
 export default function About() {
   return (
     <motion.section 
+      id="about"
       className={styles.aboutSection}
       initial={{ opacity: 0, y: 30 }}
       whileInView={{ opacity: 1, y: 0 }}

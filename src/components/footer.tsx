@@ -70,6 +70,7 @@ export default function Footer() {
   return (
     <>
       <motion.footer
+        id="contact"
         className={styles.footer}
         initial="hidden"
         whileInView="visible"

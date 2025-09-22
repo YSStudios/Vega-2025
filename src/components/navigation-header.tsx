@@ -20,6 +20,17 @@ export default function NavigationHeader({}: NavigationHeaderProps) {
     setMenuOpen(!menuOpen);
   };
 
+  const handleNavClick = (sectionId: string) => {
+    const element = document.getElementById(sectionId);
+    if (element) {
+      element.scrollIntoView({ 
+        behavior: 'smooth',
+        block: 'start'
+      });
+    }
+    setMenuOpen(false); // Close menu after navigation
+  };
+
   return (
     <>
       <header className={styles.headerContainer}>
@@ -41,11 +52,11 @@ export default function NavigationHeader({}: NavigationHeaderProps) {
       <div
         className={`${styles.menuBar} ${menuOpen ? styles.menuBarOpen : ""}`}
       >
-        <a href="#about">About</a>
-        <a href="#Team">Team</a>
-        <a href="#work">Work</a>
-        <a href="#ideas">Services</a>
-        <a href="#careers">Contact</a>
+        <button onClick={() => handleNavClick('about')}>About</button>
+        <button onClick={() => handleNavClick('team')}>Team</button>
+        <button onClick={() => handleNavClick('services')}>Services</button>
+        <button onClick={() => handleNavClick('work')}>Work</button>
+        <button onClick={() => handleNavClick('contact')}>Contact</button>
         <button className={styles.closeButton} onClick={handleMenuToggle}>
           ✕
         </button>

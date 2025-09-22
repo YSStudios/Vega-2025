@@ -27,6 +27,7 @@ const duplicatedWorkItems = [...workItems, ...workItems];
 export default function WorkMarquee() {
   return (
     <motion.section 
+      id="work"
       className={styles.workMarqueeSection}
       initial={{ opacity: 0 }}
       whileInView={{ opacity: 1 }}

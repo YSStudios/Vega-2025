@@ -42,7 +42,7 @@ const servicesData = [
 
 export default function Services() {
   return (
-    <section className={styles.servicesSection}>
+    <section id="services" className={styles.servicesSection}>
       <div className={styles.container}>
         <motion.h2 
           className={styles.sectionTitle}

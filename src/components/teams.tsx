@@ -65,6 +65,7 @@ export default function Teams() {
 
   return (
     <motion.section 
+      id="team"
       className={styles.teamsSection}
       initial={{ opacity: 0, y: 30 }}
       whileInView={{ opacity: 1, y: 0 }}
