@@ -9,7 +9,8 @@ interface ContactFormProps {
 }
 
 interface FormData {
-  name: string;
+  firstName: string;
+  lastName: string;
   email: string;
   company: string;
   message: string;
@@ -17,7 +18,8 @@ interface FormData {
 
 export default function ContactForm({ isOpen, onClose }: ContactFormProps) {
   const [formData, setFormData] = useState<FormData>({
-    name: "",
+    firstName: "",
+    lastName: "",
     email: "",
     company: "",
     message: "",
@@ -44,12 +46,17 @@ export default function ContactForm({ isOpen, onClose }: ContactFormProps) {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(formData),
+        body: JSON.stringify({
+          name: `${formData.firstName} ${formData.lastName}`.trim(),
+          email: formData.email,
+          company: formData.company,
+          message: formData.message
+        }),
       });
 
       if (response.ok) {
         setSubmitStatus('success');
-        setFormData({ name: "", email: "", company: "", message: "" });
+        setFormData({ firstName: "", lastName: "", email: "", company: "", message: "" });
         setTimeout(() => {
           onClose();
           setSubmitStatus('idle');
@@ -73,7 +80,7 @@ export default function ContactForm({ isOpen, onClose }: ContactFormProps) {
       />
       <div className={`${styles.contactForm} ${isOpen ? styles.contactFormOpen : ''}`}>
         <div className={styles.formHeader}>
-          <h2>Let&apos;s Talk</h2>
+          <h2>Let&apos;s talk —</h2>
           <button className={styles.closeButton} onClick={onClose}>
             ✕
           </button>
@@ -81,51 +88,64 @@ export default function ContactForm({ isOpen, onClose }: ContactFormProps) {
 
         <form onSubmit={handleSubmit} className={styles.form}>
           <div className={styles.inputGroup}>
-            <label htmlFor="name">Name *</label>
             <input
               type="text"
-              id="name"
-              name="name"
-              value={formData.name}
+              id="firstName"
+              name="firstName"
+              value={formData.firstName}
               onChange={handleInputChange}
+              placeholder="First Name *"
               required
               disabled={isSubmitting}
             />
           </div>
 
           <div className={styles.inputGroup}>
-            <label htmlFor="email">Email *</label>
+            <input
+              type="text"
+              id="lastName"
+              name="lastName"
+              value={formData.lastName}
+              onChange={handleInputChange}
+              placeholder="Last Name *"
+              required
+              disabled={isSubmitting}
+            />
+          </div>
+
+          <div className={styles.inputGroup}>
             <input
               type="email"
               id="email"
               name="email"
               value={formData.email}
               onChange={handleInputChange}
+              placeholder="Email Address *"
               required
               disabled={isSubmitting}
             />
           </div>
 
           <div className={styles.inputGroup}>
-            <label htmlFor="company">Company</label>
             <input
               type="text"
               id="company"
               name="company"
               value={formData.company}
               onChange={handleInputChange}
+              placeholder="Company Name *"
               disabled={isSubmitting}
             />
           </div>
 
           <div className={styles.inputGroup}>
-            <label htmlFor="message">Message *</label>
             <textarea
               id="message"
               name="message"
               value={formData.message}
               onChange={handleInputChange}
-              rows={4}
+              placeholder="Tell us a little bit more: *"
+              rows={6}
               required
               disabled={isSubmitting}
             />
@@ -136,7 +156,7 @@ export default function ContactForm({ isOpen, onClose }: ContactFormProps) {
             className={styles.submitButton}
             disabled={isSubmitting}
           >
-            {isSubmitting ? 'Sending...' : 'Send Message'}
+            {isSubmitting ? 'Submitting...' : 'Submit'}
           </button>
 
           {submitStatus === 'success' && (
@@ -151,6 +171,10 @@ export default function ContactForm({ isOpen, onClose }: ContactFormProps) {
             </div>
           )}
         </form>
+
+        <div className={styles.privacyNote}>
+          Learn more about how your information will be used in our <span className={styles.privacyLink}>Privacy Policy.</span>
+        </div>
       </div>
     </>
   );
