@@ -2,7 +2,11 @@
   "permissions": {
     "allow": [
       "Bash(npx tsc:*)",
-      "Read(//Users/kirillginko/Desktop/**)"
+      "Read(//Users/kirillginko/Desktop/**)",
+      "Bash(npm install:*)",
+      "Bash(yarn add:*)",
+      "Bash(rm:*)",
+      "Bash(pnpm add:*)"
     ],
     "deny": [],
     "ask": []
