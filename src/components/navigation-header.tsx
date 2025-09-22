@@ -2,6 +2,7 @@
 
 import React, { useState } from "react";
 import styles from "../styles/navigation-header.module.css";
+import ContactForm from "./contact-form";
 
 interface NavigationHeaderProps {
   onNavigate?: (href: string) => void;
@@ -9,10 +10,10 @@ interface NavigationHeaderProps {
 
 export default function NavigationHeader({}: NavigationHeaderProps) {
   const [menuOpen, setMenuOpen] = useState(false);
+  const [contactFormOpen, setContactFormOpen] = useState(false);
 
   const handleButtonClick = () => {
-    console.log("Button clicked");
-    // Add your button action here
+    setContactFormOpen(true);
   };
 
   const handleMenuToggle = () => {
@@ -50,6 +51,11 @@ export default function NavigationHeader({}: NavigationHeaderProps) {
           ✕
         </button>
       </div>
+
+      <ContactForm
+        isOpen={contactFormOpen}
+        onClose={() => setContactFormOpen(false)}
+      />
     </>
   );
 }
