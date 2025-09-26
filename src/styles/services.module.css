@@ -2,7 +2,7 @@
   padding: 8rem 0 0 0;
   background: var(--light-background);
   color: #000;
-  border-bottom: 2px solid #000;
+  border-bottom: 1px solid #000;
 }
 
 .sectionTitle {
@@ -47,7 +47,7 @@
   flex-direction: column;
   position: relative;
   overflow: hidden;
-  border: 2px solid #000;
+  border: 1px solid #000;
 }
 
 .cardsGrid > .serviceCard:nth-child(2) {
@@ -495,18 +495,38 @@
 /* Tablet styles */
 @media (max-width: 1024px) {
   .servicesSection {
-    padding: 6rem 3rem;
+    padding: 6rem 0 0 0;
   }
 
   .sectionTitle {
     font-size: 2.8rem;
     margin-bottom: 3rem;
     text-align: center;
+    padding: 0 3rem;
   }
 
   .cardsGrid {
-    grid-template-columns: 1fr;
-    gap: 2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+  }
+
+  .cardsGrid > .serviceCard:nth-child(1),
+  .cardsGrid > .serviceCard:nth-child(2),
+  .cardsGrid > .serviceCard:nth-child(3),
+  .cardsGrid > .serviceCard:nth-child(4),
+  .cardsGrid > .serviceCard:nth-child(5) {
+    grid-column: unset;
+    grid-row: unset;
+    border-left: 1px solid #000;
+    min-height: 500px;
+  }
+
+  .cardsGrid > .serviceCard:nth-child(2),
+  .cardsGrid > .serviceCard:nth-child(3),
+  .cardsGrid > .serviceCard:nth-child(4),
+  .cardsGrid > .serviceCard:nth-child(5) {
+    border-top: none;
   }
 
   .serviceCard {
@@ -567,13 +587,38 @@
 /* Mobile styles */
 @media (max-width: 768px) {
   .servicesSection {
-    padding: 4rem 2rem;
+    padding: 4rem 0 0 0;
   }
 
   .sectionTitle {
     font-size: 2.2rem;
     margin-bottom: 2.5rem;
     text-align: center;
+    padding: 0 2rem;
+  }
+
+  .cardsGrid {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+  }
+
+  .cardsGrid > .serviceCard:nth-child(1),
+  .cardsGrid > .serviceCard:nth-child(2),
+  .cardsGrid > .serviceCard:nth-child(3),
+  .cardsGrid > .serviceCard:nth-child(4),
+  .cardsGrid > .serviceCard:nth-child(5) {
+    grid-column: unset;
+    grid-row: unset;
+    border-left: 1px solid #000;
+    min-height: 450px;
+  }
+
+  .cardsGrid > .serviceCard:nth-child(2),
+  .cardsGrid > .serviceCard:nth-child(3),
+  .cardsGrid > .serviceCard:nth-child(4),
+  .cardsGrid > .serviceCard:nth-child(5) {
+    border-top: none;
   }
 
   .serviceCard {
