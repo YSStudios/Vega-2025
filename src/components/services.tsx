@@ -37,30 +37,43 @@ const servicesData = [
     ],
     bgColor: "green",
     cubeType: "stacked"
+  },
+  {
+    title: "Strategy",
+    items: [
+      { category: "Business Strategy", subItems: ["Market Research"] },
+      { category: "Digital Transformation", subItems: ["Innovation Consulting"] },
+      { category: "Product Strategy", subItems: ["Go-to-Market"] },
+      { category: "User Research", subItems: [] }
+    ],
+    bgColor: "orange",
+    cubeType: "spiral"
+  },
+  {
+    title: "Production",
+    items: [
+      { category: "Project Management", subItems: ["Agile Methodology"] },
+      { category: "Quality Assurance", subItems: ["Testing & Validation"] },
+      { category: "Content Production", subItems: ["Asset Creation"] },
+      { category: "Launch & Support", subItems: [] }
+    ],
+    bgColor: "red",
+    cubeType: "grid"
   }
 ];
 
 export default function Services() {
   return (
     <section id="services" className={styles.servicesSection}>
-      <div className={styles.container}>
-        <motion.h2 
-          className={styles.sectionTitle}
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.2 }}
-        >
-          Expertise & Capabilities
-        </motion.h2>
-        
-        <div className={styles.cardsGrid}>
+      <h2 className={styles.sectionTitle}>
+        Expertise & Capabilities
+      </h2>
+      
+      <div className={styles.cardsGrid}>
           {servicesData.map((service, index) => (
-            <motion.div
+            <div
               key={service.title}
               className={`${styles.serviceCard} ${styles[service.bgColor]}`}
-              initial={{ opacity: 0, y: 50 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.3 + (index * 0.2) }}
             >
               <div className={styles.cardContent}>
                 <div className={styles.cubeContainer}>
@@ -92,15 +105,32 @@ export default function Services() {
                         <div className={styles.stackLayer}></div>
                       </>
                     )}
+                    {service.cubeType === 'spiral' && (
+                      <>
+                        <div className={styles.spiralElement}></div>
+                        <div className={styles.spiralElement}></div>
+                        <div className={styles.spiralElement}></div>
+                        <div className={styles.spiralElement}></div>
+                        <div className={styles.spiralElement}></div>
+                      </>
+                    )}
+                    {service.cubeType === 'grid' && (
+                      <>
+                        <div className={styles.gridCell}></div>
+                        <div className={styles.gridCell}></div>
+                        <div className={styles.gridCell}></div>
+                        <div className={styles.gridCell}></div>
+                        <div className={styles.gridCell}></div>
+                        <div className={styles.gridCell}></div>
+                        <div className={styles.gridCell}></div>
+                        <div className={styles.gridCell}></div>
+                        <div className={styles.gridCell}></div>
+                      </>
+                    )}
                   </div>
                 </div>
                 
-                <motion.div 
-                  className={styles.textContent}
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.6, delay: 0.5 + (index * 0.2) }}
-                >
+                <div className={styles.textContent}>
                   <h3 className={styles.cardTitle}>
                     {service.title}
                   </h3>
@@ -119,12 +149,11 @@ export default function Services() {
                       </div>
                     ))}
                   </div>
-                </motion.div>
+                </div>
               </div>
-            </motion.div>
+            </div>
           ))}
         </div>
-      </div>
     </section>
   );
 }
