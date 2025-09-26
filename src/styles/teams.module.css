@@ -1,9 +1,10 @@
 .teamsSection {
   padding: 4rem 4rem 6rem 4rem;
-  background: #f5f5f0;
+  background: var(--light-background);
   min-height: 100vh;
   display: flex;
   align-items: center;
+  border-bottom: 2px solid #000;
 }
 
 .container {
@@ -31,7 +32,7 @@
   grid-template-columns: 1.3fr 2.2fr;
   gap: 8rem;
   align-items: center;
-  background: #f5f5f0;
+  background: var(--light-background);
   border-radius: 1rem;
   padding: 1rem 3rem;
   position: relative;

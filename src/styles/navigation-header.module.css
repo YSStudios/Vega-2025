@@ -29,6 +29,11 @@
   padding: 15px 25px;
   font-size: 1.2rem;
   font-weight: 600;
+  border: 2px solid #000;
+  height: 58px;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
 }
 
 .menuText {
@@ -37,14 +42,20 @@
   padding: 15px 25px;
   font-size: 1.2rem;
   font-weight: 400;
+  border: 2px solid #000;
+  border-left: none;
+  height: 58px;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .menuBar {
   position: fixed;
-  top: 28px;
+  top: 26px;
   left: 310px;
   width: 0;
-  height: 54px;
   background: #fff;
   color: #000;
   padding: 15px 25px;
@@ -59,6 +70,9 @@
   opacity: 0;
   white-space: nowrap;
   box-sizing: border-box;
+  border: 2px solid #000;
+  border-left: none;
+  height: 58px;
 }
 
 .menuBar.menuBarOpen {
@@ -151,12 +165,14 @@
   background-color: #fff;
   color: #000;
   transform: rotateX(0deg) translateZ(35px);
+  border: 2px solid #000;
 }
 
 .flipButton::after {
   background-color: var(--accent-color, #ff5057);
   color: #000;
   transform: rotateX(-90deg) translateZ(35px);
+  border: 2px solid #000;
 }
 
 .buttonText {
@@ -181,13 +197,17 @@
   .logo {
     padding: 12px 20px;
     font-size: 1rem;
+    border: 2px solid #000;
+	width: 146px;
   }
 
   .menuText {
     padding: 12px 0px;
-    width: 142px;
+    width: 146px;
     font-size: 1rem;
     text-align: center;
+    border: 2px solid #000;
+    border-top: none;
   }
 
   .menuBar {
@@ -211,6 +231,7 @@
     opacity: 0;
     white-space: nowrap;
     box-sizing: border-box;
+    border: 2px solid #000;
   }
 
   .menuBar.menuBarOpen {
@@ -299,13 +320,16 @@
   .logo {
     padding: 12px 20px;
     font-size: 1rem;
+	width: 146px;
   }
 
   .menuText {
     padding: 12px 0px;
-    width: 142px;
+    width: 146px;
     font-size: 1rem;
     text-align: center;
+    border: 2px solid #000;
+    border-top: none;
   }
 
   .menuBar {
@@ -398,9 +422,11 @@
 
   .flipButton::before {
     transform: rotateX(0deg) translateZ(20px);
+    border: 2px solid #000;
   }
 
   .flipButton::after {
     transform: rotateX(-90deg) translateZ(20px);
+    border: 2px solid #000;
   }
 }

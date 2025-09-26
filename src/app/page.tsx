@@ -11,14 +11,14 @@ export default function Home() {
   return (
     <div className="container">
       <div className="scene-container">
-        <Scene />
+        {/* <Scene /> */}
       </div>
       <Marquee />
       <About />
-      <Teams />
+	  <ScrollVideoSection />
       <Services />
       <WorkMarquee />
-      <ScrollVideoSection />
+      <Teams />
       <BrandsSlider />
     </div>
   );
