@@ -91,14 +91,13 @@
 
 /* Grid pattern background */
 .brandsSection::before {
-  content: '';
+  content: "";
   position: absolute;
   top: 0;
   left: 0;
   right: 0;
   bottom: 0;
-  background-image: 
-    linear-gradient(rgba(0, 0, 0, 0.02) 1px, transparent 1px),
+  background-image: linear-gradient(rgba(0, 0, 0, 0.02) 1px, transparent 1px),
     linear-gradient(90deg, rgba(0, 0, 0, 0.02) 1px, transparent 1px);
   background-size: 50px 50px;
   pointer-events: none;
@@ -115,28 +114,28 @@
   .brandsSection {
     padding: 3rem 0;
   }
-  
+
   .title {
     font-size: 3.5rem;
     margin-bottom: 2rem;
     padding: 0 1rem;
   }
-  
+
   .brandsContainer {
     gap: 1.5rem;
   }
-  
+
   .brandRow {
-    height: 80px;
+    height: 150px;
   }
-  
+
   .brandTrack {
     gap: 2rem;
   }
-  
+
   .brandItem {
     min-width: 120px;
-    height: 60px;
+    height: 150px;
     padding: 0.75rem;
   }
 }
@@ -145,28 +144,28 @@
   .brandsSection {
     padding: 2rem 0;
   }
-  
+
   .title {
     font-size: 2.5rem;
     margin-bottom: 1.5rem;
     padding: 0 1rem;
   }
-  
+
   .brandsContainer {
     gap: 1rem;
   }
-  
+
   .brandRow {
-    height: 70px;
+    height: 120px;
   }
-  
+
   .brandTrack {
     gap: 1.5rem;
   }
-  
+
   .brandItem {
     min-width: 100px;
-    height: 50px;
+    height: 100px;
     padding: 0.5rem;
     border-radius: 8px;
   }

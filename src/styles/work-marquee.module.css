@@ -80,7 +80,7 @@
 /* Responsive adjustments */
 @media (max-width: 1024px) {
   .workMarqueeSection {
-    padding: 1rem 0;
+    padding: 3rem 0;
   }
   
   .title {
@@ -103,7 +103,7 @@
 
 @media (max-width: 480px) {
   .workMarqueeSection {
-    padding: 1rem 0;
+    padding: 3rem 0;
   }
   
   .title {

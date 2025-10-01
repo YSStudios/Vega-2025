@@ -310,7 +310,8 @@
 
 @media (max-width: 768px) {
   .headerContent {
-    padding: 0 20px;
+    padding: 0 10px;
+    gap: 10px;
   }
 
   .menuToggle {
@@ -405,13 +406,13 @@
   }
 
   .buttonContainer {
-    width: 120px;
+    width: 100px;
     height: 40px;
-    padding: 0 10px;
+    padding: 0 5px;
   }
 
   .flipButton {
-    width: 100px;
+    width: 90px;
     height: 40px;
     top: -43px;
   }
@@ -419,7 +420,7 @@
   .flipButton::before,
   .flipButton::after {
     content: "Let's talk ↗";
-    width: 100px;
+    width: 90px;
     height: 40px;
     font-size: 0.8rem;
   }

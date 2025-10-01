@@ -46,7 +46,10 @@ export default function ScrollVideoSection() {
   useEffect(() => {
     const detectMobile = () => {
       const userAgent = navigator.userAgent || navigator.vendor;
-      const isMobileDevice = /android|webos|iphone|ipad|ipod|blackberry|iemobile|opera mini/i.test(userAgent.toLowerCase());
+      const isMobileDevice =
+        /android|webos|iphone|ipad|ipod|blackberry|iemobile|opera mini/i.test(
+          userAgent.toLowerCase()
+        );
       setIsMobile(isMobileDevice);
 
       // On mobile, force video to be visible and playing
@@ -121,7 +124,9 @@ export default function ScrollVideoSection() {
       <div className={styles.sectionTitle}>
         <div className={styles.sectionTitleContainer}>
           <h2>Case Studies —</h2>
-          <p className={styles.sectionSubtitle}>Some of our most recent work</p>
+          <p className={styles.sectionSubtitle}>
+            (Some of our most recent work)
+          </p>
         </div>
       </div>
 
