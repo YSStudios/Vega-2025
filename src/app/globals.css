@@ -528,6 +528,7 @@ a {
   width: 100%;
   height: 100%;
   overflow: hidden;
+  transition: opacity 0.5s ease-in-out;
 }
 
 .hero-image {
@@ -617,6 +618,179 @@ a {
   margin-bottom: 0;
 }
 
+.case-study-metrics {
+  margin-top: 4rem;
+}
+
+.case-study-metrics h3 {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #000;
+  margin-bottom: 2rem;
+}
+
+.metrics-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
+}
+
+.metric-item {
+  text-align: left;
+  padding: 2rem;
+  background: #fff;
+  border: 1px solid #000;
+  border-radius: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  min-height: 140px;
+}
+
+.metric-number {
+  font-size: 3rem;
+  font-weight: 700;
+  color: #000;
+  margin-bottom: 0.5rem;
+  line-height: 0.9;
+}
+
+.metric-label {
+  font-size: 1rem;
+  color: #000;
+  font-weight: 400;
+  margin-top: auto;
+}
+
+.case-study-technical {
+  margin-top: 4rem;
+}
+
+.case-study-technical h3 {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #000;
+  margin-bottom: 2rem;
+}
+
+.technical-content p {
+  font-size: 1rem;
+  line-height: 1.7;
+  color: #333;
+  margin-bottom: 1.5rem;
+}
+
+.tech-specs {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
+  margin-top: 2rem;
+}
+
+.spec-item {
+  padding: 1rem;
+  background: #f9f9f9;
+  border-radius: 6px;
+  font-size: 0.9rem;
+  color: #333;
+}
+
+.spec-item strong {
+  color: #000;
+}
+
+.case-study-contact {
+  margin-top: 4rem;
+  padding: 3rem;
+  background: #000;
+  color: #fff;
+}
+
+.case-study-contact h3 {
+  font-size: 2.5rem;
+  font-weight: 400;
+  color: #fff;
+  margin-bottom: 1rem;
+}
+
+.case-study-contact p {
+  font-size: 1rem;
+  color: #999;
+  margin-bottom: 2rem;
+  line-height: 1.6;
+}
+
+.inline-contact-form {
+  width: 100%;
+  max-width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.form-group label {
+  display: none;
+}
+
+.form-group input,
+.form-group textarea {
+  padding: 20px 24px;
+  border: 1px solid #fff;
+  border-radius: 0;
+  font-size: 1rem;
+  font-family: inherit;
+  background: transparent;
+  color: #fff;
+  transition: border-color 0.2s ease;
+}
+
+.form-group input::placeholder,
+.form-group textarea::placeholder {
+  color: #999;
+  font-size: 1rem;
+}
+
+.form-group input:focus,
+.form-group textarea:focus {
+  outline: none;
+  border-color: #fff;
+}
+
+.form-group textarea {
+  resize: vertical;
+  min-height: 120px;
+}
+
+.submit-button {
+  background: #fff;
+  color: #000;
+  border: none;
+  padding: 16px 24px;
+  font-size: 1.1rem;
+  font-weight: 600;
+  border-radius: 0;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  margin-top: 0;
+  align-self: flex-start;
+}
+
+.submit-button:hover {
+  opacity: 0.9;
+  transform: translateY(-1px);
+}
+
 @media (max-width: 1024px) {
   .case-study-content {
     grid-template-columns: 1fr;
@@ -646,6 +820,37 @@ a {
   .case-study-grid {
     grid-template-columns: 1fr;
     gap: 2rem;
+  }
+
+  .metrics-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+  }
+
+  .metric-item {
+    padding: 1.5rem;
+    min-height: 120px;
+  }
+
+  .metric-number {
+    font-size: 2.5rem;
+  }
+
+  .tech-specs {
+    grid-template-columns: 1fr;
+  }
+
+  .case-study-contact {
+    padding: 2rem;
+  }
+
+  .case-study-contact h3 {
+    font-size: 2rem;
+  }
+
+  .form-row {
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
   }
 }
 
@@ -710,6 +915,43 @@ a {
 
   .case-study-grid {
     gap: 1.5rem;
+  }
+
+  .metrics-grid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  .metric-item {
+    padding: 1.5rem;
+    min-height: 100px;
+  }
+
+  .metric-number {
+    font-size: 2rem;
+  }
+
+  .tech-specs {
+    grid-template-columns: 1fr;
+    gap: 0.75rem;
+  }
+
+  .case-study-contact {
+    padding: 1.5rem;
+  }
+
+  .case-study-contact h3 {
+    font-size: 1.8rem;
+  }
+
+  .form-row {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  .submit-button {
+    width: 100%;
+    padding: 18px 24px;
   }
 }
 

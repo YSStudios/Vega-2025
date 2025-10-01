@@ -13,7 +13,14 @@ export default function NavigationHeader({}: NavigationHeaderProps) {
   const [contactFormOpen, setContactFormOpen] = useState(false);
 
   const handleButtonClick = () => {
-    setContactFormOpen(true);
+    // Check if we're in a case study page
+    if (window.location.pathname.includes('/case-study/')) {
+      // Dispatch custom event to scroll to contact form in case study
+      window.dispatchEvent(new CustomEvent('scroll-to-contact'));
+    } else {
+      // Open modal contact form on other pages
+      setContactFormOpen(true);
+    }
   };
 
   const handleMenuToggle = () => {
