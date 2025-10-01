@@ -13,6 +13,7 @@ import { useAccentColor } from '../contexts/accent-color-context'
 const accents = ['#0093d0', '#00a78f', '#ff5057', '#ffde00']
 
 const shuffle = (accent = 0) => [
+  // Original objects
   { color: '#444', roughness: 0.1, metalness: 0.2 },
   { color: '#444', roughness: 0.75, metalness: 0.2 },
   { color: '#444', roughness: 0.1, metalness: 0.2 },
@@ -22,9 +23,22 @@ const shuffle = (accent = 0) => [
   { color: accents[accent], roughness: 0.1, metalness: 0.2, accent: true },
   { color: accents[accent], roughness: 0.75, metalness: 0.2, accent: true },
   { color: accents[accent], roughness: 0.1, metalness: 0.2, accent: true },
-
   { color: accents[accent], metalness: 1, roughness: 0 },
   { color: accents[accent], metalness: 1, roughness: 1 },
+
+  // Additional smaller objects for filling
+  { color: '#666', roughness: 0.3, metalness: 0.1 },
+  { color: '#666', roughness: 0.8, metalness: 0.1 },
+  { color: 'white', roughness: 0.2, metalness: 0.3 },
+  { color: 'white', roughness: 0.6, metalness: 0.3 },
+  { color: '#888', roughness: 0.4, metalness: 0.2 },
+  { color: '#888', roughness: 0.9, metalness: 0.2 },
+  { color: accents[accent], roughness: 0.2, metalness: 0.3 },
+  { color: accents[accent], roughness: 0.6, metalness: 0.3 },
+  { color: '#999', roughness: 0.5, metalness: 0.1 },
+  { color: '#777', roughness: 0.7, metalness: 0.1 },
+  { color: 'white', roughness: 0.3, metalness: 0.4 },
+  { color: '#555', roughness: 0.4, metalness: 0.3 },
 ]
 
 interface SceneProps {
@@ -33,14 +47,14 @@ interface SceneProps {
 
 function OrbitingScene({ children }: { children: React.ReactNode }) {
   const ref = useRef<THREE.Group>(null)
-  
+
   useFrame((state, delta) => {
     if (ref.current) {
-      // Very slow rotation around Y-axis (one full rotation every ~30 seconds)
-      ref.current.rotation.y += delta * 0.05
+      // Rotate around X-axis for vertical circular orbit
+      ref.current.rotation.x += delta * 0.1
     }
   })
-  
+
   return <group ref={ref}>{children}</group>
 }
 
@@ -83,9 +97,9 @@ export function Scene(props: SceneProps) {
     <>
       <Canvas
         onClick={click}
-        shadows
+        shadows={false}
         dpr={[1, 1.5]}
-        gl={{ antialias: false }}
+        gl={{ antialias: false, powerPreference: "high-performance" }}
         camera={{ position: cameraPosition, fov: 17.5, near: 1, far: 30 }}
         {...props}
       >
@@ -93,24 +107,21 @@ export function Scene(props: SceneProps) {
         <ambientLight intensity={0.4} />
         <spotLight position={[10, 10, 10]} angle={0.15} penumbra={1} intensity={1} castShadow />
         <OrbitingScene>
-          <Physics gravity={[0, 0, 0]}>
-            <Pointer />
-            {connectors.map((connectorProps, i) => (
-              <Connector key={i} {...connectorProps} />
-            ))}
-            <Connector position={[10, 10, 5]}>
-              <Model>
-                <MeshTransmissionMaterial 
-                  clearcoat={1} 
-                  thickness={0.1} 
-                  anisotropicBlur={0.1} 
-                  chromaticAberration={0.1} 
-                  samples={8} 
-                  resolution={512} 
-                />
-              </Model>
-            </Connector>
-          </Physics>
+          {connectors.map((connectorProps, i) => (
+            <Connector key={i} {...connectorProps} />
+          ))}
+          <Connector position={[10, 10, 5]}>
+            <Model>
+              <MeshTransmissionMaterial
+                clearcoat={1}
+                thickness={0.1}
+                anisotropicBlur={0.1}
+                chromaticAberration={0.1}
+                samples={8}
+                resolution={512}
+              />
+            </Model>
+          </Connector>
         </OrbitingScene>
         <EffectComposer enableNormalPass={false} multisampling={8}>
           <N8AO distanceFalloff={1} aoRadius={1} intensity={4} />
@@ -173,61 +184,50 @@ interface ConnectorProps {
   metalness?: number
 }
 
-function Connector({ 
-  position, 
-  children, 
-  accent, 
-  ...props 
+function Connector({
+  position,
+  children,
+  accent,
+  ...props
 }: ConnectorProps) {
-  const api = useRef<RapierRigidBody>(null)
-  const vec = useMemo(() => new THREE.Vector3(), [])
+  const meshRef = useRef<THREE.Group>(null)
   const r = THREE.MathUtils.randFloatSpread
-  const pos = useMemo(() => position || [r(20), r(20), r(20)] as [number, number, number], [position, r])
-  
-  useFrame((state, delta) => {
-    Math.min(0.1, delta)
-    if (api.current) {
-      const impulse = vec.copy(api.current.translation()).negate().multiplyScalar(0.2)
-      api.current.applyImpulse(impulse, true)
-    }
-  })
-  
-  return (
-    <RigidBody 
-      linearDamping={4} 
-      angularDamping={1} 
-      friction={0.1} 
-      position={pos} 
-      ref={api} 
-      colliders={false}
-    >
-      <CuboidCollider args={[0.38, 1.27, 0.38]} />
-      <CuboidCollider args={[1.27, 0.38, 0.38]} />
-      <CuboidCollider args={[0.38, 0.38, 1.27]} />
-      {children ? children : <Model {...props} />}
-      {accent && <pointLight intensity={4} distance={5.5} color={props.color} />}
-    </RigidBody>
-  )
-}
+  const pos = useMemo(() => position || [r(10), r(10), r(10)] as [number, number, number], [position, r])
+  const initialPos = useMemo(() => pos, [pos])
+  const randomOffset = useMemo(() => Math.random() * 10000, [])
+  const scale = useMemo(() => {
+    // Favor smaller objects for better performance and screen filling
+    // More smaller objects, fewer large ones
+    const sizes = [0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0, 1.2, 1.4]
+    return sizes[Math.floor(Math.random() * sizes.length)]
+  }, [])
 
-function Pointer() {
-  const ref = useRef<RapierRigidBody>(null)
-  const vec = useMemo(() => new THREE.Vector3(), [])
-  
-  useFrame(({ mouse, viewport }) => {
-    if (ref.current) {
-      ref.current.setNextKinematicTranslation(
-        vec.set((mouse.x * viewport.width) / 2, (mouse.y * viewport.height) / 2, 0)
+  useFrame((state) => {
+    if (meshRef.current) {
+      const t = state.clock.elapsedTime + randomOffset
+      // Spinning rotation on all axes
+      meshRef.current.rotation.set(
+        Math.cos(t / 4) / 2,
+        Math.sin(t / 4) / 2,
+        Math.cos(t / 1.5) / 2
+      )
+      // Floating Y position
+      meshRef.current.position.set(
+        initialPos[0],
+        initialPos[1] + Math.sin(t / 1.5) / 2,
+        initialPos[2]
       )
     }
   })
-  
+
   return (
-    <RigidBody position={[0, 0, 0]} type="kinematicPosition" colliders={false} ref={ref}>
-      <BallCollider args={[1]} />
-    </RigidBody>
+    <group ref={meshRef} position={pos} scale={scale}>
+      {children ? children : <Model {...props} />}
+      {accent && <pointLight intensity={4} distance={5.5} color={props.color} />}
+    </group>
   )
 }
+
 
 interface FancyRingProps extends React.ComponentProps<'mesh'> {
   geometry?: THREE.BufferGeometry

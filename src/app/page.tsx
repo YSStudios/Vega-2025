@@ -11,11 +11,11 @@ export default function Home() {
   return (
     <div className="container">
       <div className="scene-container">
-        {/* <Scene /> */}
+        <Scene />
       </div>
       <Marquee />
       <About />
-	  <ScrollVideoSection />
+      <ScrollVideoSection />
       <Services />
       <WorkMarquee />
       <Teams />
