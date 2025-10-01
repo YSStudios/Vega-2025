@@ -10,10 +10,12 @@ import ScrollVideoSection from "../components/scroll-video-section";
 export default function Home() {
   return (
     <div className="container">
-      <div className="scene-container">
-        <Scene />
+      <div className="hero-section">
+        <div className="scene-container">
+          <Scene />
+        </div>
+        <Marquee />
       </div>
-      <Marquee />
       <About />
       <ScrollVideoSection />
       <Services />

@@ -1,9 +1,9 @@
 @import url("https://rsms.me/inter/inter.css");
 
 :root {
-  --background: #ECECEC;
+  --background: #ececec;
   --foreground: #000000;
-  --light-background: #ECECEC;
+  --light-background: #ececec;
 }
 
 /* Direct Font Face Declarations */
@@ -57,8 +57,12 @@ html {
 }
 
 @keyframes smooth-scroll {
-  from { scroll-behavior: smooth; }
-  to { scroll-behavior: smooth; }
+  from {
+    scroll-behavior: smooth;
+  }
+  to {
+    scroll-behavior: smooth;
+  }
 }
 
 /* Custom scrollbar for better control */
@@ -139,12 +143,21 @@ a {
   min-height: 100vh;
 }
 
+.hero-section {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  width: 100%;
+}
+
 .scene-container {
-  height: 75vh;
+  height: 85vh;
   width: 100%;
   /* border-radius: 1rem; */
   overflow: hidden;
   position: relative;
+  background: linear-gradient(135deg, #ECECEC 0%, #F8F8F8 50%, #ECECEC 100%);
 }
 
 @media (max-width: 1024px) and (min-width: 769px) {
@@ -395,17 +408,17 @@ a {
     bottom: 1rem;
     padding: 0.8rem 1.5rem;
   }
-  
+
   .fullscreen-video-container .nav-button {
     width: 50px;
     height: 50px;
     font-size: 1.5rem;
   }
-  
+
   .fullscreen-video-container .nav-button-left {
     left: 1rem;
   }
-  
+
   .fullscreen-video-container .nav-button-right {
     right: 1rem;
   }
@@ -431,17 +444,17 @@ a {
     bottom: 0.5rem;
     padding: 0.6rem 1rem;
   }
-  
+
   .fullscreen-video-container .nav-button {
     width: 45px;
     height: 45px;
     font-size: 1.2rem;
   }
-  
+
   .fullscreen-video-container .nav-button-left {
     left: 0.5rem;
   }
-  
+
   .fullscreen-video-container .nav-button-right {
     right: 0.5rem;
   }

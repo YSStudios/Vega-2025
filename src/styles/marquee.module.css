@@ -2,8 +2,8 @@
   width: 100%;
   overflow: hidden;
   background-color: #000;
-  padding: 3rem 0;
-  position: relative;
+  padding: 1.5rem 0;
+  margin-top: auto;
   border-bottom: 1px solid #000;
 }
 
