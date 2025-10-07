@@ -1,9 +1,9 @@
 "use client";
 
 import { useRouter } from 'next/navigation';
-import { motion, useScroll, useTransform } from 'framer-motion';
+import { motion } from 'framer-motion';
 import Image from 'next/image';
-import { use, useRef, useState, useCallback, useEffect } from 'react';
+import { use, useRef, useState, useEffect } from 'react';
 
 interface CaseStudyData {
   id: string;
@@ -235,7 +235,7 @@ const extractDominantColor = (imageSrc: string): Promise<string> => {
         } else {
           resolve(`rgb(${r}, ${g}, ${b})`);
         }
-      } catch (error) {
+      } catch {
         resolve('#FFD700'); // fallback
       }
     };
@@ -271,24 +271,6 @@ export default function CaseStudyPage({ params }: { params: Promise<{ slug: stri
     }
   }, []);
 
-  // Simplified parallax effects
-  const heroY = scrollProgress * -200;
-  const textY = scrollProgress * -100;
-
-  // Image opacity based on scroll position
-  const getImageOpacity = (progress: number, start: number, fadeIn: number, fadeOut: number, end: number) => {
-    if (progress < start) return 0;
-    if (progress < fadeIn) return (progress - start) / (fadeIn - start);
-    if (progress < fadeOut) return 1;
-    if (progress < end) return 1 - (progress - fadeOut) / (end - fadeOut);
-    return 0;
-  };
-
-  const image1Opacity = { get: () => scrollProgress <= 0.3 ? 1 : Math.max(0, 1 - (scrollProgress - 0.2) / 0.1) };
-  const image2Opacity = { get: () => getImageOpacity(scrollProgress, 0.2, 0.3, 0.5, 0.6) };
-  const image3Opacity = { get: () => getImageOpacity(scrollProgress, 0.5, 0.6, 0.8, 0.9) };
-  const image4Opacity = { get: () => scrollProgress >= 0.8 ? Math.min(1, (scrollProgress - 0.8) / 0.1) : 0 };
-
   // Extract dominant color from hero image
   useEffect(() => {
     if (caseStudy?.heroImage) {
@@ -305,6 +287,18 @@ export default function CaseStudyPage({ params }: { params: Promise<{ slug: stri
       document.body.classList.remove('case-study-open');
     };
   }, []);
+
+  // Listen for custom scroll events from the navigation
+  useEffect(() => {
+    const handleScrollToContact = () => {
+      scrollToContact();
+    };
+
+    window.addEventListener('scroll-to-contact', handleScrollToContact);
+    return () => {
+      window.removeEventListener('scroll-to-contact', handleScrollToContact);
+    };
+  });
 
   if (!caseStudy) {
     return <div>Case study not found</div>;
@@ -329,17 +323,23 @@ export default function CaseStudyPage({ params }: { params: Promise<{ slug: stri
     }
   };
 
-  // Listen for custom scroll events from the navigation
-  useEffect(() => {
-    const handleScrollToContact = () => {
-      scrollToContact();
-    };
+  // Simplified parallax effects
+  const heroY = scrollProgress * -200;
+  const textY = scrollProgress * -100;
 
-    window.addEventListener('scroll-to-contact', handleScrollToContact);
-    return () => {
-      window.removeEventListener('scroll-to-contact', handleScrollToContact);
-    };
-  }, []);
+  // Image opacity based on scroll position
+  const getImageOpacity = (progress: number, start: number, fadeIn: number, fadeOut: number, end: number) => {
+    if (progress < start) return 0;
+    if (progress < fadeIn) return (progress - start) / (fadeIn - start);
+    if (progress < fadeOut) return 1;
+    if (progress < end) return 1 - (progress - fadeOut) / (end - fadeOut);
+    return 0;
+  };
+
+  const image1Opacity = { get: () => scrollProgress <= 0.3 ? 1 : Math.max(0, 1 - (scrollProgress - 0.2) / 0.1) };
+  const image2Opacity = { get: () => getImageOpacity(scrollProgress, 0.2, 0.3, 0.5, 0.6) };
+  const image3Opacity = { get: () => getImageOpacity(scrollProgress, 0.5, 0.6, 0.8, 0.9) };
+  const image4Opacity = { get: () => scrollProgress >= 0.8 ? Math.min(1, (scrollProgress - 0.8) / 0.1) : 0 };
 
   return (
     <motion.div
@@ -511,7 +511,7 @@ export default function CaseStudyPage({ params }: { params: Promise<{ slug: stri
           {/* Contact Form Section */}
           <div ref={contactRef} className="case-study-contact">
             <h3>Get In Touch —</h3>
-            <p>Ready to start your next project? Let's discuss how we can bring your vision to life.</p>
+            <p>Ready to start your next project? Let&apos;s discuss how we can bring your vision to life.</p>
             
             <form className="inline-contact-form">
               <div className="form-row">

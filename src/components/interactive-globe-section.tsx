@@ -2,8 +2,7 @@
 
 import React, { useRef, useMemo, useState, useEffect } from "react";
 import { motion } from "framer-motion";
-import { Canvas, useFrame, useThree } from "@react-three/fiber";
-import { Text } from "@react-three/drei";
+import { Canvas, useFrame } from "@react-three/fiber";
 import * as THREE from "three";
 import styles from "../styles/interactive-globe-section.module.css";
 
@@ -133,7 +132,6 @@ function Particles() {
     const positions = new Float32Array(particleCount * 3);
     
     const globeRadius = 1.2;
-    let validParticles = 0;
     
     for (let i = 0; i < particleCount; i++) {
       const i3 = i * 3;
@@ -167,7 +165,6 @@ function Particles() {
       positions[i3] = x;
       positions[i3 + 1] = y;
       positions[i3 + 2] = z;
-      validParticles++;
     }
     
     geo.setAttribute('position', new THREE.BufferAttribute(positions, 3));

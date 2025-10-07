@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { useScroll, useTransform } from "framer-motion";
 import { useRouter } from "next/navigation";
 import styles from "../styles/scroll-video.module.css";
 
@@ -41,25 +40,17 @@ const caseStudies: CaseStudy[] = [
 
 interface CaseStudiesTextProps {
   onVideoChange: (index: number) => void;
-  currentVideoIndex: number;
   onShouldPlay?: (shouldPlay: boolean) => void;
 }
 
 export default function CaseStudiesText({
   onVideoChange,
-  currentVideoIndex,
   onShouldPlay,
 }: CaseStudiesTextProps) {
   const sectionsRef = useRef<(HTMLDivElement | null)[]>([]);
   const containerRef = useRef<HTMLDivElement>(null);
   const [activeIndex, setActiveIndex] = useState(0);
   const router = useRouter();
-
-  // Global scroll progress for different parallax speeds
-  const { scrollY } = useScroll();
-  const subtitleY = useTransform(scrollY, [0, 2000], [0, -100]); // Slowest
-  const titleY = useTransform(scrollY, [0, 2000], [0, -300]); // Fastest
-  const ctaY = useTransform(scrollY, [0, 2000], [0, -200]); // Medium
 
   useEffect(() => {
     const handleScroll = () => {
