@@ -3,6 +3,7 @@
 import React from "react";
 import { motion, Variants } from "framer-motion";
 import styles from "../styles/footer.module.css";
+import InteractiveGlobeSection from "./interactive-globe-section";
 
 const footerData = {
   menu: [
@@ -114,6 +115,9 @@ const svgLayer3Variants: Variants = {
 export default function Footer() {
   return (
     <>
+      {/* Interactive Globe Section */}
+      <InteractiveGlobeSection />
+      
       <motion.footer
         id="contact"
         className={styles.footer}
