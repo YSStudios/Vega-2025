@@ -349,21 +349,6 @@ export default function CaseStudyPage({ params }: { params: Promise<{ slug: stri
       exit={{ opacity: 0 }}
       transition={{ duration: 0.5 }}
     >
-      {/* Debug scroll progress - remove later */}
-      <div style={{ 
-        position: 'fixed', 
-        top: '10px', 
-        left: '10px', 
-        zIndex: 9999, 
-        background: 'rgba(0,0,0,0.8)', 
-        color: 'white', 
-        padding: '10px',
-        borderRadius: '4px',
-        fontSize: '12px'
-      }}>
-        Scroll: {Math.round(scrollProgress * 100)}%
-      </div>
-
       {/* Close Button */}
       <button className="case-study-close" onClick={handleClose}>
         <span>Close</span>
