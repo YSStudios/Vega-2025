@@ -1,8 +1,8 @@
 "use client";
 
-import React, { useRef, useMemo, useState } from "react";
+import React, { useRef, useMemo, useState, useEffect } from "react";
 import { motion } from "framer-motion";
-import { Canvas, useFrame } from "@react-three/fiber";
+import { Canvas, useFrame, useThree } from "@react-three/fiber";
 import { Text } from "@react-three/drei";
 import * as THREE from "three";
 import styles from "../styles/interactive-globe-section.module.css";
@@ -121,6 +121,93 @@ function SimpleRing({ isHovered, onHover, onClick }: GlobeProps) {
   );
 }
 
+function Particles() {
+  const pointsRef = useRef<THREE.Points>(null);
+  const mouse = useRef({ x: 0, y: 0 });
+  
+  const particleCount = 550;
+  
+  // Create geometry
+  const { geometry, logoTexture } = useMemo(() => {
+    const geo = new THREE.BufferGeometry();
+    const positions = new Float32Array(particleCount * 3);
+    
+    const globeRadius = 1.2;
+    let validParticles = 0;
+    
+    for (let i = 0; i < particleCount; i++) {
+      const i3 = i * 3;
+      let x, y, z;
+      
+      // Keep generating until we get a valid particle position
+      let isValid = false;
+      do {
+        const radius = 4 + Math.random() * 3;
+        const theta = Math.random() * Math.PI * 2;
+        const phi = Math.random() * Math.PI;
+        
+        x = radius * Math.sin(phi) * Math.cos(theta);
+        y = radius * Math.sin(phi) * Math.sin(theta);
+        z = radius * Math.cos(phi);
+        
+        // Check if particle would be in front of the globe sphere
+        const distXY = Math.sqrt(x * x + y * y);
+        
+        // If outside globe's cylinder projection, particle is valid
+        if (distXY >= globeRadius) {
+          isValid = true;
+        } else {
+          // If inside projection, check if behind the globe surface
+          const globeFrontZ = Math.sqrt(globeRadius * globeRadius - distXY * distXY);
+          isValid = z < -globeFrontZ;
+        }
+        
+      } while (!isValid);
+      
+      positions[i3] = x;
+      positions[i3 + 1] = y;
+      positions[i3 + 2] = z;
+      validParticles++;
+    }
+    
+    geo.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+    
+    const loader = new THREE.TextureLoader();
+    const texture = loader.load('/vega-logo-white.svg');
+    
+    return { geometry: geo, logoTexture: texture };
+  }, []);
+  
+  useEffect(() => {
+    const handleMouseMove = (e: MouseEvent) => {
+      mouse.current.x = e.clientX - window.innerWidth / 2;
+      mouse.current.y = e.clientY - window.innerHeight / 2;
+    };
+    window.addEventListener('mousemove', handleMouseMove);
+    return () => window.removeEventListener('mousemove', handleMouseMove);
+  }, []);
+  
+  useFrame(({ camera }) => {
+    // Smooth camera follow like the example
+    camera.position.x += (mouse.current.x * 0.001 - camera.position.x) * 0.05;
+    camera.position.y += (-mouse.current.y * 0.001 - camera.position.y) * 0.05;
+    camera.lookAt(0, 0, 0);
+  });
+
+  return (
+    <points ref={pointsRef} geometry={geometry}>
+      <pointsMaterial
+        map={logoTexture}
+        size={0.15}
+        transparent
+        opacity={0.5}
+        sizeAttenuation
+        alphaTest={0.1}
+      />
+    </points>
+  );
+}
+
 export default function InteractiveGlobeSection() {
   const [isHovered, setIsHovered] = useState(false);
 
@@ -138,11 +225,13 @@ export default function InteractiveGlobeSection() {
       style={{ cursor: isHovered ? 'pointer' : 'default' }}
     >
       <Canvas
-        camera={{ position: [0, 0, 6], fov: 55 }}
+        camera={{ position: [0, 0, 6], fov: 55, near: 1 }}
         style={{ background: "transparent" }}
       >
         <ambientLight intensity={1} />
         <directionalLight position={[5, 5, 5]} intensity={1} />
+        
+        <Particles />
         
         <WireframeGlobe 
           isHovered={isHovered} 
