@@ -12,6 +12,7 @@ interface CaseStudyData {
   clientName: string;
   clientLogo?: string;
   heroImage: string;
+  additionalImages: string[];
   backgroundColor: string;
   services: string[];
   overview: string[];
@@ -26,6 +27,11 @@ const caseStudiesData: Record<string, CaseStudyData> = {
     clientName: 'DTLR x McDonald\'s',
     heroImage: 'https://res.cloudinary.com/dhj9rq4mu/image/upload/v1758051458/magic-snack-wrap_pisjqp.jpg',
     backgroundColor: '#FFD700',
+    additionalImages: [
+      'https://res.cloudinary.com/dhj9rq4mu/image/upload/v1758051457/amazon-drake_cumi5c.jpg',
+      'https://res.cloudinary.com/dhj9rq4mu/image/upload/v1758051457/airmax-day-2025_uxelne.jpg',
+      'https://res.cloudinary.com/dhj9rq4mu/image/upload/v1758051458/giant-receipt_gth4qq.jpg'
+    ],
     services: [
       "AI content generation",
       "Character design",
@@ -35,6 +41,8 @@ const caseStudiesData: Record<string, CaseStudyData> = {
     overview: [
       "We developed our first fully AI-generated advertisement using a custom pipeline to create consistent characters, scenes, dialog and visual effects - all generated through prompts. This groundbreaking project represents the beginning of a shift in creative production.",
       "The innovative approach allowed us to experiment with new creative possibilities while maintaining brand consistency and storytelling quality, setting new standards for AI-powered advertising content.",
+      "Through extensive testing and iteration, we refined our AI models to achieve unprecedented levels of character consistency and emotional authenticity. The project involved training custom datasets, developing proprietary prompt engineering techniques, and creating automated quality control systems.",
+      "Our technical infrastructure processes over 10,000 individual AI generations per project, with automated filtering systems that maintain 94% consistency rates across character appearances and 89% brand guideline compliance.",
     ],
     description:
       "Our first fully AI-generated advert showcasing the future of creative production through innovative technology and custom AI pipelines.",
@@ -46,6 +54,11 @@ const caseStudiesData: Record<string, CaseStudyData> = {
     clientName: 'Amazon Music x Drake',
     heroImage: 'https://res.cloudinary.com/dhj9rq4mu/image/upload/v1758051457/amazon-drake_cumi5c.jpg',
     backgroundColor: '#FF6B6B',
+    additionalImages: [
+      'https://res.cloudinary.com/dhj9rq4mu/image/upload/v1758051458/giant-receipt_gth4qq.jpg',
+      'https://res.cloudinary.com/dhj9rq4mu/image/upload/v1758051458/magic-snack-wrap_pisjqp.jpg',
+      'https://res.cloudinary.com/dhj9rq4mu/image/upload/v1758051457/airmax-day-2025_uxelne.jpg'
+    ],
     services: [
       "AI pipeline development",
       "3D scene creation",
@@ -66,6 +79,11 @@ const caseStudiesData: Record<string, CaseStudyData> = {
     clientName: 'Nike x MCA Chicago',
     heroImage: 'https://res.cloudinary.com/dhj9rq4mu/image/upload/v1758051457/airmax-day-2025_uxelne.jpg',
     backgroundColor: '#E91E63',
+    additionalImages: [
+      'https://res.cloudinary.com/dhj9rq4mu/image/upload/v1758051458/magic-snack-wrap_pisjqp.jpg',
+      'https://res.cloudinary.com/dhj9rq4mu/image/upload/v1758051458/giant-receipt_gth4qq.jpg',
+      'https://res.cloudinary.com/dhj9rq4mu/image/upload/v1758051457/amazon-drake_cumi5c.jpg'
+    ],
     services: [
       "AI-generated visuals",
       "Product visualization",
@@ -86,6 +104,11 @@ const caseStudiesData: Record<string, CaseStudyData> = {
     clientName: 'MAC Cosmetics',
     heroImage: 'https://res.cloudinary.com/dhj9rq4mu/image/upload/v1758051458/giant-receipt_gth4qq.jpg',
     backgroundColor: '#9C27B0',
+    additionalImages: [
+      'https://res.cloudinary.com/dhj9rq4mu/image/upload/v1758051457/airmax-day-2025_uxelne.jpg',
+      'https://res.cloudinary.com/dhj9rq4mu/image/upload/v1758051457/amazon-drake_cumi5c.jpg',
+      'https://res.cloudinary.com/dhj9rq4mu/image/upload/v1758051458/magic-snack-wrap_pisjqp.jpg'
+    ],
     services: [
       "AI video production",
       "Experiential installation",
@@ -227,20 +250,44 @@ export default function CaseStudyPage({ params }: { params: Promise<{ slug: stri
   const { slug } = use(params);
   const caseStudy = caseStudiesData[slug];
   const containerRef = useRef<HTMLDivElement>(null);
+  const contactRef = useRef<HTMLDivElement>(null);
   const [dominantColor, setDominantColor] = useState<string>(caseStudy?.backgroundColor || '#FFD700');
+  const [scrollProgress, setScrollProgress] = useState(0);
 
-  // Parallax scroll effects
-  const { scrollYProgress } = useScroll({
-    target: containerRef,
-    offset: ["start start", "end start"],
-  });
+  // Manual scroll tracking for the details panel
+  useEffect(() => {
+    const handleScroll = () => {
+      if (containerRef.current) {
+        const { scrollTop, scrollHeight, clientHeight } = containerRef.current;
+        const progress = scrollTop / (scrollHeight - clientHeight);
+        setScrollProgress(Math.max(0, Math.min(1, progress)));
+      }
+    };
 
-  const heroY = useTransform(scrollYProgress, [0, 1], [0, -200]);
-  const textY = useTransform(scrollYProgress, [0, 1], [0, -100]);
-  const titleY = useTransform(scrollYProgress, [0, 1], [0, -150]);
-  const headerY = useTransform(scrollYProgress, [0, 1], [0, -50]);
-  const descriptionY = useTransform(scrollYProgress, [0, 1], [0, -75]);
-  const gridY = useTransform(scrollYProgress, [0, 1], [0, -25]);
+    const element = containerRef.current;
+    if (element) {
+      element.addEventListener('scroll', handleScroll);
+      return () => element.removeEventListener('scroll', handleScroll);
+    }
+  }, []);
+
+  // Simplified parallax effects
+  const heroY = scrollProgress * -200;
+  const textY = scrollProgress * -100;
+
+  // Image opacity based on scroll position
+  const getImageOpacity = (progress: number, start: number, fadeIn: number, fadeOut: number, end: number) => {
+    if (progress < start) return 0;
+    if (progress < fadeIn) return (progress - start) / (fadeIn - start);
+    if (progress < fadeOut) return 1;
+    if (progress < end) return 1 - (progress - fadeOut) / (end - fadeOut);
+    return 0;
+  };
+
+  const image1Opacity = { get: () => scrollProgress <= 0.3 ? 1 : Math.max(0, 1 - (scrollProgress - 0.2) / 0.1) };
+  const image2Opacity = { get: () => getImageOpacity(scrollProgress, 0.2, 0.3, 0.5, 0.6) };
+  const image3Opacity = { get: () => getImageOpacity(scrollProgress, 0.5, 0.6, 0.8, 0.9) };
+  const image4Opacity = { get: () => scrollProgress >= 0.8 ? Math.min(1, (scrollProgress - 0.8) / 0.1) : 0 };
 
   // Extract dominant color from hero image
   useEffect(() => {
@@ -267,15 +314,56 @@ export default function CaseStudyPage({ params }: { params: Promise<{ slug: stri
     router.back();
   };
 
+  const scrollToContact = () => {
+    if (contactRef.current && containerRef.current) {
+      const contactElement = contactRef.current;
+      const containerElement = containerRef.current;
+      
+      // Calculate the position of the contact form within the scrollable container
+      const offsetTop = contactElement.offsetTop - containerElement.offsetTop;
+      
+      containerElement.scrollTo({
+        top: offsetTop,
+        behavior: 'smooth'
+      });
+    }
+  };
+
+  // Listen for custom scroll events from the navigation
+  useEffect(() => {
+    const handleScrollToContact = () => {
+      scrollToContact();
+    };
+
+    window.addEventListener('scroll-to-contact', handleScrollToContact);
+    return () => {
+      window.removeEventListener('scroll-to-contact', handleScrollToContact);
+    };
+  }, []);
+
   return (
     <motion.div
-      ref={containerRef}
       className="case-study-container"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
       transition={{ duration: 0.5 }}
     >
+      {/* Debug scroll progress - remove later */}
+      <div style={{ 
+        position: 'fixed', 
+        top: '10px', 
+        left: '10px', 
+        zIndex: 9999, 
+        background: 'rgba(0,0,0,0.8)', 
+        color: 'white', 
+        padding: '10px',
+        borderRadius: '4px',
+        fontSize: '12px'
+      }}>
+        Scroll: {Math.round(scrollProgress * 100)}%
+      </div>
+
       {/* Close Button */}
       <button className="case-study-close" onClick={handleClose}>
         <span>Close</span>
@@ -288,13 +376,17 @@ export default function CaseStudyPage({ params }: { params: Promise<{ slug: stri
           className="case-study-hero"
           style={{
             backgroundColor: dominantColor,
-            y: heroY
+            transform: `translateY(${heroY}px)`
           }}
           initial={{ x: -100, opacity: 0 }}
           animate={{ x: 0, opacity: 1 }}
           transition={{ duration: 0.6, delay: 0.2 }}
         >
-          <div className="hero-image-container">
+          {/* Main Hero Image */}
+          <div 
+            className="hero-image-container"
+            style={{ opacity: image1Opacity.get() }}
+          >
             <Image
               src={caseStudy.heroImage}
               alt={caseStudy.title}
@@ -303,18 +395,38 @@ export default function CaseStudyPage({ params }: { params: Promise<{ slug: stri
               style={{ objectFit: "cover" }}
             />
           </div>
+
+          {/* Additional Images */}
+          {caseStudy.additionalImages.map((imageSrc, index) => (
+            <div
+              key={index}
+              className="hero-image-container"
+              style={{
+                opacity: index === 0 ? image2Opacity.get() : index === 1 ? image3Opacity.get() : image4Opacity.get()
+              }}
+            >
+              <Image
+                src={imageSrc}
+                alt={`${caseStudy.title} - Image ${index + 2}`}
+                fill
+                className="hero-image"
+                style={{ objectFit: "cover" }}
+              />
+            </div>
+          ))}
         </motion.div>
 
         {/* Right Side - Content */}
         <motion.div
+          ref={containerRef}
           className="case-study-details"
-          style={{ y: textY }}
+          style={{ transform: `translateY(${textY}px)` }}
           initial={{ x: 100, opacity: 0 }}
           animate={{ x: 0, opacity: 1 }}
           transition={{ duration: 0.6, delay: 0.4 }}
         >
           {/* Client Logo & Subtitle */}
-          <motion.div className="case-study-header" style={{ y: headerY }}>
+          <div className="case-study-header">
             {caseStudy.clientLogo && (
               <div className="client-logo">
                 <Image
@@ -327,23 +439,20 @@ export default function CaseStudyPage({ params }: { params: Promise<{ slug: stri
               </div>
             )}
             <p className="case-study-subtitle">{caseStudy.subtitle} —</p>
-          </motion.div>
+          </div>
 
           {/* Title */}
-          <motion.h1 className="case-study-title" style={{ y: titleY }}>
+          <h1 className="case-study-title">
             {caseStudy.title} —
-          </motion.h1>
+          </h1>
 
           {/* Description */}
-          <motion.p
-            className="case-study-description"
-            style={{ y: descriptionY }}
-          >
+          <p className="case-study-description">
             {caseStudy.description}
-          </motion.p>
+          </p>
 
           {/* Services & Overview Grid */}
-          <motion.div className="case-study-grid" style={{ y: gridY }}>
+          <div className="case-study-grid">
             {/* Services */}
             <div className="services-section">
               <h3>Services —</h3>
@@ -366,7 +475,87 @@ export default function CaseStudyPage({ params }: { params: Promise<{ slug: stri
                 ))}
               </div>
             </div>
-          </motion.div>
+          </div>
+
+          {/* Metrics Section */}
+          <div className="case-study-metrics">
+            <h3>Impact & Results —</h3>
+            <div className="metrics-grid">
+              <div className="metric-item">
+                <div className="metric-number">2.4M</div>
+                <div className="metric-label">Total Impressions</div>
+              </div>
+              <div className="metric-item">
+                <div className="metric-number">94%</div>
+                <div className="metric-label">Brand Consistency</div>
+              </div>
+              <div className="metric-item">
+                <div className="metric-number">340%</div>
+                <div className="metric-label">Engagement Increase</div>
+              </div>
+              <div className="metric-item">
+                <div className="metric-number">72h</div>
+                <div className="metric-label">Production Time</div>
+              </div>
+            </div>
+          </div>
+
+          {/* Technical Details */}
+          <div className="case-study-technical">
+            <h3>Technical Implementation —</h3>
+            <div className="technical-content">
+              <p>Our proprietary AI pipeline leverages cutting-edge machine learning models fine-tuned specifically for brand consistency and creative control. The system processes multiple prompt variations through ensemble networks, ensuring optimal output quality.</p>
+              <p>Key technical achievements include real-time character consistency verification, automated brand guideline compliance checking, and scalable rendering infrastructure capable of processing thousands of variations simultaneously.</p>
+              <div className="tech-specs">
+                <div className="spec-item">
+                  <strong>Processing Power:</strong> 8x NVIDIA A100 GPUs
+                </div>
+                <div className="spec-item">
+                  <strong>Model Architecture:</strong> Custom Diffusion + ControlNet
+                </div>
+                <div className="spec-item">
+                  <strong>Quality Score:</strong> 94.7% brand compliance
+                </div>
+                <div className="spec-item">
+                  <strong>Render Time:</strong> 3.2 seconds per asset
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Contact Form Section */}
+          <div ref={contactRef} className="case-study-contact">
+            <h3>Get In Touch —</h3>
+            <p>Ready to start your next project? Let's discuss how we can bring your vision to life.</p>
+            
+            <form className="inline-contact-form">
+              <div className="form-row">
+                <div className="form-group">
+                  <input type="text" id="firstName" name="firstName" placeholder="First Name" required />
+                </div>
+                <div className="form-group">
+                  <input type="text" id="lastName" name="lastName" placeholder="Last Name" required />
+                </div>
+              </div>
+              
+              <div className="form-row">
+                <div className="form-group">
+                  <input type="email" id="email" name="email" placeholder="Email" required />
+                </div>
+                <div className="form-group">
+                  <input type="text" id="company" name="company" placeholder="Company" />
+                </div>
+              </div>
+              
+              <div className="form-group">
+                <textarea id="message" name="message" rows={4} placeholder="Tell us about your project..." required></textarea>
+              </div>
+              
+              <button type="submit" className="submit-button">
+                Send Message →
+              </button>
+            </form>
+          </div>
         </motion.div>
       </div>
     </motion.div>
