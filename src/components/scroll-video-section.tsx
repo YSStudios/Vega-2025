@@ -151,7 +151,6 @@ export default function ScrollVideoSection() {
         <div className={styles.textContent}>
           <CaseStudiesText
             onVideoChange={handleVideoChange}
-            currentVideoIndex={currentVideoIndex}
             onShouldPlay={handleShouldPlay}
           />
         </div>
