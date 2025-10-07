@@ -223,7 +223,7 @@ export default function Footer() {
         className={styles.logoSection}
         initial="hidden"
         whileInView="visible"
-        viewport={{ once: true, margin: "100px" }}
+        viewport={{ once: false, margin: "100px" }}
       >
         <div className={styles.svgContainer}>
            <div className={`${styles.svgLayer} ${styles.svgLayer1}`}>
