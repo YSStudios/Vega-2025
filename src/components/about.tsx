@@ -19,18 +19,21 @@ export default function About() {
       className={styles.aboutSection}
       initial={{ opacity: 0, y: 30 }}
       whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true }}
       transition={{ duration: 0.8, delay: 0 }}
     >
       <motion.div 
         className={styles.container}
         initial={{ opacity: 0, y: 20 }}
         whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
         transition={{ duration: 0.6, delay: 0.1 }}
       >
         <motion.div 
           className={styles.mainContent}
           initial={{ opacity: 0, y: 15 }}
           whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
           transition={{ duration: 0.6, delay: 0.15 }}
         >
           <h1 className={styles.mainText}>
@@ -38,6 +41,7 @@ export default function About() {
               className={styles.studioLabel}
               initial={{ opacity: 0, y: 25 }}
               whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
               transition={{ duration: 0.7, delay: 0.25 }}
             >
               ( The Studio )
@@ -47,6 +51,7 @@ export default function About() {
                 key={index}
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
                 transition={{ duration: 0.6, delay: 0.4 + (index * 0.1) }}
                 style={{ display: 'block' }}
               >
@@ -57,6 +62,7 @@ export default function About() {
               className={styles.desktopButton}
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
               transition={{ duration: 0.6, delay: 0.8 }}
             >
               {" "}
@@ -64,6 +70,7 @@ export default function About() {
                 className={styles.learnMoreButton}
                 initial={{ opacity: 0, y: 15 }}
                 whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
                 transition={{ duration: 0.5, delay: 0.9 }}
                 style={{ transition: 'none' }}
               >
@@ -72,6 +79,7 @@ export default function About() {
               <motion.span
                 initial={{ opacity: 0, x: -10 }}
                 whileInView={{ opacity: 1, x: 0 }}
+                viewport={{ once: true }}
                 transition={{ duration: 0.5, delay: 1.0 }}
                 style={{ display: 'inline-block' }}
               >
@@ -83,12 +91,14 @@ export default function About() {
             className={styles.mobileButton}
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
             transition={{ duration: 0.6, delay: 0.8 }}
           >
             <motion.span 
               className={styles.learnMoreButton}
               initial={{ opacity: 0, y: 15 }}
               whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
               transition={{ duration: 0.5, delay: 0.9 }}
               style={{ transition: 'none' }}
             >
@@ -97,6 +107,7 @@ export default function About() {
             <motion.span
               initial={{ opacity: 0, x: -10 }}
               whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
               transition={{ duration: 0.5, delay: 1.0 }}
               style={{ display: 'inline-block' }}
             >

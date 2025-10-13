@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useEffect, useRef } from "react";
 import { motion } from "framer-motion";
 import styles from "../styles/services.module.css";
 
@@ -63,8 +63,38 @@ const servicesData = [
 ];
 
 export default function Services() {
+  const sectionRef = useRef<HTMLElement>(null);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          const cubes = entry.target.querySelectorAll(`.${styles.cube}`);
+          cubes.forEach((cube) => {
+            if (entry.isIntersecting) {
+              (cube as HTMLElement).style.animationPlayState = 'running';
+            } else {
+              (cube as HTMLElement).style.animationPlayState = 'paused';
+            }
+          });
+        });
+      },
+      { threshold: 0.1 }
+    );
+
+    if (sectionRef.current) {
+      observer.observe(sectionRef.current);
+    }
+
+    return () => {
+      if (sectionRef.current) {
+        observer.unobserve(sectionRef.current);
+      }
+    };
+  }, []);
+
   return (
-    <section id="services" className={styles.servicesSection}>
+    <section ref={sectionRef} id="services" className={styles.servicesSection}>
       <h2 className={styles.sectionTitle}>
         Expertise & Capabilities
       </h2>

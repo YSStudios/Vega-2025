@@ -155,9 +155,9 @@ export function Scene(props: SceneProps) {
         <EffectComposer multisampling={0}>
           <DepthOfField
             target={[0, 0, 3]}
-            focalLength={0.25}
-            bokehScale={6}
-            height={480}
+            focalLength={0.1}
+            bokehScale={2}
+            height={720}
           />
           <ToneMapping />
         </EffectComposer>

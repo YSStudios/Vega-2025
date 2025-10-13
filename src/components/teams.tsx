@@ -69,6 +69,7 @@ export default function Teams() {
       className={styles.teamsSection}
       initial={{ opacity: 0, y: 30 }}
       whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true }}
       transition={{ duration: 0.8, delay: 0 }}
     >
       <div className={styles.container}>
@@ -76,6 +77,7 @@ export default function Teams() {
           className={styles.sectionTitle}
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
           transition={{ duration: 0.8, delay: 0.2 }}
         >
           Our Team
@@ -85,6 +87,7 @@ export default function Teams() {
           className={styles.contentContainer}
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
           transition={{ duration: 0.6, delay: 0.4 }}
         >
         <div className={styles.contentWrapper}>

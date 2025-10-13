@@ -114,6 +114,7 @@
   position: relative;
   transform-style: preserve-3d;
   animation: float 6s ease-in-out infinite;
+  will-change: transform;
 }
 
 .cube.fragments {
@@ -147,7 +148,6 @@
   background: rgba(255, 255, 255, 0.9);
   border: 2px solid rgba(255, 255, 255, 0.3);
   border-radius: 4px;
-  backdrop-filter: blur(10px);
 }
 
 .fragment:nth-child(1) {
@@ -194,7 +194,6 @@
 .module {
   position: absolute;
   border-radius: 8px;
-  backdrop-filter: blur(10px);
 }
 
 .module:nth-child(1) {
@@ -258,7 +257,6 @@
   height: 120px;
   border: 2px solid rgba(255, 255, 255, 0.3);
   border-radius: 12px;
-  backdrop-filter: blur(10px);
 }
 
 .stackLayer:nth-child(1) {
@@ -293,7 +291,6 @@
 .spiralElement {
   position: absolute;
   border-radius: 50%;
-  backdrop-filter: blur(10px);
   border: 2px solid rgba(255, 255, 255, 0.3);
 }
 
@@ -346,7 +343,6 @@
 .gridCell {
   position: absolute;
   border-radius: 4px;
-  backdrop-filter: blur(10px);
   border: 1px solid rgba(255, 255, 255, 0.3);
   width: 45px;
   height: 45px;
