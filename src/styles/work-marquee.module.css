@@ -1,6 +1,6 @@
 .workMarqueeSection {
   padding: 3rem 0;
-  background: #000;
+  background: var(--background);
   overflow: hidden;
   position: relative;
   width: 100%;
@@ -15,9 +15,9 @@
 
 .title {
   font-family: var(--font-argon), sans-serif;
-  font-size: 3.5rem;
+  font-size: 4.5rem;
   font-weight: 700;
-  color: #fff;
+  color: rgb(0, 0, 0);
   margin: 0 0 0rem 0;
   letter-spacing: 0.02em;
   line-height: 0.85;
@@ -47,24 +47,25 @@
 
 .marqueeItem {
   font-family: var(--font-argon), sans-serif;
-  font-size: 4.5rem;
+  font-size: 3.5rem;
   font-weight: 400;
-  color: rgba(255, 255, 255, 0.7);
+  color: rgba(0, 0, 0, 1);
   text-transform: uppercase;
   letter-spacing: -2px;
   transition: color 0.3s ease;
   flex-shrink: 0;
   position: relative;
+  padding-top: 2rem;
 }
 
 .marqueeItem:hover {
-  color: rgba(255, 255, 255, 0.9);
+  color: rgba(0, 0, 0, 1);
 }
 
 .marqueeItem::after {
   content: "↗";
   margin-left: 4rem;
-  color: rgba(255, 255, 255, 0.5);
+  color: rgb(0, 0, 0);
   font-family: var(--font-object-sans);
   font-size: 0.6em;
   vertical-align: middle;
@@ -76,26 +77,25 @@
   display: none;
 }
 
-
 /* Responsive adjustments */
 @media (max-width: 1024px) {
   .workMarqueeSection {
     padding: 3rem 0;
   }
-  
+
   .title {
     margin-bottom: 1.5rem;
     padding: 0 1rem;
   }
-  
+
   .marqueeContainer {
     height: auto;
   }
-  
+
   .marqueeTrack {
     gap: 2rem;
   }
-  
+
   .marqueeItem::after {
     margin-left: 2rem;
   }
@@ -105,20 +105,20 @@
   .workMarqueeSection {
     padding: 3rem 0;
   }
-  
+
   .title {
     margin-bottom: 1rem;
     padding: 0 1rem;
   }
-  
+
   .marqueeContainer {
     height: auto;
   }
-  
+
   .marqueeTrack {
     gap: 1.5rem;
   }
-  
+
   .marqueeItem::after {
     margin-left: 1.5rem;
   }

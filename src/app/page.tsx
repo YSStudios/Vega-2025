@@ -1,11 +1,10 @@
 import About from "../components/about";
-import Services from "../components/services";
-import Teams from "../components/teams";
 import WorkMarquee from "../components/work-marquee";
 import BrandsSlider from "../components/brands-slider";
 import { Scene } from "@/components/scene";
 import Marquee from "../components/marquee";
 import ScrollVideoSection from "../components/scroll-video-section";
+import ProjectAccordion from "../components/project-accordion";
 
 export default function Home() {
   return (
@@ -18,9 +17,8 @@ export default function Home() {
       </div>
       <About />
       <ScrollVideoSection />
-      <Services />
       <WorkMarquee />
-      <Teams />
+      <ProjectAccordion />
       <BrandsSlider />
     </div>
   );
