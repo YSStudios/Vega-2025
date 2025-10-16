@@ -17,8 +17,8 @@ export default function Home() {
       </div>
       <About />
       <ScrollVideoSection />
-      <ProjectAccordion />
       <WorkMarquee />
+      <ProjectAccordion />
       <BrandsSlider />
     </div>
   );

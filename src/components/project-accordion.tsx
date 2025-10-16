@@ -1,9 +1,16 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { gsap } from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 import styles from "../styles/project-accordion.module.css";
 import Image from "next/image";
+
+// Register ScrollTrigger plugin
+if (typeof window !== "undefined") {
+  gsap.registerPlugin(ScrollTrigger);
+}
 
 interface AccordionItem {
   id: string;
@@ -76,19 +83,76 @@ const accordionData: AccordionItem[] = [
 
 export default function ProjectAccordion() {
   const [expandedId, setExpandedId] = useState<string | null>(null);
+  const sectionTitleRef = useRef<HTMLHeadingElement>(null);
+  const accordionItemsRef = useRef<(HTMLDivElement | null)[]>([]);
 
   const toggleAccordion = (id: string) => {
     setExpandedId(expandedId === id ? null : id);
   };
 
+  useEffect(() => {
+    // Animate section title
+    if (sectionTitleRef.current) {
+      gsap.fromTo(
+        sectionTitleRef.current,
+        { opacity: 0, y: 80 },
+        {
+          opacity: 1,
+          y: 0,
+          duration: 1.2,
+          ease: "power3.out",
+          scrollTrigger: {
+            trigger: sectionTitleRef.current,
+            start: "top 90%",
+            end: "top 20%",
+            toggleActions: "play none none reverse",
+          },
+        }
+      );
+    }
+
+    // Animate accordion items with stagger - each item independently
+    const validItems = accordionItemsRef.current.filter(
+      (item) => item !== null
+    );
+
+    validItems.forEach((item, index) => {
+      gsap.fromTo(
+        item,
+        { opacity: 0, y: 100 },
+        {
+          opacity: 1,
+          y: 0,
+          duration: 1.2,
+          delay: index * 0.2,
+          ease: "power3.out",
+          scrollTrigger: {
+            trigger: item,
+            start: "top 85%",
+            end: "top 15%",
+            toggleActions: "play none none reverse",
+          },
+        }
+      );
+    });
+  }, []);
+
   return (
     <div className={styles.accordionContainer}>
-      <h2 className={styles.sectionTitle}>Expertise & Capabilities</h2>
+      <h2 ref={sectionTitleRef} className={styles.sectionTitle}>
+        Expertise & Capabilities
+      </h2>
       {accordionData.map((item, index) => {
         const isExpanded = expandedId === item.id;
 
         return (
-          <div key={item.id} className={styles.accordionItem}>
+          <div
+            key={item.id}
+            ref={(el) => {
+              accordionItemsRef.current[index] = el;
+            }}
+            className={styles.accordionItem}
+          >
             <div className={styles.accordionItemInner}>
               <button
                 className={`${styles.accordionHeader} ${
