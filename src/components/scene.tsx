@@ -51,7 +51,7 @@ export function Scene({ animationSpeedRef, className }: SceneProps) {
       particleSize: 600,
       particleColor: new THREE.Color(currentAccent),
       size: 1.7,
-      minAlpha: 0.04,
+      minAlpha: 0.3,
       maxAlpha: 0.8,
       force: 0.7,
     },
@@ -59,6 +59,8 @@ export function Scene({ animationSpeedRef, className }: SceneProps) {
       threshold: 0.058,
       strength: 1.2,
       radius: 0,
+	  directionX: 1.5,
+	  directionY: 1,
     },
     renderer: {
       toneMapping: THREE.ACESFilmicToneMapping,
@@ -74,14 +76,11 @@ export function Scene({ animationSpeedRef, className }: SceneProps) {
 
     // Setup renderer
     rendererRef.current = new THREE.WebGLRenderer({
-      antialias: true,
       canvas: canvasRef.current,
-      alpha: false,
-      premultipliedAlpha: false,
       powerPreference: "high-performance",
     });
     rendererRef.current.setSize(ww, wh);
-    rendererRef.current.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    rendererRef.current.setPixelRatio(Math.min(window.devicePixelRatio, 1.5));
     rendererRef.current.setClearColor(0x000000, 1);
     rendererRef.current.toneMapping = settings.renderer.toneMapping;
     rendererRef.current.toneMappingExposure = settings.renderer.toneMappingExposure;
@@ -117,10 +116,16 @@ export function Scene({ animationSpeedRef, className }: SceneProps) {
 
     bloomPassRef.current = new MotionBloomPass(
       new THREE.Vector2(ww, wh),
-      settings.bloom.strength,
-      settings.bloom.radius,
-      settings.bloom.threshold
+      1.5,
+      0.4,
+      0.85
     );
+    // Override with our settings
+    bloomPassRef.current.threshold = settings.bloom.threshold;
+    bloomPassRef.current.strength = settings.bloom.strength;
+    bloomPassRef.current.radius = settings.bloom.radius;
+    bloomPassRef.current.BlurDirectionX.set(settings.bloom.directionX, 1.1);
+    bloomPassRef.current.BlurDirectionY.set(settings.bloom.directionY, 1.0);
     composerRef.current.addPass(bloomPassRef.current);
 
     const outputPass = new OutputPass();
@@ -250,7 +255,7 @@ export function Scene({ animationSpeedRef, className }: SceneProps) {
 
       if (composerRef.current) {
         composerRef.current.setSize(ww, wh);
-        composerRef.current.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+        composerRef.current.setPixelRatio(Math.min(window.devicePixelRatio, 1.5));
       }
 
       if (gpgpuRef.current) {

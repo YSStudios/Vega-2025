@@ -11,7 +11,7 @@ void main() {
 
 	vec3 velocity = texture2D( uVelocityTexture, vUv ).xyz * 100.0;
 
-	float velocityAlpha = clamp(length(velocity.r), uMinAlpha, uMaxAlpha);
+	float velocityAlpha = clamp(length(velocity), uMinAlpha, uMaxAlpha);
 
 	if (center > 0.5) { discard; }
 
