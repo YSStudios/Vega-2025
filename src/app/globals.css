@@ -215,6 +215,72 @@ a {
   animation: bounce 2s infinite;
 }
 
+/* lil-gui styling */
+.lil-gui {
+  --background-color: rgba(0, 0, 0, 0.85) !important;
+  --title-background-color: rgba(0, 0, 0, 0.95) !important;
+  --title-text-color: #fff !important;
+  --widget-color: rgba(255, 255, 255, 0.15) !important;
+  --hover-color: rgba(255, 255, 255, 0.25) !important;
+  --focus-color: rgba(147, 221, 255, 0.4) !important;
+  --number-color: #93ddff !important;
+  --string-color: #b4e8ff !important;
+  --font-size: 12px !important;
+  --input-font-size: 11px !important;
+  --font-family: var(--font-argon), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif !important;
+  --font-family-mono: var(--font-geist-mono), Consolas, "Courier New", monospace !important;
+  --padding: 6px !important;
+  --spacing: 6px !important;
+  --widget-height: 20px !important;
+  --title-height: 26px !important;
+  --name-width: 45% !important;
+  --slider-knob-width: 2px !important;
+  --slider-input-width: 27% !important;
+  --color-input-width: 27% !important;
+  --slider-input-min-width: 45px !important;
+  --color-input-min-width: 45px !important;
+  --folder-indent: 7px !important;
+  --widget-padding: 0 0 0 4px !important;
+  --widget-border-radius: 4px !important;
+  --checkbox-size: calc(0.75 * var(--widget-height)) !important;
+  --scrollbar-width: 5px !important;
+  z-index: 1000 !important;
+  backdrop-filter: blur(10px) !important;
+  -webkit-backdrop-filter: blur(10px) !important;
+}
+
+.lil-gui.root {
+  position: fixed !important;
+  top: 20px !important;
+  right: 20px !important;
+}
+
+.lil-gui .title {
+  font-weight: 600 !important;
+  letter-spacing: 0.5px !important;
+}
+
+.lil-gui .controller {
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+}
+
+.lil-gui .controller:hover {
+  border-color: rgba(255, 255, 255, 0.2) !important;
+}
+
+@media (max-width: 768px) {
+  .lil-gui.root {
+    top: 10px !important;
+    right: 10px !important;
+    max-width: calc(100vw - 20px) !important;
+  }
+  
+  .lil-gui {
+    --font-size: 11px !important;
+    --widget-height: 18px !important;
+  }
+}
+
 @keyframes bounce {
   0%,
   20%,
