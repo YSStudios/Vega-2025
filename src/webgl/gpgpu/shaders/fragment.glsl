@@ -46,6 +46,10 @@ void main() {
 		finalColor = mix(vec3(luminance), finalColor, 1.0 + uChromaticIntensity * 0.5);
 	}
 
-	gl_FragColor = vec4(finalColor, velocityAlpha);
+	// Add soft glow/fade from center to edge for better visibility
+	float softEdge = 1.0 - smoothstep(0.0, 0.5, center);
+	float finalAlpha = velocityAlpha * softEdge;
+
+	gl_FragColor = vec4(finalColor, finalAlpha);
 }
 

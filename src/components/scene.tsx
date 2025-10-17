@@ -41,25 +41,41 @@ export function Scene({ animationSpeedRef, className }: SceneProps) {
   const mouseRef = useRef({ x: 0, y: 0 });
   const loadedRef = useRef(false);
   const guiRef = useRef<GUI | null>(null);
+  const cameraAnimationRef = useRef<number | null>(null);
+  const lastCameraChangeRef = useRef<number>(0);
 
   const settings = {
     camera: {
       fov: 50,
       near: 0.1,
       far: 1000,
-      initialPosition: { x: 0, y: 0, z: 1.5 },
+      initialPosition: { x: 0, y: 0, z: 3 },
     },
     gpgpu: {
       particleSize: 600,
       particleColor: new THREE.Color(currentAccent),
       size: 1.7,
-      minAlpha: 0.3,
-      maxAlpha: 0.8,
-      force: 0.7,
+      minAlpha: 0.4,
+      maxAlpha: 0.95,
+      force: 0.05,
+    },
+    wave: {
+      amplitude: 0.0,
+      frequency: 1.0,
+      speed: 1.0,
+    },
+    cameraAnimation: {
+      enabled: true,
+      duration: 4, // seconds between camera changes
+    },
+    colorShift: {
+      enabled: false,
+      speed: 0.5, // color shift speed
+      colors: ["#0093d0", "#00a78f", "#ff5057", "#ffde00", "#9b59b6", "#e74c3c", "#f39c12", "#2ecc71"],
     },
     bloom: {
-      threshold: 0.058,
-      strength: 1.2,
+      threshold: 0.6,
+      strength: 0.4,
       radius: 0,
 	  directionX: 1.5,
 	  directionY: 1,
@@ -72,6 +88,7 @@ export function Scene({ animationSpeedRef, className }: SceneProps) {
     renderer: {
       toneMapping: THREE.ACESFilmicToneMapping,
       toneMappingExposure: 1,
+      backgroundColor: "#000000",
     },
   };
 
@@ -88,7 +105,7 @@ export function Scene({ animationSpeedRef, className }: SceneProps) {
     });
     rendererRef.current.setSize(ww, wh);
     rendererRef.current.setPixelRatio(Math.min(window.devicePixelRatio, 1.5));
-    rendererRef.current.setClearColor(0x000000, 1);
+    rendererRef.current.setClearColor(settings.renderer.backgroundColor, 1);
     rendererRef.current.toneMapping = settings.renderer.toneMapping;
     rendererRef.current.toneMappingExposure = settings.renderer.toneMappingExposure;
 
@@ -150,13 +167,13 @@ export function Scene({ animationSpeedRef, className }: SceneProps) {
       "/vega-v-logo.glb",
       (gltf) => {
         let mergedMesh: THREE.Mesh | null = null;
-
+        
         gltf.scene.traverse((child) => {
           if (child instanceof THREE.Mesh && child.geometry) {
             const geometry = child.geometry.clone();
             child.updateWorldMatrix(true, false);
             geometry.applyMatrix4(child.matrixWorld);
-
+            
             if (!mergedMesh) {
               mergedMesh = new THREE.Mesh(geometry, new THREE.MeshBasicMaterial());
             } else {
@@ -189,6 +206,9 @@ export function Scene({ animationSpeedRef, className }: SceneProps) {
           // Scale and rotate the model to fit the scene better
           const scale = 0.5;
           const tempMesh = mergedMesh as THREE.Mesh;
+          
+          // Set position first
+          tempMesh.position.set(0, 0.25, 0);
           tempMesh.scale.set(scale, scale, scale);
           
           // Rotate 90 degrees on X axis
@@ -196,7 +216,6 @@ export function Scene({ animationSpeedRef, className }: SceneProps) {
           tempMesh.updateMatrix();
           tempMesh.geometry.applyMatrix4(tempMesh.matrix);
           tempMesh.rotation.set(0, 0, 0);
-          tempMesh.position.set(0, 0, 0);
           tempMesh.scale.set(1, 1, 1);
           tempMesh.updateMatrix();
 
@@ -233,6 +252,49 @@ export function Scene({ animationSpeedRef, className }: SceneProps) {
     );
   };
 
+  const animateCameraToNewPosition = () => {
+    if (!cameraRef.current) return;
+
+    // Define different camera positions
+    const cameraPositions = [
+      { x: 2, y: 1, z: 2 },      // Top right
+      { x: -2, y: 1, z: 2 },     // Top left
+      { x: 2, y: -1, z: 2 },     // Bottom right
+      { x: -2, y: -1, z: 2 },    // Bottom left
+      { x: 0, y: 2, z: 2 },      // Top center
+      { x: 0, y: -2, z: 2 },     // Bottom center
+      { x: 3, y: 0, z: 1 },      // Right side
+      { x: -3, y: 0, z: 1 },     // Left side
+    ];
+
+    // Pick a random position
+    const randomIndex = Math.floor(Math.random() * cameraPositions.length);
+    const targetPosition = cameraPositions[randomIndex];
+
+    // Smoothly animate to new position
+    const startPosition = cameraRef.current.position.clone();
+    const duration = 2000; // 2 seconds
+    const startTime = performance.now();
+
+    const animate = () => {
+      const elapsed = performance.now() - startTime;
+      const progress = Math.min(elapsed / duration, 1);
+
+      // Easing function for smooth animation
+      const easeInOutCubic = (t: number) => t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
+      const easedProgress = easeInOutCubic(progress);
+
+      // Interpolate position
+      cameraRef.current!.position.lerpVectors(startPosition, new THREE.Vector3(targetPosition.x, targetPosition.y, targetPosition.z), easedProgress);
+
+      if (progress < 1) {
+        cameraAnimationRef.current = requestAnimationFrame(animate);
+      }
+    };
+
+    animate();
+  };
+
   const render = () => {
     if (!rendererRef.current || !sceneRef.current || !cameraRef.current) return;
 
@@ -241,6 +303,30 @@ export function Scene({ animationSpeedRef, className }: SceneProps) {
     // Update GPGPU
     if (gpgpuRef.current) {
       gpgpuRef.current.compute();
+    }
+
+    // Camera animation
+    if (settings.cameraAnimation.enabled && cameraRef.current) {
+      const now = performance.now() * 0.001;
+      if (now - lastCameraChangeRef.current > settings.cameraAnimation.duration) {
+        animateCameraToNewPosition();
+        lastCameraChangeRef.current = now;
+      }
+    }
+
+    // Color shifting
+    if (settings.colorShift.enabled && gpgpuRef.current) {
+      const time = performance.now() * 0.001;
+      const totalTime = time * settings.colorShift.speed;
+      const colorIndex = Math.floor(totalTime) % settings.colorShift.colors.length;
+      const nextColorIndex = (colorIndex + 1) % settings.colorShift.colors.length;
+      const t = totalTime - Math.floor(totalTime);
+      
+      const currentColor = new THREE.Color(settings.colorShift.colors[colorIndex]);
+      const nextColor = new THREE.Color(settings.colorShift.colors[nextColorIndex]);
+      
+      const interpolatedColor = currentColor.clone().lerp(nextColor, t);
+      gpgpuRef.current.updateColor(interpolatedColor);
     }
 
     // Update Orbit Controls
@@ -364,6 +450,73 @@ export function Scene({ animationSpeedRef, className }: SceneProps) {
       .max(1)
       .step(0.01);
 
+    // Blend Mode
+    const blendModeOptions = {
+      Normal: THREE.NormalBlending,
+      Additive: THREE.AdditiveBlending,
+      Multiply: THREE.MultiplyBlending,
+      Subtractive: THREE.SubtractiveBlending,
+    };
+    const blendModeControl = { mode: "Normal" };
+    particlesFolder
+      .add(blendModeControl, "mode", Object.keys(blendModeOptions))
+      .name("Blend Mode")
+      .onChange((value: string) => {
+        if (gpgpuRef.current) {
+          gpgpuRef.current.material.blending = blendModeOptions[value as keyof typeof blendModeOptions];
+          // MultiplyBlending and SubtractiveBlending require premultipliedAlpha = true
+          gpgpuRef.current.material.premultipliedAlpha = (value === "Multiply" || value === "Subtractive");
+          gpgpuRef.current.material.needsUpdate = true;
+        }
+      });
+
+    // Wave distortion controls
+    if (gpgpuRef.current) {
+      particlesFolder
+        .add(gpgpuRef.current.uniforms.velocityUniforms.uWaveAmplitude, "value")
+        .name("Wave Amplitude")
+        .min(0)
+        .max(0.5)
+        .step(0.01);
+
+      particlesFolder
+        .add(gpgpuRef.current.uniforms.velocityUniforms.uWaveFrequency, "value")
+        .name("Wave Frequency")
+        .min(0.1)
+        .max(10)
+        .step(0.1);
+
+      particlesFolder
+        .add(gpgpuRef.current.uniforms.velocityUniforms.uWaveSpeed, "value")
+        .name("Wave Speed")
+        .min(0)
+        .max(5)
+        .step(0.1);
+    }
+
+    // Color shifting controls
+    const colorShiftControl = {
+      enabled: settings.colorShift.enabled,
+      speed: settings.colorShift.speed,
+    };
+    
+    particlesFolder
+      .add(colorShiftControl, "enabled")
+      .name("Color Shift")
+      .onChange((value: boolean) => {
+        settings.colorShift.enabled = value;
+      });
+
+    particlesFolder
+      .add(colorShiftControl, "speed")
+      .name("Color Speed")
+      .min(0.1)
+      .max(2)
+      .step(0.1)
+      .onChange((value: number) => {
+        settings.colorShift.speed = value;
+      });
+
     particlesFolder.open();
 
     // Camera folder
@@ -380,7 +533,7 @@ export function Scene({ animationSpeedRef, className }: SceneProps) {
       cameraFolder
         .add(cameraRef.current, "fov")
         .name("FOV")
-        .min(30)
+        .min(15)
         .max(120)
         .step(1)
         .onChange(() => {
@@ -390,41 +543,65 @@ export function Scene({ animationSpeedRef, className }: SceneProps) {
         });
     }
 
+    // Camera animation controls
+    const cameraAnimationControl = {
+      enabled: settings.cameraAnimation.enabled,
+      duration: settings.cameraAnimation.duration,
+    };
+    
+    cameraFolder
+      .add(cameraAnimationControl, "enabled")
+      .name("Auto Rotate")
+      .onChange((value: boolean) => {
+        settings.cameraAnimation.enabled = value;
+      });
+
+    cameraFolder
+      .add(cameraAnimationControl, "duration")
+      .name("Change Interval")
+      .min(1)
+      .max(10)
+      .step(0.5)
+      .onChange((value: number) => {
+        settings.cameraAnimation.duration = value;
+      });
+
     cameraFolder.close();
 
-    // Bloom folder
-    const bloomFolder = guiRef.current.addFolder("Post Processing");
-    
+    // Post Processing folder
+    const postProcessingFolder = guiRef.current.addFolder("Post Processing");
+
+    // Bloom controls
     if (bloomPassRef.current) {
-      bloomFolder
+      postProcessingFolder
         .add(bloomPassRef.current, "threshold")
-        .name("Threshold")
+        .name("Bloom Threshold")
         .min(0)
         .max(1)
         .step(0.001);
 
-      bloomFolder
+      postProcessingFolder
         .add(bloomPassRef.current, "strength")
-        .name("Strength")
+        .name("Bloom Strength")
         .min(0)
         .max(3)
         .step(0.01);
 
-      bloomFolder
+      postProcessingFolder
         .add(bloomPassRef.current, "radius")
-        .name("Radius")
+        .name("Bloom Radius")
         .min(0)
         .max(1)
         .step(0.01);
 
-      bloomFolder
+      postProcessingFolder
         .add(bloomPassRef.current.BlurDirectionX, "x")
         .name("Direction X")
         .min(0)
         .max(10)
         .step(0.01);
 
-      bloomFolder
+      postProcessingFolder
         .add(bloomPassRef.current.BlurDirectionY, "y")
         .name("Direction Y")
         .min(0)
@@ -434,14 +611,14 @@ export function Scene({ animationSpeedRef, className }: SceneProps) {
 
     // Chromatic Aberration controls
     if (chromaticPassRef.current) {
-      bloomFolder
+      postProcessingFolder
         .add(chromaticPassRef.current.uniforms['amount'], "value")
         .name("Aberration Amount")
         .min(0)
         .max(0.02)
         .step(0.0001);
 
-      bloomFolder
+      postProcessingFolder
         .add(chromaticPassRef.current.uniforms['angle'], "value")
         .name("Aberration Angle")
         .min(0)
@@ -449,7 +626,7 @@ export function Scene({ animationSpeedRef, className }: SceneProps) {
         .step(0.01);
     }
 
-    bloomFolder.close();
+    postProcessingFolder.close();
 
     // Renderer folder
     const rendererFolder = guiRef.current.addFolder("Renderer");
@@ -487,6 +664,20 @@ export function Scene({ animationSpeedRef, className }: SceneProps) {
         .min(0)
         .max(10)
         .step(0.1);
+
+      // Background color control
+      const backgroundColorControl = {
+        color: settings.renderer.backgroundColor,
+      };
+      rendererFolder
+        .addColor(backgroundColorControl, "color")
+        .name("Background Color")
+        .onChange((value: string) => {
+          if (rendererRef.current) {
+            settings.renderer.backgroundColor = value;
+            rendererRef.current.setClearColor(value, 1);
+          }
+        });
     }
 
     rendererFolder.close();

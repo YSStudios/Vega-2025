@@ -4,6 +4,10 @@ uniform float uMouseSpeed;
 uniform float uForce;
 uniform float uMouseRadius;
 uniform float uMouseStrength;
+uniform float uTime;
+uniform float uWaveAmplitude;
+uniform float uWaveFrequency;
+uniform float uWaveSpeed;
 
 
 void main() {
@@ -36,6 +40,18 @@ void main() {
 		velocity += pushDirection * ( 1.0 - mouseDistance / maxDistance ) * uMouseStrength * uMouseSpeed;
 	}
 
+	// Wave force - similar to mouse but based on sine wave
+	if( uWaveAmplitude > 0.0 ) {
+		float wave = sin(original.x * uWaveFrequency + uTime * uWaveSpeed) * uWaveAmplitude;
+		vec3 waveTarget = original + vec3(0.0, wave, 0.0);
+		
+		vec3 waveDirection = normalize( waveTarget - position );
+		float waveDist = length( waveTarget - position );
+		
+		if( waveDist > 0.001 ) {
+			velocity += waveDirection * ( waveDist * 0.02 );
+		}
+	}
 
 	gl_FragColor = vec4(velocity, 1.);
 }

@@ -109,8 +109,13 @@ export class GPGPU {
         this.uniforms.velocityUniforms.uOriginalPosition = { value: positionTexture };
         this.uniforms.velocityUniforms.uTime = { value: 0 };
         this.uniforms.velocityUniforms.uForce = { value: this.params.force };
-        this.uniforms.velocityUniforms.uMouseRadius = { value: 0.1 };
-        this.uniforms.velocityUniforms.uMouseStrength = { value: 0.007 };
+        this.uniforms.velocityUniforms.uMouseRadius = { value: 0.35 };
+        this.uniforms.velocityUniforms.uMouseStrength = { value: 0.05 };
+
+        // Wave distortion uniforms (in velocity shader)
+        this.uniforms.velocityUniforms.uWaveAmplitude = { value: 0.0 };
+        this.uniforms.velocityUniforms.uWaveFrequency = { value: 1.0 };
+        this.uniforms.velocityUniforms.uWaveSpeed = { value: 1.0 };
 
         this.gpgpuCompute.init();
     }
@@ -125,13 +130,14 @@ export class GPGPU {
                 uColor: { value: this.params.color },
                 uMinAlpha: { value: this.params.minAlpha },
                 uMaxAlpha: { value: this.params.maxAlpha },
-                uChromaticIntensity: { value: 0.0 },
+                uChromaticIntensity: { value: 0.5 },
             },
             vertexShader,
             fragmentShader,
             depthWrite: false,
             depthTest: false,
-            blending: THREE.AdditiveBlending,
+            blending: THREE.NormalBlending,
+            premultipliedAlpha: false,
             transparent: true
         });
 
@@ -152,6 +158,9 @@ export class GPGPU {
     }
 
     compute() {
+        // Update time for wave animation
+        this.uniforms.velocityUniforms.uTime.value = performance.now() * 0.001;
+        
         this.gpgpuCompute.compute();
         if (this.events && this.events.update) {
             this.events.update();
