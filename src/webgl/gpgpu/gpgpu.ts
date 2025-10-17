@@ -125,6 +125,7 @@ export class GPGPU {
                 uColor: { value: this.params.color },
                 uMinAlpha: { value: this.params.minAlpha },
                 uMaxAlpha: { value: this.params.maxAlpha },
+                uChromaticIntensity: { value: 0.0 },
             },
             vertexShader,
             fragmentShader,

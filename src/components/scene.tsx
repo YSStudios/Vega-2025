@@ -9,6 +9,7 @@ import { EffectComposer } from "three/examples/jsm/postprocessing/EffectComposer
 import { RenderPass } from "three/examples/jsm/postprocessing/RenderPass.js";
 import { OutputPass } from "three/examples/jsm/postprocessing/OutputPass.js";
 import { MotionBloomPass } from "../webgl/postprocessing/motion-bloom-pass";
+import { ChromaticAberrationPass } from "../webgl/postprocessing/chromatic-aberration-pass";
 import { GPGPU } from "../webgl/gpgpu/gpgpu";
 import { GUI } from "lil-gui";
 import styles from "../styles/scene.module.css";
@@ -34,6 +35,7 @@ export function Scene({ animationSpeedRef, className }: SceneProps) {
   const gpgpuRef = useRef<GPGPU | null>(null);
   const composerRef = useRef<EffectComposer | null>(null);
   const bloomPassRef = useRef<MotionBloomPass | null>(null);
+  const chromaticPassRef = useRef<ChromaticAberrationPass | null>(null);
   const orbitControlsRef = useRef<OrbitControls | null>(null);
   const animationFrameRef = useRef<number | null>(null);
   const mouseRef = useRef({ x: 0, y: 0 });
@@ -61,6 +63,11 @@ export function Scene({ animationSpeedRef, className }: SceneProps) {
       radius: 0,
 	  directionX: 1.5,
 	  directionY: 1,
+    },
+    chromatic: {
+      particleIntensity: 0.0,
+      aberrationAmount: 0.003,
+      aberrationAngle: 0.0,
     },
     renderer: {
       toneMapping: THREE.ACESFilmicToneMapping,
@@ -127,6 +134,12 @@ export function Scene({ animationSpeedRef, className }: SceneProps) {
     bloomPassRef.current.BlurDirectionX.set(settings.bloom.directionX, 1.1);
     bloomPassRef.current.BlurDirectionY.set(settings.bloom.directionY, 1.0);
     composerRef.current.addPass(bloomPassRef.current);
+
+    // Add chromatic aberration pass
+    chromaticPassRef.current = new ChromaticAberrationPass();
+    chromaticPassRef.current.uniforms['amount'].value = settings.chromatic.aberrationAmount;
+    chromaticPassRef.current.uniforms['angle'].value = settings.chromatic.aberrationAngle;
+    composerRef.current.addPass(chromaticPassRef.current);
 
     const outputPass = new OutputPass();
     composerRef.current.addPass(outputPass);
@@ -343,6 +356,14 @@ export function Scene({ animationSpeedRef, className }: SceneProps) {
       .max(0.1)
       .step(0.001);
 
+    // Chromatic Intensity
+    particlesFolder
+      .add(gpgpuRef.current.material.uniforms.uChromaticIntensity, "value")
+      .name("Chromatic Intensity")
+      .min(0)
+      .max(1)
+      .step(0.01);
+
     particlesFolder.open();
 
     // Camera folder
@@ -408,6 +429,23 @@ export function Scene({ animationSpeedRef, className }: SceneProps) {
         .name("Direction Y")
         .min(0)
         .max(10)
+        .step(0.01);
+    }
+
+    // Chromatic Aberration controls
+    if (chromaticPassRef.current) {
+      bloomFolder
+        .add(chromaticPassRef.current.uniforms['amount'], "value")
+        .name("Aberration Amount")
+        .min(0)
+        .max(0.02)
+        .step(0.0001);
+
+      bloomFolder
+        .add(chromaticPassRef.current.uniforms['angle'], "value")
+        .name("Aberration Angle")
+        .min(0)
+        .max(Math.PI * 2)
         .step(0.01);
     }
 
