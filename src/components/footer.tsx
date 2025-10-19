@@ -4,6 +4,7 @@ import React from "react";
 import { motion, Variants } from "framer-motion";
 import styles from "../styles/footer.module.css";
 import InteractiveGlobeSection from "./interactive-globe-section";
+import Marquee from "./marquee";
 
 const footerData = {
   menu: [
@@ -67,57 +68,12 @@ const itemVariants: Variants = {
   },
 };
 
-const svgLayer1Variants: Variants = {
-  hidden: {
-    opacity: 0,
-    y: 100,
-  },
-  visible: {
-    opacity: 1,
-    y: 0,
-    transition: {
-      duration: 0.8,
-      ease: "easeOut",
-    },
-  },
-};
-
-const svgLayer2Variants: Variants = {
-  hidden: {
-    opacity: 0,
-    y: 100,
-  },
-  visible: {
-    opacity: 1,
-    y: 0,
-    transition: {
-      duration: 0.8,
-      ease: "easeOut",
-    },
-  },
-};
-
-const svgLayer3Variants: Variants = {
-  hidden: {
-    opacity: 0,
-    y: 100,
-  },
-  visible: {
-    opacity: 1,
-    y: 0,
-    transition: {
-      duration: 0.8,
-      ease: "easeOut",
-    },
-  },
-};
-
 export default function Footer() {
   return (
     <>
       {/* Interactive Globe Section */}
       <InteractiveGlobeSection />
-      
+
       <motion.footer
         id="contact"
         className={styles.footer}
@@ -218,94 +174,8 @@ export default function Footer() {
         </div>
       </motion.footer>
 
-      {/* Large Logo SVG - Stacked Animation */}
-      <motion.div 
-        className={styles.logoSection}
-        initial="hidden"
-        whileInView="visible"
-        viewport={{ once: false, margin: "100px" }}
-      >
-        <div className={styles.svgContainer}>
-           <div className={`${styles.svgLayer} ${styles.svgLayer1}`}>
-             <motion.svg 
-               className={styles.vegaSvg}
-               width="100%" 
-               height="100%" 
-               viewBox="0 0 8000 859" 
-               version="1.1" 
-               xmlns="http://www.w3.org/2000/svg" 
-               style={{fillRule:"evenodd", clipRule:"evenodd", strokeLinejoin:"round", strokeMiterlimit:2}}
-               variants={svgLayer1Variants}
-             >
-              <text 
-                x="18.363px" 
-                y="817.953px" 
-                 style={{
-                   fontFamily:"var(--font-object-sans), sans-serif",
-                   fontWeight:700,
-                   fontSize:"1080.37px",
-                   fill:"#333333",
-                   stroke:"none"
-                 }}
-              >
-                VEGA.STUDIO
-               </text>
-             </motion.svg>
-          </div>
-          <div className={`${styles.svgLayer} ${styles.svgLayer2}`}>
-             <motion.svg
-              className={styles.vegaSvg}
-              width="100%" 
-              height="100%" 
-              viewBox="0 0 8000 859" 
-              version="1.1" 
-              xmlns="http://www.w3.org/2000/svg" 
-              style={{fillRule:"evenodd", clipRule:"evenodd", strokeLinejoin:"round", strokeMiterlimit:2}}
-              variants={svgLayer2Variants}
-            >
-              <text 
-                x="18.363px" 
-                y="817.953px" 
-                style={{
-                  fontFamily:"var(--font-object-sans), sans-serif",
-                  fontWeight:700,
-                  fontSize:"1080.37px",
-                  fill:"#999999",
-                  stroke:"none"
-                }}
-              >
-                VEGA.STUDIO
-               </text>
-             </motion.svg>
-          </div>
-          <div className={`${styles.svgLayer} ${styles.svgLayer3}`}>
-             <motion.svg
-              className={styles.vegaSvg}
-              width="100%" 
-              height="100%" 
-              viewBox="0 0 8000 859" 
-              version="1.1" 
-              xmlns="http://www.w3.org/2000/svg" 
-              style={{fillRule:"evenodd", clipRule:"evenodd", strokeLinejoin:"round", strokeMiterlimit:2}}
-              variants={svgLayer3Variants}
-            >
-              <text 
-                x="18.363px" 
-                y="817.953px" 
-                style={{
-                  fontFamily:"var(--font-object-sans), sans-serif",
-                  fontWeight:700,
-                  fontSize:"1080.37px",
-                  fill:"#ffffff",
-                  stroke:"none"
-                }}
-              >
-                VEGA.STUDIO
-               </text>
-             </motion.svg>
-          </div>
-        </div>
-      </motion.div>
+      {/* Marquee Section */}
+      <Marquee mainText="WORK WITH US" subText="" speed={500} />
     </>
   );
 }
