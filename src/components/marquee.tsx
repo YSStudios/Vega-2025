@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useRef, useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import styles from "../styles/marquee.module.css";
 
@@ -15,24 +15,39 @@ export default function Marquee({
   subText = "CREATIVE TECHNOLOGY STUDIO",
   speed = 100,
 }: MarqueeProps) {
+  const [contentWidth, setContentWidth] = useState(0);
+  const contentRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (contentRef.current) {
+      const width = contentRef.current.scrollWidth / 2; // Divide by 2 because we duplicate the content
+      setContentWidth(width);
+    }
+  }, [mainText, subText]);
+
+  // Calculate duration based on content width and desired speed
+  // Speed represents pixels per second
+  const duration = contentWidth ? contentWidth / (speed / 10) : 100;
+
   return (
     <div className={styles.marqueeContainer}>
       <div className={styles.marquee}>
         <motion.div
+          ref={contentRef}
           className={styles.marqueeContent}
           animate={{
-            x: [0, -2000],
+            x: contentWidth ? [0, -contentWidth] : [0, -2000],
           }}
           transition={{
-            duration: speed,
+            duration: duration,
             ease: "linear",
             repeat: Infinity,
           }}
         >
-          {Array.from({ length: 6 }).map((_, index) => (
+          {Array.from({ length: 12 }).map((_, index) => (
             <div key={index} className={styles.marqueeItem}>
               <h1 className={styles.mainText}>{mainText}</h1>
-              <span className={styles.subText}>{subText}</span>
+              {subText && <span className={styles.subText}>{subText}</span>}
             </div>
           ))}
         </motion.div>

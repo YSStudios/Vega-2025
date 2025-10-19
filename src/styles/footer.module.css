@@ -1,7 +1,7 @@
 .footer {
   width: 100%;
-  background-color: #000;
-  padding: 4rem 0 0 0;
+  background-color: var(--background);
+  padding: 4rem 0 4rem 0;
   margin-top: auto;
 }
 
@@ -30,7 +30,7 @@
   font-family: var(--font-argon);
   font-size: 1rem;
   font-weight: 400;
-  color: rgba(255, 255, 255, 0.6);
+  color: rgba(0, 0, 0, 0.6);
   margin: 0;
   text-transform: uppercase;
   letter-spacing: 0.05em;
@@ -46,7 +46,7 @@
 }
 
 .footerLink {
-  color: rgb(255, 255, 255);
+  color: rgb(0, 0, 0);
   text-decoration: none;
   font-family: var(--font-object-sans);
   font-size: 1.1rem;
@@ -78,7 +78,7 @@
 .careerTitle {
   font-family: var(--font-argon);
   font-size: 0.9rem;
-  color: rgba(255, 255, 255, 0.6);
+  color: rgba(0, 0, 0, 0.6);
   margin: 0;
   font-weight: 400;
 }
@@ -99,7 +99,12 @@
   min-height: 400px;
   display: block;
   overflow: visible;
-  background: linear-gradient(180deg, rgba(0,0,0,0) 0%, rgba(0,0,0,0.8) 30%, rgba(0,0,0,1) 100%);
+  background: linear-gradient(
+    180deg,
+    rgba(0, 0, 0, 0) 0%,
+    rgba(0, 0, 0, 0.8) 30%,
+    rgba(0, 0, 0, 1) 100%
+  );
   padding-top: 0;
 }
 
@@ -142,7 +147,7 @@
   .svgLayer1 {
     bottom: 120px;
   }
-  
+
   .svgLayer2 {
     bottom: 60px;
   }
@@ -158,16 +163,16 @@
   .footerColumn:nth-child(3) {
     grid-column: 1 / -1;
   }
-  
+
   .svgContainer {
     min-height: 300px;
     padding-top: 0;
   }
-  
+
   .svgLayer2 {
     bottom: 40px;
   }
-  
+
   .svgLayer1 {
     bottom: 80px;
   }
@@ -178,7 +183,7 @@
   .footer {
     padding: 2rem 0 6rem 0;
   }
-  
+
   .footerGrid {
     grid-template-columns: 1fr;
     gap: 2rem;
@@ -187,16 +192,16 @@
   .footerContainer {
     padding: 0 1rem;
   }
-  
+
   .svgContainer {
     min-height: 200px;
     padding-top: 0;
   }
-  
+
   .svgLayer2 {
     bottom: 15px;
   }
-  
+
   .svgLayer1 {
     bottom: 30px;
   }
