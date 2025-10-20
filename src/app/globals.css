@@ -157,7 +157,7 @@ a {
   /* border-radius: 1rem; */
   overflow: hidden;
   position: relative;
-  background: linear-gradient(135deg, #ECECEC 0%, #F8F8F8 50%, #ECECEC 100%);
+  background: #ffffff;
 }
 
 @media (max-width: 1024px) and (min-width: 769px) {
