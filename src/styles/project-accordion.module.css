@@ -7,7 +7,7 @@
 
 .sectionTitle {
   font-family: var(--font-argon), sans-serif;
-  font-size: 4rem;
+  font-size: 4.5rem;
   font-weight: 400;
   margin-bottom: 4rem;
   color: #000;
@@ -58,7 +58,7 @@
 }
 
 .category {
-  font-size: 0.75rem;
+  font-size: 0.9rem;
   font-weight: 600;
   letter-spacing: 0.1em;
   text-transform: uppercase;
@@ -73,8 +73,8 @@
 }
 
 .title {
-  font-family: "Mondwest", serif;
-  font-size: 3.5rem;
+  font-family: var(--font-argon), sans-serif;
+  font-size: 4rem;
   font-weight: 400;
   margin: 0;
   color: #000;
@@ -83,8 +83,8 @@
 }
 
 .subtitle {
-  font-family: "Mondwest", serif;
-  font-size: 3.5rem;
+  font-family: var(--font-argon), sans-serif;
+  font-size: 4rem;
   font-weight: 400;
   margin: 0;
   color: #000;
@@ -99,8 +99,8 @@
 }
 
 .number {
-  font-family: "Mondwest", serif;
-  font-size: 8rem;
+  font-family: var(--font-argon), sans-serif;
+  font-size: 10rem;
   font-weight: 400;
   line-height: 1;
   color: #000;
