@@ -131,6 +131,7 @@ export default function ScrollVideoSection() {
       </div>
 
       <section
+        id="case-studies"
         ref={sectionRef}
         className={styles.scrollVideoSection}
         data-scroll-video-section

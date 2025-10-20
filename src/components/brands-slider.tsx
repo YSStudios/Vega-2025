@@ -67,6 +67,7 @@ const duplicatedRows = brandRows.map(row => [...row, ...row]);
 export default function BrandsSlider() {
   return (
     <motion.section 
+      id="brands"
       className={styles.brandsSection}
       initial={{ opacity: 0 }}
       whileInView={{ opacity: 1 }}

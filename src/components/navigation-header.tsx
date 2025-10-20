@@ -61,9 +61,9 @@ export default function NavigationHeader({}: NavigationHeaderProps) {
         className={`${styles.menuBar} ${menuOpen ? styles.menuBarOpen : ""}`}
       >
         <button onClick={() => handleNavClick('about')}>About</button>
-        <button onClick={() => handleNavClick('team')}>Team</button>
+		<button onClick={() => handleNavClick('case-studies')}>Work</button>
         <button onClick={() => handleNavClick('services')}>Services</button>
-        <button onClick={() => handleNavClick('work')}>Work</button>
+		<button onClick={() => handleNavClick('brands')}>Brands</button>
         <button onClick={() => handleNavClick('contact')}>Contact</button>
         <button className={styles.closeButton} onClick={handleMenuToggle}>
           ✕
