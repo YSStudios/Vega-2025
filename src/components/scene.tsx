@@ -25,8 +25,16 @@ const shuffle = (accent = 0) => [
   { color: "#333", roughness: 0.4, metalness: 0.2 },
   { color: "#444", roughness: 0.2, metalness: 0.4 },
   { color: accents[accent], roughness: 0.2, metalness: 0.3 },
-  { color: accents[(accent + 1) % accents.length], roughness: 0.4, metalness: 0.3 },
-  { color: accents[(accent + 2) % accents.length], roughness: 0.2, metalness: 0.3 },
+  {
+    color: accents[(accent + 1) % accents.length],
+    roughness: 0.4,
+    metalness: 0.3,
+  },
+  {
+    color: accents[(accent + 2) % accents.length],
+    roughness: 0.2,
+    metalness: 0.3,
+  },
   { color: accents[accent], roughness: 0.2, metalness: 0.4, accent: true },
   { color: accents[accent], roughness: 0.3, metalness: 0.4, accent: true },
   { color: accents[accent], roughness: 0.2, metalness: 0.4, accent: true },
@@ -36,32 +44,72 @@ const shuffle = (accent = 0) => [
   // Additional smaller objects - controlled reflectivity
   { color: "#555", roughness: 0.3, metalness: 0.2 },
   { color: "#666", roughness: 0.4, metalness: 0.3 },
-  { color: accents[(accent + 3) % accents.length], roughness: 0.3, metalness: 0.3 },
-  { color: accents[(accent + 1) % accents.length], roughness: 0.4, metalness: 0.3 },
+  {
+    color: accents[(accent + 3) % accents.length],
+    roughness: 0.3,
+    metalness: 0.3,
+  },
+  {
+    color: accents[(accent + 1) % accents.length],
+    roughness: 0.4,
+    metalness: 0.3,
+  },
   { color: "#777", roughness: 0.3, metalness: 0.3 },
   { color: "#888", roughness: 0.4, metalness: 0.2 },
-  { color: accents[(accent + 2) % accents.length], roughness: 0.2, metalness: 0.4 },
+  {
+    color: accents[(accent + 2) % accents.length],
+    roughness: 0.2,
+    metalness: 0.4,
+  },
   { color: accents[accent], roughness: 0.3, metalness: 0.3 },
   { color: "#999", roughness: 0.3, metalness: 0.3 },
   { color: "#aaa", roughness: 0.4, metalness: 0.2 },
-  { color: accents[(accent + 3) % accents.length], roughness: 0.2, metalness: 0.3 },
+  {
+    color: accents[(accent + 3) % accents.length],
+    roughness: 0.2,
+    metalness: 0.3,
+  },
   { color: "#bbb", roughness: 0.3, metalness: 0.3 },
 
   // Extra objects to fill the scene
   { color: "#ccc", roughness: 0.3, metalness: 0.3 },
   { color: "#ddd", roughness: 0.4, metalness: 0.2 },
-  { color: accents[(accent + 1) % accents.length], roughness: 0.3, metalness: 0.3 },
-  { color: accents[(accent + 2) % accents.length], roughness: 0.4, metalness: 0.3 },
+  {
+    color: accents[(accent + 1) % accents.length],
+    roughness: 0.3,
+    metalness: 0.3,
+  },
+  {
+    color: accents[(accent + 2) % accents.length],
+    roughness: 0.4,
+    metalness: 0.3,
+  },
   { color: "#eee", roughness: 0.3, metalness: 0.2 },
-  { color: accents[(accent + 3) % accents.length], roughness: 0.2, metalness: 0.4 },
+  {
+    color: accents[(accent + 3) % accents.length],
+    roughness: 0.2,
+    metalness: 0.4,
+  },
   { color: "#666", roughness: 0.3, metalness: 0.3 },
   { color: accents[accent], roughness: 0.4, metalness: 0.3 },
   { color: "#444", roughness: 0.3, metalness: 0.3 },
-  { color: accents[(accent + 1) % accents.length], roughness: 0.2, metalness: 0.4 },
+  {
+    color: accents[(accent + 1) % accents.length],
+    roughness: 0.2,
+    metalness: 0.4,
+  },
   { color: "#777", roughness: 0.4, metalness: 0.2 },
-  { color: accents[(accent + 2) % accents.length], roughness: 0.3, metalness: 0.3 },
+  {
+    color: accents[(accent + 2) % accents.length],
+    roughness: 0.3,
+    metalness: 0.3,
+  },
   { color: "#555", roughness: 0.3, metalness: 0.3 },
-  { color: accents[(accent + 3) % accents.length], roughness: 0.4, metalness: 0.3 },
+  {
+    color: accents[(accent + 3) % accents.length],
+    roughness: 0.4,
+    metalness: 0.3,
+  },
 ];
 
 interface SceneProps {
@@ -171,10 +219,7 @@ export function Scene(props: SceneProps) {
           x: "-50%",
         }}
         className="scroll-indicator-fixed"
-      >
-        <span className="scroll-text">scroll down</span>
-        <div className="scroll-arrow">↓</div>
-      </motion.div>
+      ></motion.div>
     </>
   );
 }

@@ -175,7 +175,7 @@ export default function Footer() {
       </motion.footer>
 
       {/* Marquee Section */}
-      <Marquee mainText="WORK WITH US" subText="" speed={500} />
+      <Marquee mainText="WORK WITH US" subText="" speed={500} variant="dark" />
     </>
   );
 }

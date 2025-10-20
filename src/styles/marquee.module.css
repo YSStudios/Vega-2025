@@ -7,6 +7,12 @@
   border: 1px solid #000;
 }
 
+.marqueeContainer.dark {
+  background-color: #000;
+  border: none;
+  border-top: 1px solid #fff;
+}
+
 .marquee {
   width: 100%;
   height: auto;
@@ -42,6 +48,10 @@
   text-transform: uppercase;
 }
 
+.dark .mainText {
+  color: rgb(255, 255, 255);
+}
+
 .subText {
   font-size: clamp(0.8rem, 1.2vw, 1.2rem);
   font-weight: 500;
@@ -54,6 +64,10 @@
   /* font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
     "Helvetica Neue", Arial, sans-serif; */
   font-family: var(--font-object-sans), sans-serif;
+}
+
+.dark .subText {
+  color: rgb(255, 255, 255);
 }
 
 .subText::before {

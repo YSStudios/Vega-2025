@@ -8,12 +8,14 @@ interface MarqueeProps {
   mainText?: string;
   subText?: string;
   speed?: number;
+  variant?: "light" | "dark";
 }
 
 export default function Marquee({
   mainText = "Vega Studios",
   subText = "CREATIVE TECHNOLOGY STUDIO",
   speed = 100,
+  variant = "light",
 }: MarqueeProps) {
   const [contentWidth, setContentWidth] = useState(0);
   const contentRef = useRef<HTMLDivElement>(null);
@@ -30,7 +32,7 @@ export default function Marquee({
   const duration = contentWidth ? contentWidth / (speed / 10) : 100;
 
   return (
-    <div className={styles.marqueeContainer}>
+    <div className={`${styles.marqueeContainer} ${variant === "dark" ? styles.dark : ""}`}>
       <div className={styles.marquee}>
         <motion.div
           ref={contentRef}
