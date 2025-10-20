@@ -6,6 +6,7 @@ uniform vec3 uColor;
 uniform float uMinAlpha;
 uniform float uMaxAlpha;
 uniform float uChromaticIntensity;
+uniform vec3 uBackgroundColor;
 
 
 void main() {
@@ -17,8 +18,12 @@ void main() {
 
 	if (center > 0.5) { discard; }
 
+	// Calculate background luminance to determine if it's light or dark
+	float bgLuminance = dot(uBackgroundColor, vec3(0.299, 0.587, 0.114));
+	bool isLightBackground = bgLuminance > 0.5;
+
 	// Chromatic color gradient based on velocity and position
-	vec3 finalColor = uColor;
+	vec3 baseColor = uColor;
 	
 	if (uChromaticIntensity > 0.0) {
 		// Create color shift based on velocity magnitude
@@ -35,20 +40,47 @@ void main() {
 		// Add position-based color variation
 		float positionFactor = (sin(vPosition.x * 2.0) + sin(vPosition.y * 2.0) + sin(vPosition.z * 2.0)) * 0.1;
 		
-		finalColor = vec3(
+		baseColor = vec3(
 			clamp(r + positionFactor, 0.0, 1.0),
 			clamp(g + positionFactor, 0.0, 1.0),
 			clamp(b + positionFactor, 0.0, 1.0)
 		);
 		
 		// Enhance color saturation
-		float luminance = dot(finalColor, vec3(0.299, 0.587, 0.114));
-		finalColor = mix(vec3(luminance), finalColor, 1.0 + uChromaticIntensity * 0.5);
+		float luminance = dot(baseColor, vec3(0.299, 0.587, 0.114));
+		baseColor = mix(vec3(luminance), baseColor, 1.0 + uChromaticIntensity * 0.5);
 	}
+
+	// Background-aware color adjustment
+	vec3 finalColor = baseColor;
+	if (isLightBackground) {
+		// On light backgrounds: significantly darken particles for contrast
+		finalColor = baseColor * 0.15; // Much darker for visibility
+	} else {
+		// On dark backgrounds: keep bright
+		finalColor = baseColor;
+	}
+
+	// Create strong outline effect for definition on any background
+	float outerRing = smoothstep(0.25, 0.5, center);
+	float innerCore = 1.0 - smoothstep(0.0, 0.25, center);
+	
+	// Define outline color based on background
+	vec3 outlineColor = isLightBackground 
+		? vec3(0.0, 0.0, 0.0) // Pure black outline on light backgrounds
+		: finalColor * 1.8;    // Much brighter outline on dark backgrounds
+	
+	// Mix outline with core color - much stronger outline
+	finalColor = mix(finalColor, outlineColor, outerRing * 0.9);
 
 	// Add soft glow/fade from center to edge for better visibility
 	float softEdge = 1.0 - smoothstep(0.0, 0.5, center);
 	float finalAlpha = velocityAlpha * softEdge;
+	
+	// Boost alpha on light backgrounds for better visibility
+	if (isLightBackground) {
+		finalAlpha = mix(finalAlpha, 1.0, 0.5); // Increase opacity by 50%
+	}
 
 	gl_FragColor = vec4(finalColor, finalAlpha);
 }

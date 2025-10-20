@@ -109,8 +109,8 @@ export class GPGPU {
         this.uniforms.velocityUniforms.uOriginalPosition = { value: positionTexture };
         this.uniforms.velocityUniforms.uTime = { value: 0 };
         this.uniforms.velocityUniforms.uForce = { value: this.params.force };
-        this.uniforms.velocityUniforms.uMouseRadius = { value: 0.35 };
-        this.uniforms.velocityUniforms.uMouseStrength = { value: 0.05 };
+        this.uniforms.velocityUniforms.uMouseRadius = { value: 0.5 };
+        this.uniforms.velocityUniforms.uMouseStrength = { value: .03 };
 
         // Wave distortion uniforms (in velocity shader)
         this.uniforms.velocityUniforms.uWaveAmplitude = { value: 0.0 };
@@ -131,6 +131,7 @@ export class GPGPU {
                 uMinAlpha: { value: this.params.minAlpha },
                 uMaxAlpha: { value: this.params.maxAlpha },
                 uChromaticIntensity: { value: 0.5 },
+                uBackgroundColor: { value: new THREE.Color(0x000000) },
             },
             vertexShader,
             fragmentShader,
@@ -169,6 +170,10 @@ export class GPGPU {
 
     updateColor(color: THREE.Color) {
         this.material.uniforms.uColor.value = color;
+    }
+
+    updateBackgroundColor(color: THREE.Color) {
+        this.material.uniforms.uBackgroundColor.value = color;
     }
 
     dispose() {

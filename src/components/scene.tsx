@@ -41,20 +41,24 @@ export function Scene({ animationSpeedRef, className }: SceneProps) {
   const mouseRef = useRef({ x: 0, y: 0 });
   const loadedRef = useRef(false);
   const guiRef = useRef<GUI | null>(null);
-  const cameraAnimationRef = useRef<number | null>(null);
-  const lastCameraChangeRef = useRef<number>(0);
+  
+  // Color transition state
+  const currentColorRef = useRef<THREE.Color>(new THREE.Color(currentAccent));
+  const startColorRef = useRef<THREE.Color>(new THREE.Color(currentAccent));
+  const targetColorRef = useRef<THREE.Color>(new THREE.Color(currentAccent));
+  const colorTransitionProgressRef = useRef<number>(1); // 1 means transition complete
 
   const settings = {
     camera: {
-      fov: 50,
+      fov: 105,
       near: 0.1,
       far: 1000,
       initialPosition: { x: 0, y: 0, z: 3 },
     },
     gpgpu: {
-      particleSize: 600,
+      particleSize: 200,
       particleColor: new THREE.Color(currentAccent),
-      size: 1.7,
+      size: 3.8,
       minAlpha: 0.4,
       maxAlpha: 0.95,
       force: 0.05,
@@ -66,7 +70,7 @@ export function Scene({ animationSpeedRef, className }: SceneProps) {
     },
     cameraAnimation: {
       enabled: true,
-      duration: 4, // seconds between camera changes
+      speed: 1.0, // Overall speed multiplier for camera movement
     },
     colorShift: {
       enabled: false,
@@ -74,9 +78,9 @@ export function Scene({ animationSpeedRef, className }: SceneProps) {
       colors: ["#0093d0", "#00a78f", "#ff5057", "#ffde00", "#9b59b6", "#e74c3c", "#f39c12", "#2ecc71"],
     },
     bloom: {
-      threshold: 0.6,
-      strength: 0.4,
-      radius: 0,
+      threshold: 0.4,
+      strength: 1.2,
+      radius: 0.2,
 	  directionX: 1.5,
 	  directionY: 1,
     },
@@ -150,6 +154,9 @@ export function Scene({ animationSpeedRef, className }: SceneProps) {
     bloomPassRef.current.radius = settings.bloom.radius;
     bloomPassRef.current.BlurDirectionX.set(settings.bloom.directionX, 1.1);
     bloomPassRef.current.BlurDirectionY.set(settings.bloom.directionY, 1.0);
+    // Set initial background color and enable inverse bloom
+    bloomPassRef.current.updateBackgroundColor(new THREE.Color(settings.renderer.backgroundColor));
+    bloomPassRef.current.updateInvertAmount(1.0);
     composerRef.current.addPass(bloomPassRef.current);
 
     // Add chromatic aberration pass
@@ -164,7 +171,7 @@ export function Scene({ animationSpeedRef, className }: SceneProps) {
     // Load GLB model and setup GPGPU
     const loader = new GLTFLoader();
     loader.load(
-      "/vega-v-logo.glb",
+      "/vega-v-logo1.glb",
       (gltf) => {
         let mergedMesh: THREE.Mesh | null = null;
         
@@ -204,7 +211,7 @@ export function Scene({ animationSpeedRef, className }: SceneProps) {
 
         if (mergedMesh && sceneRef.current && rendererRef.current && cameraRef.current) {
           // Scale and rotate the model to fit the scene better
-          const scale = 0.5;
+          const scale = 0.125;
           const tempMesh = mergedMesh as THREE.Mesh;
           
           // Set position first
@@ -237,6 +244,9 @@ export function Scene({ animationSpeedRef, className }: SceneProps) {
             canvas: canvasRef.current,
           });
 
+          // Set initial background color
+          gpgpuRef.current.updateBackgroundColor(new THREE.Color(settings.renderer.backgroundColor));
+
           loadedRef.current = true;
           
           // Setup debug controls after GPGPU is initialized
@@ -252,47 +262,43 @@ export function Scene({ animationSpeedRef, className }: SceneProps) {
     );
   };
 
-  const animateCameraToNewPosition = () => {
-    if (!cameraRef.current) return;
+  const updateFluidCameraMovement = (time: number) => {
+    if (!cameraRef.current || !settings.cameraAnimation.enabled) return;
 
-    // Define different camera positions
-    const cameraPositions = [
-      { x: 2, y: 1, z: 2 },      // Top right
-      { x: -2, y: 1, z: 2 },     // Top left
-      { x: 2, y: -1, z: 2 },     // Bottom right
-      { x: -2, y: -1, z: 2 },    // Bottom left
-      { x: 0, y: 2, z: 2 },      // Top center
-      { x: 0, y: -2, z: 2 },     // Bottom center
-      { x: 3, y: 0, z: 1 },      // Right side
-      { x: -3, y: 0, z: 1 },     // Left side
-    ];
-
-    // Pick a random position
-    const randomIndex = Math.floor(Math.random() * cameraPositions.length);
-    const targetPosition = cameraPositions[randomIndex];
-
-    // Smoothly animate to new position
-    const startPosition = cameraRef.current.position.clone();
-    const duration = 2000; // 2 seconds
-    const startTime = performance.now();
-
-    const animate = () => {
-      const elapsed = performance.now() - startTime;
-      const progress = Math.min(elapsed / duration, 1);
-
-      // Easing function for smooth animation
-      const easeInOutCubic = (t: number) => t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
-      const easedProgress = easeInOutCubic(progress);
-
-      // Interpolate position
-      cameraRef.current!.position.lerpVectors(startPosition, new THREE.Vector3(targetPosition.x, targetPosition.y, targetPosition.z), easedProgress);
-
-      if (progress < 1) {
-        cameraAnimationRef.current = requestAnimationFrame(animate);
-      }
-    };
-
-    animate();
+    // Use multiple sine waves with different frequencies for organic movement
+    const slowTime = time * 0.2 * settings.cameraAnimation.speed;
+    
+    // Horizontal movement (left to right) - stays in front
+    const horizontalAngle = Math.sin(slowTime * 0.7) * 0.6; // ±0.6 radians (±34 degrees)
+    
+    // Vertical movement (up and down) - subtle
+    const verticalAngle = Math.sin(slowTime * 0.5 + 1.5) * 0.35; // ±0.35 radians (±20 degrees)
+    
+    // Orbital movement - very subtle circular motion
+    const orbitalOffset = Math.sin(slowTime * 0.3) * 0.15;
+    
+    // Distance variation (zoom in/out) - slow and smooth
+    const baseDistance = 1.0;
+    const distanceVariation = Math.sin(slowTime * 0.4 + 2.0) * 0.2; // ±0.6 units
+    const distance = baseDistance + distanceVariation;
+    
+    // Calculate camera position in spherical coordinates
+    // Keep phi (vertical angle) mostly in front by offsetting it
+    const phi = Math.PI / 2 + verticalAngle; // Around horizontal plane
+    const theta = horizontalAngle + orbitalOffset; // Side to side
+    
+    // Convert spherical to Cartesian coordinates
+    const x = distance * Math.sin(phi) * Math.sin(theta);
+    const y = distance * Math.cos(phi);
+    const z = distance * Math.sin(phi) * Math.cos(theta);
+    
+    // Smooth transition to new position
+    cameraRef.current.position.x += (x - cameraRef.current.position.x) * 0.02;
+    cameraRef.current.position.y += (y - cameraRef.current.position.y) * 0.02;
+    cameraRef.current.position.z += (z - cameraRef.current.position.z) * 0.02;
+    
+    // Always look at the center
+    cameraRef.current.lookAt(0, 0, 0);
   };
 
   const render = () => {
@@ -305,18 +311,25 @@ export function Scene({ animationSpeedRef, className }: SceneProps) {
       gpgpuRef.current.compute();
     }
 
-    // Camera animation
-    if (settings.cameraAnimation.enabled && cameraRef.current) {
-      const now = performance.now() * 0.001;
-      if (now - lastCameraChangeRef.current > settings.cameraAnimation.duration) {
-        animateCameraToNewPosition();
-        lastCameraChangeRef.current = now;
-      }
+    // Fluid camera movement
+    const time = performance.now() * 0.001;
+    updateFluidCameraMovement(time);
+
+    // Color transition (when user clicks)
+    if (gpgpuRef.current && colorTransitionProgressRef.current < 1) {
+      // Smooth transition over 0.8 seconds
+      colorTransitionProgressRef.current = Math.min(colorTransitionProgressRef.current + 0.016 / 0.8, 1);
+      
+      // Ease out cubic for smooth deceleration
+      const easeProgress = 1 - Math.pow(1 - colorTransitionProgressRef.current, 3);
+      
+      // Interpolate from start color to target color
+      currentColorRef.current.lerpColors(startColorRef.current, targetColorRef.current, easeProgress);
+      gpgpuRef.current.updateColor(currentColorRef.current);
     }
 
-    // Color shifting
+    // Color shifting (auto color change)
     if (settings.colorShift.enabled && gpgpuRef.current) {
-      const time = performance.now() * 0.001;
       const totalTime = time * settings.colorShift.speed;
       const colorIndex = Math.floor(totalTime) % settings.colorShift.colors.length;
       const nextColorIndex = (colorIndex + 1) % settings.colorShift.colors.length;
@@ -527,14 +540,14 @@ export function Scene({ animationSpeedRef, className }: SceneProps) {
         .add(cameraRef.current.position, "z")
         .name("Distance")
         .min(0.5)
-        .max(5)
+        .max(250)
         .step(0.1);
 
       cameraFolder
         .add(cameraRef.current, "fov")
         .name("FOV")
-        .min(15)
-        .max(120)
+        .min(1)
+        .max(180)
         .step(1)
         .onChange(() => {
           if (cameraRef.current) {
@@ -546,24 +559,24 @@ export function Scene({ animationSpeedRef, className }: SceneProps) {
     // Camera animation controls
     const cameraAnimationControl = {
       enabled: settings.cameraAnimation.enabled,
-      duration: settings.cameraAnimation.duration,
+      speed: settings.cameraAnimation.speed,
     };
     
     cameraFolder
       .add(cameraAnimationControl, "enabled")
-      .name("Auto Rotate")
+      .name("Fluid Movement")
       .onChange((value: boolean) => {
         settings.cameraAnimation.enabled = value;
       });
 
     cameraFolder
-      .add(cameraAnimationControl, "duration")
-      .name("Change Interval")
-      .min(1)
-      .max(10)
-      .step(0.5)
+      .add(cameraAnimationControl, "speed")
+      .name("Movement Speed")
+      .min(0.1)
+      .max(3)
+      .step(0.1)
       .onChange((value: number) => {
-        settings.cameraAnimation.duration = value;
+        settings.cameraAnimation.speed = value;
       });
 
     cameraFolder.close();
@@ -607,6 +620,20 @@ export function Scene({ animationSpeedRef, className }: SceneProps) {
         .min(0)
         .max(10)
         .step(0.01);
+
+      // Inverse bloom control
+      const inverseBloomControl = { amount: 1.0 };
+      postProcessingFolder
+        .add(inverseBloomControl, "amount")
+        .name("Inverse Bloom")
+        .min(0)
+        .max(2)
+        .step(0.1)
+        .onChange((value: number) => {
+          if (bloomPassRef.current) {
+            bloomPassRef.current.updateInvertAmount(value);
+          }
+        });
     }
 
     // Chromatic Aberration controls
@@ -676,6 +703,14 @@ export function Scene({ animationSpeedRef, className }: SceneProps) {
           if (rendererRef.current) {
             settings.renderer.backgroundColor = value;
             rendererRef.current.setClearColor(value, 1);
+            // Update particles to adapt to new background color
+            if (gpgpuRef.current) {
+              gpgpuRef.current.updateBackgroundColor(new THREE.Color(value));
+            }
+            // Update bloom pass to adapt to new background color
+            if (bloomPassRef.current) {
+              bloomPassRef.current.updateBackgroundColor(new THREE.Color(value));
+            }
           }
         });
     }
@@ -711,8 +746,10 @@ export function Scene({ animationSpeedRef, className }: SceneProps) {
 
   useEffect(() => {
     if (gpgpuRef.current && loadedRef.current) {
-      const newColor = new THREE.Color(currentAccent);
-      gpgpuRef.current.updateColor(newColor);
+      // Initiate smooth color transition
+      startColorRef.current = currentColorRef.current.clone();
+      targetColorRef.current = new THREE.Color(currentAccent);
+      colorTransitionProgressRef.current = 0; // Start transition
     }
   }, [currentAccent]);
 

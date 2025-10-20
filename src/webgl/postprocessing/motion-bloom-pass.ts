@@ -115,11 +115,35 @@ export class MotionBloomPass extends Pass {
 
         const copyShader = CopyShader;
         this.copyUniforms = UniformsUtils.clone(copyShader.uniforms);
+        this.copyUniforms['uBackgroundColor'] = { value: new Vector3(0, 0, 0) };
+        this.copyUniforms['uInvertBloom'] = { value: 0.0 };
 
         this.blendMaterial = new ShaderMaterial({
             uniforms: this.copyUniforms,
             vertexShader: copyShader.vertexShader,
-            fragmentShader: copyShader.fragmentShader,
+            fragmentShader: `
+                uniform sampler2D tDiffuse;
+                uniform vec3 uBackgroundColor;
+                uniform float uInvertBloom;
+                varying vec2 vUv;
+                
+                void main() {
+                    vec4 bloom = texture2D(tDiffuse, vUv);
+                    
+                    // Calculate if background is light or dark
+                    float bgLuminance = dot(uBackgroundColor, vec3(0.299, 0.587, 0.114));
+                    
+                    // On light backgrounds, invert the bloom to create dark halos
+                    // On dark backgrounds, keep it additive for bright glows
+                    if (bgLuminance > 0.5) {
+                        // Invert bloom for dark shadows on light backgrounds
+                        gl_FragColor = vec4(-bloom.rgb * uInvertBloom, bloom.a);
+                    } else {
+                        // Normal additive bloom for dark backgrounds
+                        gl_FragColor = bloom;
+                    }
+                }
+            `,
             blending: AdditiveBlending,
             depthTest: false,
             depthWrite: false,
@@ -134,6 +158,14 @@ export class MotionBloomPass extends Pass {
 
         this.basic = new MeshBasicMaterial();
         this.fsQuad = new FullScreenQuad(null);
+    }
+
+    updateBackgroundColor(color: Color) {
+        this.copyUniforms['uBackgroundColor'].value.set(color.r, color.g, color.b);
+    }
+
+    updateInvertAmount(amount: number) {
+        this.copyUniforms['uInvertBloom'].value = amount;
     }
 
     dispose() {
