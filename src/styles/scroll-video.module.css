@@ -30,10 +30,10 @@
 }
 
 .sectionTitle {
-  padding: 8rem 4rem;
+  padding: 4rem 4rem 8rem 4rem;
   background: var(--light-background);
   color: #000;
-  min-height: 80vh;
+  min-height: 60vh;
   display: flex;
   align-items: center;
   border-bottom: 1px solid #000;
@@ -42,15 +42,14 @@
 
 /* Grid pattern background */
 .sectionTitle::before {
-  content: '';
+  content: "";
   position: absolute;
   top: 0;
   left: 0;
   right: 0;
   bottom: 0;
-  background-image:
-    linear-gradient(rgba(0, 0, 0, 0.02) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(0, 0, 0, 0.02) 1px, transparent 1px);
+  /* background-image: linear-gradient(rgba(0, 0, 0, 0.02) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 0, 0, 0.02) 1px, transparent 1px); */
   background-size: 50px 50px;
   pointer-events: none;
   z-index: 1;
@@ -86,6 +85,51 @@
   max-width: 500px;
   text-align: right;
   line-height: 1.2;
+}
+
+/* Marquee Styles */
+.marqueeWrapper {
+  width: 100%;
+  overflow: hidden;
+  background: var(--background);
+  border-bottom: 1px solid #000;
+  padding: 1rem 0;
+  position: relative;
+}
+
+.marqueeContent {
+  display: flex;
+  align-items: center;
+  gap: 0;
+  will-change: transform;
+  width: max-content;
+}
+
+.marqueeItem {
+  display: flex;
+  align-items: center;
+  gap: 3rem;
+  margin-right: 3rem;
+  white-space: nowrap;
+}
+
+.marqueeText {
+  font-family: var(--font-argon), sans-serif;
+  font-size: 1.5rem;
+  font-weight: 400;
+  color: black;
+  position: relative;
+  text-transform: uppercase;
+}
+
+.marqueeText::after {
+  content: "↗";
+  margin-left: 3rem;
+  color: black;
+  font-family: var(--font-object-sans);
+  font-size: 0.8em;
+  vertical-align: middle;
+  display: inline-block;
 }
 
 .caseStudiesTextContainer {
@@ -190,8 +234,8 @@
   }
 
   .sectionTitle {
-    padding: 6rem 3rem;
-    min-height: 70vh;
+    padding: 3rem 3rem 6rem 3rem;
+    min-height: 55vh;
   }
 
   .sectionTitle h2 {
@@ -251,8 +295,8 @@
   }
 
   .sectionTitle {
-    padding: 4rem 2rem;
-    min-height: 70vh;
+    padding: 3rem 2rem 5rem 2rem;
+    min-height: 50vh;
   }
 
   .sectionTitle h2 {
