@@ -1,6 +1,6 @@
 .footer {
   width: 100%;
-  background-color: var(--background);
+  background-color: black;
   padding: 4rem 0 4rem 0;
   margin-top: auto;
 }
@@ -30,7 +30,7 @@
   font-family: var(--font-argon);
   font-size: 1rem;
   font-weight: 400;
-  color: rgba(0, 0, 0, 0.6);
+  color: rgba(255, 255, 255, 0.6);
   margin: 0;
   text-transform: uppercase;
   letter-spacing: 0.05em;
@@ -46,7 +46,7 @@
 }
 
 .footerLink {
-  color: rgb(0, 0, 0);
+  color: rgb(255, 255, 255);
   text-decoration: none;
   font-family: var(--font-object-sans);
   font-size: 1.1rem;
@@ -78,7 +78,7 @@
 .careerTitle {
   font-family: var(--font-argon);
   font-size: 0.9rem;
-  color: rgba(0, 0, 0, 0.6);
+  color: rgba(255, 255, 255, 0.6);
   margin: 0;
   font-weight: 400;
 }
