@@ -1,5 +1,5 @@
 .workMarqueeSection {
-  padding: 3rem 0;
+  padding: 1rem 0;
   background: var(--background);
   overflow: hidden;
   position: relative;
@@ -15,7 +15,7 @@
 
 .title {
   font-family: var(--font-argon), sans-serif;
-  font-size: 4.5rem;
+  font-size: 3rem;
   font-weight: 700;
   color: rgb(0, 0, 0);
   margin: 0 0 0rem 0;
@@ -47,7 +47,7 @@
 
 .marqueeItem {
   font-family: var(--font-argon), sans-serif;
-  font-size: 3.5rem;
+  font-size: 2.5rem;
   font-weight: 400;
   color: rgba(0, 0, 0, 1);
   text-transform: uppercase;
@@ -55,7 +55,7 @@
   transition: color 0.3s ease;
   flex-shrink: 0;
   position: relative;
-  padding-top: 2rem;
+  padding-top: 0.5rem;
 }
 
 .marqueeItem:hover {
@@ -80,12 +80,17 @@
 /* Responsive adjustments */
 @media (max-width: 1024px) {
   .workMarqueeSection {
-    padding: 3rem 0;
+    padding: 1rem 0;
   }
 
   .title {
-    margin-bottom: 1.5rem;
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
     padding: 0 1rem;
+  }
+
+  .marqueeItem {
+    font-size: 2rem;
   }
 
   .marqueeContainer {
@@ -103,12 +108,17 @@
 
 @media (max-width: 480px) {
   .workMarqueeSection {
-    padding: 3rem 0;
+    padding: 1rem 0;
   }
 
   .title {
-    margin-bottom: 1rem;
+    font-size: 2rem;
+    margin-bottom: 0.5rem;
     padding: 0 1rem;
+  }
+
+  .marqueeItem {
+    font-size: 1.5rem;
   }
 
   .marqueeContainer {
