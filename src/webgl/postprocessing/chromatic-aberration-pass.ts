@@ -1,10 +1,10 @@
-import { ShaderMaterial, UniformsUtils, Vector2 } from 'three';
+import { ShaderMaterial, UniformsUtils, WebGLRenderTarget, WebGLRenderer } from 'three';
 import { Pass, FullScreenQuad } from 'three/examples/jsm/postprocessing/Pass.js';
 
 export class ChromaticAberrationPass extends Pass {
     material: ShaderMaterial;
     fsQuad: FullScreenQuad;
-    uniforms: any;
+    uniforms: { [uniform: string]: { value: unknown } };
 
     constructor() {
         super();
@@ -69,7 +69,7 @@ export class ChromaticAberrationPass extends Pass {
         this.fsQuad = new FullScreenQuad(this.material);
     }
 
-    render(renderer: any, writeBuffer: any, readBuffer: any) {
+    render(renderer: WebGLRenderer, writeBuffer: WebGLRenderTarget, readBuffer: WebGLRenderTarget) {
         this.uniforms['tDiffuse'].value = readBuffer.texture;
 
         if (this.renderToScreen) {

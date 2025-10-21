@@ -53,7 +53,8 @@ export class GPGPUEvents {
     setupMouse() {
         // Add BVH acceleration to mesh raycast
         THREE.Mesh.prototype.raycast = acceleratedRaycast;
-        (this.geometry as any).boundsTree = new MeshBVH(this.geometry);
+        // Add BVH to geometry for faster raycasting
+        (this.geometry as THREE.BufferGeometry & { boundsTree: MeshBVH }).boundsTree = new MeshBVH(this.geometry);
 
         this.raycaster.firstHitOnly = true;
 

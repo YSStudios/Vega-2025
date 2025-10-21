@@ -1,7 +1,7 @@
 import * as THREE from 'three';
 import { GPGPUUtils } from './gpgpu-utils';
 import { GPGPUEvents } from './gpgpu-events';
-import { GPUComputationRenderer } from 'three/examples/jsm/misc/GPUComputationRenderer.js';
+import { GPUComputationRenderer, Variable } from 'three/examples/jsm/misc/GPUComputationRenderer.js';
 import simFragment from './shaders/simFragment.glsl';
 import simFragmentVelocity from './shaders/simFragmentVelocity.glsl';
 import vertexShader from './shaders/vertex.glsl';
@@ -44,8 +44,8 @@ export class GPGPU {
     canvas: HTMLCanvasElement | null;
     utils: GPGPUUtils;
     gpgpuCompute: GPUComputationRenderer;
-    positionVariable: any;
-    velocityVariable: any;
+    positionVariable: Variable | null;
+    velocityVariable: Variable | null;
     uniforms: GPGPUUniforms;
     events: GPGPUEvents;
     material: THREE.ShaderMaterial;
@@ -121,10 +121,14 @@ export class GPGPU {
     }
 
     createParticles() {
+        // These are guaranteed to be non-null after initGPGPU()
+        const positionVar = this.positionVariable!;
+        const velocityVar = this.velocityVariable!;
+        
         this.material = new THREE.ShaderMaterial({
             uniforms: {
-                uPositionTexture: { value: this.gpgpuCompute.getCurrentRenderTarget(this.positionVariable).texture },
-                uVelocityTexture: { value: this.gpgpuCompute.getCurrentRenderTarget(this.velocityVariable).texture },
+                uPositionTexture: { value: this.gpgpuCompute.getCurrentRenderTarget(positionVar).texture },
+                uVelocityTexture: { value: this.gpgpuCompute.getCurrentRenderTarget(velocityVar).texture },
                 uResolution: { value: new THREE.Vector2(this.sizes.width, this.sizes.height) },
                 uParticleSize: { value: this.params.size },
                 uColor: { value: this.params.color },

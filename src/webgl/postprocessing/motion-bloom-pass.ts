@@ -26,12 +26,12 @@ export class MotionBloomPass extends Pass {
     renderTargetsVertical: WebGLRenderTarget[];
     nMips: number;
     renderTargetBright: WebGLRenderTarget;
-    highPassUniforms: any;
+    highPassUniforms: { [uniform: string]: { value: unknown } };
     materialHighPassFilter: ShaderMaterial;
     separableBlurMaterials: ShaderMaterial[];
     compositeMaterial: ShaderMaterial;
     bloomTintColors: Vector3[];
-    copyUniforms: any;
+    copyUniforms: { [uniform: string]: { value: unknown } };
     blendMaterial: ShaderMaterial;
     basic: MeshBasicMaterial;
     fsQuad: FullScreenQuad;
@@ -157,11 +157,11 @@ export class MotionBloomPass extends Pass {
         this.oldClearAlpha = 1;
 
         this.basic = new MeshBasicMaterial();
-        this.fsQuad = new FullScreenQuad(null);
+        this.fsQuad = new FullScreenQuad(undefined);
     }
 
     updateBackgroundColor(color: Color) {
-        this.copyUniforms['uBackgroundColor'].value.set(color.r, color.g, color.b);
+        (this.copyUniforms['uBackgroundColor'].value as Vector3).set(color.r, color.g, color.b);
     }
 
     updateInvertAmount(amount: number) {
