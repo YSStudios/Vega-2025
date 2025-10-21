@@ -1,7 +1,6 @@
 "use client";
 
 import React, { useEffect, useRef } from "react";
-import { motion } from "framer-motion";
 import styles from "../styles/services.module.css";
 
 const servicesData = [
@@ -82,13 +81,14 @@ export default function Services() {
       { threshold: 0.1 }
     );
 
-    if (sectionRef.current) {
-      observer.observe(sectionRef.current);
+    const currentSection = sectionRef.current;
+    if (currentSection) {
+      observer.observe(currentSection);
     }
 
     return () => {
-      if (sectionRef.current) {
-        observer.unobserve(sectionRef.current);
+      if (currentSection) {
+        observer.unobserve(currentSection);
       }
     };
   }, []);
@@ -100,7 +100,7 @@ export default function Services() {
       </h2>
       
       <div className={styles.cardsGrid}>
-          {servicesData.map((service, index) => (
+          {servicesData.map((service) => (
             <div
               key={service.title}
               className={`${styles.serviceCard} ${styles[service.bgColor]}`}
