@@ -117,7 +117,7 @@
 }
 
 .vegaSvg {
-  width: 100vw;
+  width: 100%;
   height: auto;
   display: block;
   filter: drop-shadow(0 0 0 transparent);

@@ -27,6 +27,7 @@
   left: -115px;
   margin-bottom: 0;
   white-space: nowrap;
+  overflow: visible;
 }
 
 .mainContent {

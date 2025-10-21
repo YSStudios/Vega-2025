@@ -12,7 +12,7 @@ interface MarqueeProps {
 }
 
 export default function Marquee({
-  mainText = "Vega Studios",
+  mainText = "Vega Studio",
   subText = "CREATIVE TECHNOLOGY STUDIO",
   speed = 100,
   variant = "light",
