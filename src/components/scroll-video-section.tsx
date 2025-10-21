@@ -70,40 +70,8 @@ export default function ScrollVideoSection() {
     detectMobile();
   }, []);
 
-  useEffect(() => {
-    const handleScroll = () => {
-      const section = sectionRef.current;
-      const video = videoRef.current;
-
-      if (!section || !video) return;
-
-      const sectionRect = section.getBoundingClientRect();
-      const sectionTop = sectionRect.top;
-      const sectionBottom = sectionRect.bottom;
-      const windowHeight = window.innerHeight;
-      // Calculate if section is in view and how much
-      if (sectionTop <= 0 && sectionBottom > windowHeight) {
-        // Section is taking full viewport, video should be sticky
-        video.style.position = "fixed";
-        video.style.top = "0";
-      } else if (sectionTop > 0) {
-        // Section is below viewport, video should be at top of section
-        video.style.position = "absolute";
-        video.style.top = "0";
-      } else if (sectionBottom <= windowHeight) {
-        // Section is above viewport, video should be at bottom of section
-        video.style.position = "absolute";
-        video.style.top = `${sectionRect.height - windowHeight}px`;
-      }
-    };
-
-    window.addEventListener("scroll", handleScroll);
-    handleScroll(); // Initial call
-
-    return () => {
-      window.removeEventListener("scroll", handleScroll);
-    };
-  }, [currentVideoIndex]);
+  // Removed JavaScript position manipulation in favor of CSS sticky positioning
+  // This prevents layout jumps on mobile devices
 
   // Mobile-specific intersection observer to force video playing
   useEffect(() => {

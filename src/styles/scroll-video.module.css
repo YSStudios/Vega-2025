@@ -1,21 +1,24 @@
 .scrollVideoSection {
   position: relative;
   width: 100%;
-  height: 475vh; /* Allow scrolling through 4 case studies + moderate exit scroll */
+  height: auto; /* Let content determine height */
+  min-height: 475vh; /* Ensure enough scroll range */
   margin: 0 0 0 0;
-  overflow: hidden;
   z-index: 5;
   border-bottom: 1px solid #000;
+  scroll-snap-stop: normal;
+  -webkit-overflow-scrolling: touch; /* Enable momentum scrolling on iOS */
 }
 
 .videoBackground {
-  position: absolute;
+  position: sticky;
   top: 0;
   left: 0;
   width: 100%;
   height: 100vh;
   z-index: 1;
   will-change: transform;
+  overflow: hidden;
 }
 
 .textContent {
