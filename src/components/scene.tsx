@@ -58,8 +58,8 @@ export function Scene({ animationSpeedRef, className }: SceneProps) {
     gpgpu: {
       particleSize: 200,
       particleColor: new THREE.Color(currentAccent),
-      size: 3.8,
-      minAlpha: 0.4,
+      size: 6,
+      minAlpha: 0.75,
       maxAlpha: 0.95,
       force: 0.05,
     },
@@ -78,21 +78,21 @@ export function Scene({ animationSpeedRef, className }: SceneProps) {
       colors: ["#0093d0", "#00a78f", "#ff5057", "#ffde00", "#9b59b6", "#e74c3c", "#f39c12", "#2ecc71"],
     },
     bloom: {
-      threshold: 0.4,
-      strength: 1.2,
+      threshold: 0.0,
+      strength: 0,
       radius: 0.2,
 	  directionX: 1.5,
 	  directionY: 1,
     },
     chromatic: {
       particleIntensity: 0.0,
-      aberrationAmount: 0.003,
+      aberrationAmount: 0.0,
       aberrationAngle: 0.0,
     },
     renderer: {
-      toneMapping: THREE.ACESFilmicToneMapping,
+      toneMapping: THREE.NoToneMapping,
       toneMappingExposure: 1,
-      backgroundColor: "#000000",
+      backgroundColor: "#ececec",
     },
   };
 
@@ -668,7 +668,7 @@ export function Scene({ animationSpeedRef, className }: SceneProps) {
       };
 
       const toneMappingControl = {
-        toneMapping: "ACESFilmicToneMapping",
+        toneMapping: "NoToneMapping",
       };
 
       rendererFolder

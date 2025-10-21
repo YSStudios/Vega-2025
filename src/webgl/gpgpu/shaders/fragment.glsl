@@ -20,7 +20,7 @@ void main() {
 
 	// Calculate background luminance to determine if it's light or dark
 	float bgLuminance = dot(uBackgroundColor, vec3(0.299, 0.587, 0.114));
-	bool isLightBackground = bgLuminance > 0.5;
+	bool isLightBackground = false; // Temporarily disabled - treat all backgrounds as dark
 
 	// Chromatic color gradient based on velocity and position
 	vec3 baseColor = uColor;
