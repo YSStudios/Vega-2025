@@ -4,7 +4,6 @@ import React, { useEffect, useRef } from "react";
 import { useAccentColor } from "../contexts/accent-color-context";
 import * as THREE from "three";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
-import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
 import { EffectComposer } from "three/examples/jsm/postprocessing/EffectComposer.js";
 import { RenderPass } from "three/examples/jsm/postprocessing/RenderPass.js";
 import { OutputPass } from "three/examples/jsm/postprocessing/OutputPass.js";
@@ -35,7 +34,6 @@ export function Scene({ className }: SceneProps) {
   const composerRef = useRef<EffectComposer | null>(null);
   const bloomPassRef = useRef<MotionBloomPass | null>(null);
   const chromaticPassRef = useRef<ChromaticAberrationPass | null>(null);
-  const orbitControlsRef = useRef<OrbitControls | null>(null);
   const animationFrameRef = useRef<number | null>(null);
   const mouseRef = useRef({ x: 0, y: 0 });
   const loadedRef = useRef(false);
@@ -129,12 +127,6 @@ export function Scene({ className }: SceneProps) {
     );
     cameraRef.current.lookAt(0, 0, 0);
     sceneRef.current.add(cameraRef.current);
-
-    // Setup Orbit Controls
-    orbitControlsRef.current = new OrbitControls(cameraRef.current, canvasRef.current);
-    orbitControlsRef.current.enableDamping = true;
-    orbitControlsRef.current.enableZoom = false;
-    orbitControlsRef.current.enablePan = false;
 
     // Setup Post-processing
     composerRef.current = new EffectComposer(rendererRef.current);
@@ -339,11 +331,6 @@ export function Scene({ className }: SceneProps) {
       
       const interpolatedColor = currentColor.clone().lerp(nextColor, t);
       gpgpuRef.current.updateColor(interpolatedColor);
-    }
-
-    // Update Orbit Controls
-    if (orbitControlsRef.current) {
-      orbitControlsRef.current.update();
     }
 
     // Render with composer (post-processing)
