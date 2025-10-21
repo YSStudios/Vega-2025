@@ -193,7 +193,7 @@ export default function ScrollVideoSection() {
   return (
     <>
       {/* Marquee Section Above */}
-      <div className={styles.marqueeWrapper}>
+      {/* <div className={styles.marqueeWrapper}>
         <motion.div
           ref={marqueeRef}
           className={styles.marqueeContent}
@@ -212,7 +212,7 @@ export default function ScrollVideoSection() {
             </div>
           ))}
         </motion.div>
-      </div>
+      </div> */}
 
       <div className={styles.sectionTitle}>
         <div className={styles.sectionTitleContainer}>
