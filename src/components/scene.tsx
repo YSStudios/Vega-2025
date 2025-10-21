@@ -250,7 +250,7 @@ export function Scene({ animationSpeedRef, className }: SceneProps) {
           loadedRef.current = true;
           
           // Setup debug controls after GPGPU is initialized
-          setupDebugControls();
+          // setupDebugControls(); // Commented out to hide GUI
           
           render();
         }
