@@ -17,11 +17,10 @@ import styles from "../styles/scene.module.css";
 const accents = ["#0093d0", "#00a78f", "#ff5057", "#ffde00"];
 
 interface SceneProps {
-  animationSpeedRef?: React.MutableRefObject<number>;
   className?: string;
 }
 
-export function Scene({ animationSpeedRef, className }: SceneProps) {
+export function Scene({ className }: SceneProps) {
   const { currentAccent, setCurrentAccent } = useAccentColor();
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [accentIndex, setAccentIndex] = React.useState(() => {
@@ -382,6 +381,8 @@ export function Scene({ animationSpeedRef, className }: SceneProps) {
     setCurrentAccent(accents[nextIndex]);
   };
 
+  // Debug controls function (commented out in production)
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const setupDebugControls = () => {
     if (typeof window === "undefined" || !gpgpuRef.current) return;
 
@@ -742,6 +743,7 @@ export function Scene({ animationSpeedRef, className }: SceneProps) {
       window.removeEventListener("resize", handleResize);
       cleanup();
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
