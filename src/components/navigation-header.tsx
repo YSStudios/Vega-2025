@@ -46,11 +46,11 @@ export default function NavigationHeader({}: NavigationHeaderProps) {
         <div className={styles.headerContent}>
           <div className={styles.menuToggle} onClick={handleMenuToggle}>
             <div className={styles.logo}>
-              <span className={styles.logoText}>Vega Studios</span>
+              <span className={styles.logoText}>Vega Studio</span>
               <div className={styles.logoSvg}>
                 <Image
                   src="/vega-logo-white.svg"
-                  alt="Vega Studios"
+                  alt="Vega Studio"
                   width={24}
                   height={24}
                   priority

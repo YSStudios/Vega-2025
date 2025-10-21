@@ -205,7 +205,7 @@
 /* Mobile Responsive */
 @media (max-width: 768px) {
   .contactForm {
-    width: 100vw;
+    width: 100%;
     right: 0;
   }
 
