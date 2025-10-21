@@ -19,7 +19,7 @@ void main() {
 
 	vec4 mvPosition = modelViewMatrix * vec4( newpos, 1.0 );
 
-	gl_PointSize = ( uParticleSize / -mvPosition.z );
+	gl_PointSize = ( uParticleSize * 1.2 / -mvPosition.z );
 
 	gl_Position = projectionMatrix * mvPosition;
 }

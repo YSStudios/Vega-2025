@@ -169,7 +169,7 @@ function Particles() {
       positions[i3 + 2] = z;
       
       // Random size variation for more realistic stars
-      sizes[i] = 0.02 + Math.random() * 0.2;
+      sizes[i] = 0.1 + Math.random() * 0.3;
       
       // Random alpha variation
       alphas[i] = 0.6 + Math.random() * 0.4;
@@ -214,7 +214,7 @@ function Particles() {
           void main() {
             vAlpha = alpha;
             vec4 mvPosition = modelViewMatrix * vec4(position, 1.0);
-            gl_PointSize = size * (50.0 / -mvPosition.z);
+            gl_PointSize = size * (100.0 / -mvPosition.z);
             gl_Position = projectionMatrix * mvPosition;
           }
         `}

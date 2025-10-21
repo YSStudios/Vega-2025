@@ -14,7 +14,9 @@ void main() {
 
 	vec3 velocity = texture2D( uVelocityTexture, vUv ).xyz * 100.0;
 
-	float velocityAlpha = clamp(length(velocity), uMinAlpha, uMaxAlpha);
+	// Use a more stable alpha calculation to prevent blinking
+	float velocityMagnitude = length(velocity);
+	float velocityAlpha = mix(uMinAlpha, uMaxAlpha, smoothstep(0.0, 2.0, velocityMagnitude));
 
 	if (center > 0.5) { discard; }
 
