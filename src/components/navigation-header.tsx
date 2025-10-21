@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
+import Image from "next/image";
 import styles from "../styles/navigation-header.module.css";
 import ContactForm from "./contact-form";
 
@@ -44,7 +45,18 @@ export default function NavigationHeader({}: NavigationHeaderProps) {
       <header className={styles.headerContainer}>
         <div className={styles.headerContent}>
           <div className={styles.menuToggle} onClick={handleMenuToggle}>
-            <div className={styles.logo}>Vega Studios</div>
+            <div className={styles.logo}>
+              <span className={styles.logoText}>Vega Studios</span>
+              <div className={styles.logoSvg}>
+                <Image
+                  src="/vega-logo-white.svg"
+                  alt="Vega Studios"
+                  width={24}
+                  height={24}
+                  priority
+                />
+              </div>
+            </div>
             <div className={styles.menuText}>Menu</div>
           </div>
 
@@ -61,9 +73,9 @@ export default function NavigationHeader({}: NavigationHeaderProps) {
         className={`${styles.menuBar} ${menuOpen ? styles.menuBarOpen : ""}`}
       >
         <button onClick={() => handleNavClick('about')}>About</button>
-        <button onClick={() => handleNavClick('team')}>Team</button>
+		<button onClick={() => handleNavClick('case-studies')}>Work</button>
         <button onClick={() => handleNavClick('services')}>Services</button>
-        <button onClick={() => handleNavClick('work')}>Work</button>
+		<button onClick={() => handleNavClick('brands')}>Brands</button>
         <button onClick={() => handleNavClick('contact')}>Contact</button>
         <button className={styles.closeButton} onClick={handleMenuToggle}>
           ✕

@@ -14,13 +14,9 @@ const textLines = [
 
 export default function About() {
   return (
-    <motion.section
+    <section
       id="about"
       className={styles.aboutSection}
-      initial={{ opacity: 0, y: 30 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: false, amount: 0.3 }}
-      transition={{ duration: 0.8, delay: 0 }}
     >
       <motion.div
         className={styles.container}
@@ -116,6 +112,6 @@ export default function About() {
           </motion.div>
         </motion.div>
       </motion.div>
-    </motion.section>
+    </section>
   );
 }

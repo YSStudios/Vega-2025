@@ -953,9 +953,13 @@ a {
   }
 
   .case-study-hero {
-    position: static;
-    height: 50vh;
+    position: relative;
+    height: 45vh;
+    min-height: 300px;
+    max-height: 400px;
     padding: 0;
+    margin-bottom: 0;
+    z-index: 1;
   }
 
   .hero-image-container {
@@ -967,9 +971,12 @@ a {
   }
 
   .case-study-details {
-    position: static;
+    position: relative;
     overflow: visible;
     padding: 2rem 1.5rem 4rem 1.5rem;
+    margin-top: 0;
+    z-index: 2;
+    background: #fff;
   }
 
   /* Hide navigation header when viewing case studies */
@@ -1034,15 +1041,40 @@ a {
   }
 }
 
+/* Medium mobile breakpoint for phones like iPhone 12/13/14 */
+@media (max-width: 600px) and (min-width: 481px) {
+  .case-study-hero {
+    height: 42vh;
+    min-height: 280px;
+    max-height: 380px;
+    position: relative;
+    z-index: 1;
+  }
+  
+  .case-study-details {
+    position: relative;
+    z-index: 2;
+    background: #fff;
+  }
+}
+
 /* Additional mobile breakpoint for very small screens and landscape phones */
 @media (max-width: 480px) {
   .case-study-hero {
     padding: 0;
-    height: 50vh;
+    height: 40vh;
+    min-height: 250px;
+    max-height: 350px;
+    position: relative;
+    z-index: 1;
   }
 
   .case-study-details {
     padding: 1.5rem 1rem 3rem 1rem;
+    margin-top: 0;
+    position: relative;
+    z-index: 2;
+    background: #fff;
   }
 
   .case-study-title {
