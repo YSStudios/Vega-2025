@@ -138,7 +138,7 @@ export default function ProjectAccordion() {
   }, []);
 
   return (
-    <div className={styles.accordionContainer}>
+    <div id="services" className={styles.accordionContainer}>
       <h2 ref={sectionTitleRef} className={styles.sectionTitle}>
         Expertise & Capabilities
       </h2>

@@ -34,6 +34,15 @@
   box-sizing: border-box;
   display: flex;
   align-items: center;
+  position: relative;
+}
+
+.logoText {
+  display: block;
+}
+
+.logoSvg {
+  display: none;
 }
 
 .menuText {
@@ -64,7 +73,7 @@
   z-index: 1500;
   display: flex;
   align-items: center;
-  gap: 40px;
+  gap: 36px;
   overflow: hidden;
   transition: width 0.4s ease, opacity 0.4s ease;
   opacity: 0;
@@ -113,8 +122,6 @@
   padding: 15px 0;
 }
 
-.closeButton:hover {
-}
 
 .buttonContainer {
   position: relative;
@@ -190,29 +197,40 @@
   }
 
   .menuToggle {
-    flex-direction: column;
-    align-items: flex-start;
+    flex-direction: row;
+    align-items: center;
   }
 
   .logo {
     padding: 12px 20px;
     font-size: 1rem;
     border: 1px solid #000;
-	width: 146px;
+	width: auto;
+    justify-content: center;
+  }
+
+  .logoText {
+    display: none;
+  }
+
+  .logoSvg {
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
 
   .menuText {
-    padding: 12px 0px;
-    width: 146px;
+    padding: 12px 20px;
+    width: auto;
     font-size: 1rem;
     text-align: center;
     border: 1px solid #000;
-    border-top: none;
+    border-left: none;
   }
 
   .menuBar {
     position: fixed;
-    top: 136px;
+    top: 79px;
     left: 20px;
     width: 146px;
     height: 0;
@@ -233,13 +251,15 @@
     box-sizing: border-box;
     border: 1px solid #000;
     border-top: none;
+    visibility: hidden;
   }
 
   .menuBar.menuBarOpen {
+    width: 149px;
     height: 285px;
-    width: 146px;
     padding: 15px;
     opacity: 1;
+    visibility: visible;
   }
 
   .menuBar button {
@@ -315,29 +335,40 @@
   }
 
   .menuToggle {
-    flex-direction: column;
-    align-items: flex-start;
+    flex-direction: row;
+    align-items: center;
   }
 
   .logo {
     padding: 12px 20px;
     font-size: 1rem;
-	width: 146px;
+	width: auto;
+    justify-content: center;
+  }
+
+  .logoText {
+    display: none;
+  }
+
+  .logoSvg {
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
 
   .menuText {
-    padding: 12px 0px;
-    width: 146px;
+    padding: 12px 20px;
+    width: auto;
     font-size: 1rem;
     text-align: center;
     border: 1px solid #000;
-    border-top: none;
+    border-left: none;
   }
 
   .menuBar {
     position: fixed;
-    top: 136px;
-    left: 20px;
+    top: 79px;
+    left: 10px;
     width: 146px;
     height: 0;
     background: rgb(255, 255, 255);
@@ -357,13 +388,15 @@
     box-sizing: border-box;
     border: 1px solid #000;
     border-top: none;
+    visibility: hidden;
   }
 
   .menuBar.menuBarOpen {
+    width: 149px;
     height: 285px;
-    width: 146px;
     padding: 15px;
     opacity: 1;
+    visibility: visible;
   }
 
   .menuBar button {
@@ -414,7 +447,7 @@
   .flipButton {
     width: 90px;
     height: 40px;
-    top: -43px;
+    top: -26px;
   }
 
   .flipButton::before,
