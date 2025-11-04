@@ -127,9 +127,11 @@ function Particles() {
   const particleCount = 550;
   
   // Create geometry
-  const { geometry, logoTexture } = useMemo(() => {
+  const geometry = useMemo(() => {
     const geo = new THREE.BufferGeometry();
     const positions = new Float32Array(particleCount * 3);
+    const sizes = new Float32Array(particleCount);
+    const alphas = new Float32Array(particleCount);
     
     const globeRadius = 1.2;
     
@@ -165,14 +167,19 @@ function Particles() {
       positions[i3] = x;
       positions[i3 + 1] = y;
       positions[i3 + 2] = z;
+      
+      // Random size variation for more realistic stars
+      sizes[i] = 0.1 + Math.random() * 0.3;
+      
+      // Random alpha variation
+      alphas[i] = 0.6 + Math.random() * 0.4;
     }
     
     geo.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+    geo.setAttribute('size', new THREE.BufferAttribute(sizes, 1));
+    geo.setAttribute('alpha', new THREE.BufferAttribute(alphas, 1));
     
-    const loader = new THREE.TextureLoader();
-    const texture = loader.load('/vega-logo-white.svg');
-    
-    return { geometry: geo, logoTexture: texture };
+    return geo;
   }, []);
   
   useEffect(() => {
@@ -189,17 +196,51 @@ function Particles() {
     camera.position.x += (mouse.current.x * 0.001 - camera.position.x) * 0.05;
     camera.position.y += (-mouse.current.y * 0.001 - camera.position.y) * 0.05;
     camera.lookAt(0, 0, 0);
+    
+    // Slowly rotate the particles around the globe
+    if (pointsRef.current) {
+      pointsRef.current.rotation.y += 0.0001;
+    }
   });
 
   return (
     <points ref={pointsRef} geometry={geometry}>
-      <pointsMaterial
-        map={logoTexture}
-        size={0.15}
+      <shaderMaterial
+        vertexShader={`
+          attribute float size;
+          attribute float alpha;
+          varying float vAlpha;
+          
+          void main() {
+            vAlpha = alpha;
+            vec4 mvPosition = modelViewMatrix * vec4(position, 1.0);
+            gl_PointSize = size * (100.0 / -mvPosition.z);
+            gl_Position = projectionMatrix * mvPosition;
+          }
+        `}
+        fragmentShader={`
+          varying float vAlpha;
+          
+          void main() {
+            float distanceToCenter = distance(gl_PointCoord, vec2(0.5));
+            
+            // Create a circular falloff
+            float alpha = 1.0 - smoothstep(0.0, 0.5, distanceToCenter);
+            
+            // Add a bright core
+            float core = 1.0 - smoothstep(0.0, 0.2, distanceToCenter);
+            
+            // Combine core and falloff for star-like appearance
+            float finalAlpha = alpha * vAlpha;
+            vec3 color = vec3(1.0, 1.0, 1.0) * (0.3 + core * 0.7);
+            
+            gl_FragColor = vec4(color, finalAlpha);
+          }
+        `}
         transparent
-        opacity={0.5}
-        sizeAttenuation
-        alphaTest={0.1}
+        blending={THREE.AdditiveBlending}
+        depthWrite={false}
+        uniforms={{}}
       />
     </points>
   );
